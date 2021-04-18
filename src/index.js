@@ -1,9 +1,9 @@
-const { MARCXML_MEDIA_TYPE } = require('../marcxml/constants');
-const { toSlimXml } = require('../marcxml/toSlimXml');
-const { uniqBy } = require('../../utils');
-const { getRslCollections } = require('./detect');
-const { DEFAULT_SOURCE } = require('../../constants');
-const { forceArray, flatten, defaults, flattenDeep } = require('../../utils');
+const {MARCXML_MEDIA_TYPE} = require('../marcxml/constants');
+const {toSlimXml} = require('../marcxml/toSlimXml');
+const {uniqBy} = require('../../utils');
+const {getRslCollections} = require('./detect');
+const {DEFAULT_SOURCE} = require('../../constants');
+const {forceArray, flatten, defaults, flattenDeep} = require('../../utils');
 const {
   getPhysicalLocationRecord,
   getUrlRecords,
@@ -13,17 +13,17 @@ const {
   getMarcSource,
   detectMarcSchemaUri,
 } = require('./detect');
-const { marcObjectToJson } = require('../marc/marcObjectToJson');
-const { getMarcRecordDates } = require('./dates');
+const {marcObjectToJson} = require('../marc/marcObjectToJson');
+const {getMarcRecordDates} = require('./dates');
 
 const {
   MARC21_TO_OPDS2_JSONATA,
   MARC_EXTENSION,
   RUSMARC_TO_MARC21_JSONATA,
 } = require('./constants');
-const { JSON_MEDIA_TYPE } = require('../json/constants');
-const { UNIMARC_JSON_SCHEMA_URI } = require('./constants-unimarc');
-const { RUSMARC_JSON_SCHEMA_URI } = require('./constants-rusmarc');
+const {JSON_MEDIA_TYPE} = require('../json/constants');
+const {UNIMARC_JSON_SCHEMA_URI} = require('./constants-unimarc');
+const {RUSMARC_JSON_SCHEMA_URI} = require('./constants-rusmarc');
 
 const {
   toISO2709,
@@ -37,9 +37,9 @@ const {
 
 } = require('./constants');
 
-const { JSONLD_MEDIA_TYPE } = require('../jsonld/constants');
+const {JSONLD_MEDIA_TYPE} = require('../jsonld/constants');
 
-const { OPDS2_MEDIA_TYPE } = require('../opds2/constants');
+const {OPDS2_MEDIA_TYPE} = require('../opds2/constants');
 
 const toEntities = (rawRecord, config) => {
   const objects = forceArray(
@@ -47,7 +47,7 @@ const toEntities = (rawRecord, config) => {
       ? fromISO2709(rawRecord, config)
       : rawRecord,
   );
-  const { mediaType, generateCollections } = defaults(config, {
+  const {mediaType, generateCollections} = defaults(config, {
     generateCollections: false,
     mediaType: MARC_MEDIA_TYPE,
   });
@@ -79,10 +79,10 @@ const toEntities = (rawRecord, config) => {
           const key = getMarcKey(obj).toLocaleLowerCase();
           const links = flattenDeep(
             getUrlRecords(obj).map(({
-              key: key_from,
-              source: source_from,
-              kind: kind_from,
-            }) => ({
+                                      key: key_from,
+                                      source: source_from,
+                                      kind: kind_from,
+                                    }) => ({
               key_from,
               source_from: source_from || DEFAULT_SOURCE,
               kind_from,
@@ -96,7 +96,7 @@ const toEntities = (rawRecord, config) => {
           const items = flattenDeep(
             uniqBy(
               getPhysicalLocationRecord(obj).filter(
-                ({ kind, source, key }) => kind && source && key).map(
+                ({kind, source, key}) => kind && source && key).map(
                 item => ({
                   ...item,
                   // source: item.source ? item.source.toLocaleLowerCase() : null,
@@ -105,7 +105,7 @@ const toEntities = (rawRecord, config) => {
                   mediaType: (mediaType || item.mediaType),
                 }),
               ),
-              ({ kind, source, key }) => [kind, source, key].join('\t'),
+              ({kind, source, key}) => [kind, source, key].join('\t'),
             ).map(
               item => ([
                 {
@@ -199,56 +199,54 @@ const toEntities = (rawRecord, config) => {
               ...collectionsWithRelations,
             ];
           }
+        } else {
+          return null;
         }
-       else {
-                return null;
-              }
-            },
-          ),
-        ).filter(v => !!v);
-      };
+      },
+    ),
+  ).filter(v => !!v);
+};
 
-      const marcToOpds = (input) => {
-        if ((typeof input === 'string') || (Buffer.isBuffer(input))) {
-          input = fromISO2709(input);
-        }
-        const marcObjs = flatten(forceArray(input).map(
-          o => {
-            const isRusmarc = (detectMarcSchemaUri(o) === RUSMARC_JSON_SCHEMA_URI);
-            const isUnimarc = (detectMarcSchemaUri(o) === UNIMARC_JSON_SCHEMA_URI);
-            return (isRusmarc || isUnimarc)
-              ? RUSMARC_TO_MARC21_JSONATA(forceArray(o).map(marcObjectToJson))
-              : forceArray(o).map(marcObjectToJson);
-          },
-        ));
-        return marcObjs.map(MARC21_TO_OPDS2_JSONATA);
-      };
-      module.exports = {
-        // marcObjToEntities: toEntities(),
-        endMarker: MARC_RECORD_SEPARATION_CHAR,
-        mediaType: MARC_MEDIA_TYPE,
-        encoding: MARC_ENCODING,
-        extension: MARC_EXTENSION,
-        is: isMarc,
-        toEntities,
-        toObjects: input => fromISO2709(input),
-        fromObjects: input => toISO2709(input),
-        to: {
-          [OPDS2_MEDIA_TYPE]: marcToOpds,
-          [MARC_MEDIA_TYPE]: input => {
-            return fromISO2709(input).map(
-              o => {
-                const isRusmarc = (detectMarcSchemaUri(o) === RUSMARC_JSON_SCHEMA_URI);
-                const isUnimarc = (detectMarcSchemaUri(o) === UNIMARC_JSON_SCHEMA_URI);
-                return (isRusmarc || isUnimarc)
-                  ? RUSMARC_TO_MARC21_JSONATA(forceArray(o).map(marcObjectToJson))
-                  : forceArray(o).map(marcObjectToJson);
-              },
-            );
-          },
-          [MARCXML_MEDIA_TYPE]: input => fromISO2709(input).map(toSlimXml).join('\n'),
-          // [MARC_MEDIA_TYPE]: input => input,
-          [JSONLD_MEDIA_TYPE]: marcToOpds,
-          [JSON_MEDIA_TYPE]: input => fromISO2709(input),
+const marcToOpds = (input) => {
+  if ((typeof input === 'string') || (Buffer.isBuffer(input))) {
+    input = fromISO2709(input);
+  }
+  const marcObjs = flatten(forceArray(input).map(
+    o => {
+      const isRusmarc = (detectMarcSchemaUri(o) === RUSMARC_JSON_SCHEMA_URI);
+      const isUnimarc = (detectMarcSchemaUri(o) === UNIMARC_JSON_SCHEMA_URI);
+      return (isRusmarc || isUnimarc)
+        ? RUSMARC_TO_MARC21_JSONATA(forceArray(o).map(marcObjectToJson))
+        : forceArray(o).map(marcObjectToJson);
+    },
+  ));
+  return marcObjs.map(MARC21_TO_OPDS2_JSONATA);
+};
+module.exports = {
+  // marcObjToEntities: toEntities(),
+  endMarker: MARC_RECORD_SEPARATION_CHAR,
+  mediaType: MARC_MEDIA_TYPE,
+  encoding: MARC_ENCODING,
+  extension: MARC_EXTENSION,
+  is: isMarc,
+  toEntities,
+  toObjects: input => fromISO2709(input),
+  fromObjects: input => toISO2709(input),
+  to: {
+    [OPDS2_MEDIA_TYPE]: marcToOpds,
+    [MARC_MEDIA_TYPE]: input => {
+      return fromISO2709(input).map(
+        o => {
+          const isRusmarc = (detectMarcSchemaUri(o) === RUSMARC_JSON_SCHEMA_URI);
+          const isUnimarc = (detectMarcSchemaUri(o) === UNIMARC_JSON_SCHEMA_URI);
+          return (isRusmarc || isUnimarc)
+            ? RUSMARC_TO_MARC21_JSONATA(forceArray(o).map(marcObjectToJson))
+            : forceArray(o).map(marcObjectToJson);
         },
-      };
+      );
+    },
+    [MARCXML_MEDIA_TYPE]: input => fromISO2709(input).map(toSlimXml).join('\n'),
+    [JSONLD_MEDIA_TYPE]: marcToOpds,
+    [JSON_MEDIA_TYPE]: input => fromISO2709(input),
+  },
+};

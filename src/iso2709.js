@@ -23,10 +23,9 @@
  * @licend  The above is the entire license notice
  * for the JavaScript code in this file.
  *
- **/
-const sortBy = require('lodash.sortby');
-const { isObject } = require('../../utils');
-const { lengthInBytes } = require('./../../utils/text');
+ * */
+const { isObject } = require('./utils/types');
+const { padLeft } = require('./utils/formatting');
 const { isControlFieldTag } = require('./fields');
 const {
   MARC_DIRECTORY_INDEX_SIZE,
@@ -37,12 +36,16 @@ const {
   MARC_BLANK_CHAR,
 } = require('./constants');
 
-const { padLeft } = require('../../utils/humanize');
+// Returns the length of the input string in UTF8 bytes
+const lengthInBytes = (str) => {
+  const match = encodeURIComponent(str).match(/%[89ABab]/g);
+  return str.length + (match ? match.length : 0);
+};
 
 /**
  * Converts the byte array to a UTF-8 string.
  */
-const toString = (input) => Buffer.isBuffer(input) ? input.toString('utf-8') : input;
+const toString = (input) => (Buffer.isBuffer(input) ? input.toString('utf-8') : input);
 // Was initially:
 // const byteArrayToString = (byte_array) => byte_array.toString('utf-8');
 
@@ -58,7 +61,13 @@ const parseDirectory = (data_str) => {
     curr_char = data_str.charAt(pos);
     if (curr_char !== MARC_FTC_CHAR) directory += curr_char;
     pos += 1;
-    if ((data_str.length === 0)||(data_str.length <13) && (data_str.replace(/[\u0000\r\n\t]+$/uig, '').length === 0)) {
+    if (
+      (data_str.length === 0) || (
+        // FIXME: SIGNIFICANT CHANGE WAS MADE HERE TO FIX INVALID EXPR PRECEDENCE
+        // eslint-disable-next-line no-control-regex
+        (data_str.length < 13) && (data_str.replace(/[\u0000\r\n\t]+$/uig, '').length === 0)
+      )
+    ) {
       break;
     }
     if (pos > data_str.length) {
@@ -112,7 +121,9 @@ const dirFieldLength = (directory_entry) => directory_entry.substring(3, 7);
  * @param directory_entry
  * @returns {*|string}
  */
-const dirStartingCharacterPosition = (directory_entry) => directory_entry.substring(7, MARC_DIRECTORY_INDEX_SIZE);
+const dirStartingCharacterPosition = (directory_entry) => (
+  directory_entry.substring(7, MARC_DIRECTORY_INDEX_SIZE)
+);
 
 /**
  * Returns a UTF-8 substring
@@ -125,7 +136,16 @@ const substrUTF8 = (str, start_in_bytes, length_in_bytes) => toString(
 );
 
 // Converts the input UTF-8 string to a byte array.
-const toBuffer = (input) => isObject(input) ? input : Buffer.isBuffer(input) ? input : Buffer.from(input, 'utf8');
+const toBuffer = (input) => (
+  // eslint-disable-next-line no-nested-ternary
+  isObject(input)
+    ? input
+    : (
+      Buffer.isBuffer(input)
+        ? input
+        : Buffer.from(input, 'utf8')
+    )
+);
 
 // Adds leading zeros to the specified numeric field
 const addLeadingZeros = (num_field, length) => {
@@ -154,7 +174,10 @@ const processDataElementOld = (str) => {
         curr_element_str = curr_element_str.substring(1);
 
         // Remove trailing control characters
-        if (curr_element_str.charAt(curr_element_str.length - 1) === MARC_SD_CHAR || curr_element_str.charAt(curr_element_str.length - 1) === MARC_FTC_CHAR) {
+        if (
+          (curr_element_str.charAt(curr_element_str.length - 1) === MARC_SD_CHAR)
+          || (curr_element_str.charAt(curr_element_str.length - 1) === MARC_FTC_CHAR)
+        ) {
           curr_element_str = curr_element_str.substring(0, curr_element_str.length - 1);
         }
 
@@ -226,8 +249,8 @@ const convertRecordFromISO2709 = (input) => {
       const indStr = data_element_str
         ? data_element_str.substr(0, 2).replace(/[^a-z0-9]/ig, MARC_BLANK_CHAR)
         : [MARC_BLANK_CHAR, MARC_BLANK_CHAR].join('');
-      let ind1 = indStr.charAt(0);
-      let ind2 = indStr.charAt(1);
+      const ind1 = indStr.charAt(0);
+      const ind2 = indStr.charAt(1);
 
       // Create a <datafield> element
       datafield = {
@@ -255,8 +278,10 @@ const convertRecordFromISO2709 = (input) => {
   directory_entries.forEach(processDirectoryEntry);
   return {
     ...record,
-    controlfield: record.controlfield,//sortBy(record.controlfield, ({ tag }) => tag),
-    datafield: record.datafield,//sortBy(record.datafield, ({ tag }) => tag),
+    controlfield: record.controlfield,
+    // sortBy(record.controlfield, ({ tag }) => tag),
+    datafield: record.datafield,
+    // sortBy(record.datafield, ({ tag }) => tag),
   };
 };
 
@@ -286,8 +311,12 @@ const convertRecordToISO2709 = (recordObj) => {
   let leader = recordObj.leader;
   let char_pos = 0;
 
-  const cf = recordObj.controlfield || (recordObj.getControlfields ? recordObj.getControlfields() : []);
-  const df = recordObj.datafield || (recordObj.getDatafields ? recordObj.getDatafields() : []);
+  const cf = recordObj.controlfield || (
+    recordObj.getControlfields ? recordObj.getControlfields() : []
+  );
+  const df = recordObj.datafield || (
+    recordObj.getDatafields ? recordObj.getDatafields() : []
+  );
 
   cf.forEach((field) => {
     directory_str += field.tag;
@@ -310,54 +339,71 @@ const convertRecordToISO2709 = (recordObj) => {
     }
   });
 
-  df.forEach((field) => {
-    let curr_datafield = '';
-    const { tag, ind1, ind2 } = field;
+  df.forEach(
+    (field) => {
+      let curr_datafield = '';
+      const { tag, ind1, ind2 } = field;
 
-    // Add tag to directory
-    directory_str += tag;
+      // Add tag to directory
+      directory_str += tag;
 
-    // Add indicators
-    datafield_str += ((ind1 || MARC_BLANK_CHAR) + (ind2 || MARC_BLANK_CHAR) + MARC_SD_CHAR);
-    const sf = (field.subfield || field.subfields);
-    sf.forEach((subfield, index) => {
-      let subfield_str = subfield.code + subfield.value;
+      // Add indicators
+      datafield_str += ((ind1 || MARC_BLANK_CHAR) + (ind2 || MARC_BLANK_CHAR) + MARC_SD_CHAR);
+      const sf = (field.subfield || field.subfields);
+      sf.forEach((subfield, index) => {
+        let subfield_str = subfield.code + subfield.value;
 
-      // Add separator for subfield or data field
-      subfield_str += index === sf.length - 1 ? MARC_FTC_CHAR : MARC_SD_CHAR;
-      curr_datafield += subfield_str;
-    });
+        // Add separator for subfield or data field
+        subfield_str += index === sf.length - 1 ? MARC_FTC_CHAR : MARC_SD_CHAR;
+        curr_datafield += subfield_str;
+      });
 
-    datafield_str += curr_datafield;
+      datafield_str += curr_datafield;
 
-    // Add length of field containing indicators and a separator (3 characters total)
-    directory_str += addLeadingZeros(toBuffer(curr_datafield).length + 3, 4);
+      // Add length of field containing indicators and a separator (3 characters total)
+      directory_str += addLeadingZeros(toBuffer(curr_datafield).length + 3, 4);
 
-    // Add character position
-    directory_str += addLeadingZeros(char_pos, 5);
+      // Add character position
+      directory_str += addLeadingZeros(char_pos, 5);
 
-    // Advance character position counter
-    char_pos += lengthInBytes(curr_datafield) + 3;
-  });
+      // Advance character position counter
+      char_pos += lengthInBytes(curr_datafield) + 3;
+    },
+  );
 
   // Recalculate and write new string length into leader
-  const new_str_length = toBuffer(leader + directory_str + MARC_FTC_CHAR + datafield_str + MARC_RECORD_SEPARATION_CHAR).length;
+  const new_str_length = toBuffer(
+    [
+      leader,
+      directory_str,
+      MARC_FTC_CHAR,
+      datafield_str,
+      MARC_RECORD_SEPARATION_CHAR,
+    ].join(''),
+  ).length;
   leader = padLeft(new_str_length, '0', 5) + leader.substring(5);
 
   // Recalculate base address position
   const new_base_addr_pos = MARC_LEADER_LENGTH + directory_str.length + 1;
-  leader = leader.substring(0, MARC_DIRECTORY_INDEX_SIZE) + padLeft(new_base_addr_pos, '0', 5) + leader.substring(17);
-  record_str += (leader + directory_str + MARC_FTC_CHAR + datafield_str + MARC_RECORD_SEPARATION_CHAR);
+  leader = [
+    leader.substring(0, MARC_DIRECTORY_INDEX_SIZE),
+    padLeft(new_base_addr_pos, '0', 5),
+    leader.substring(17),
+  ].join('');
+  record_str += [
+    leader,
+    directory_str,
+    MARC_FTC_CHAR,
+    datafield_str,
+    MARC_RECORD_SEPARATION_CHAR,
+  ].join('');
   return record_str;
 };
 
-
 // The last element will always be empty because records end in char 1D
 // eslint-disable-next-line no-control-regex
-const fromISO2709 = (record_data, config) => splitRecords(record_data).map(
-  (rec) => {
-    return convertRecordFromISO2709(rec);
-  },
+const fromISO2709 = (record_data /* config */) => splitRecords(record_data).map(
+  (rec) => convertRecordFromISO2709(rec),
 ).reduce(
   (product, item) => (Array.isArray(product) ? product.concat(item) : [product, item]),
   [],
@@ -368,7 +414,6 @@ const toISO2709 = (record_data) => (
     ? record_data.reduce((product, item) => product + convertRecordToISO2709(item), '')
     : convertRecordToISO2709(record_data)
 );
-
 
 module.exports = {
   splitRecords,

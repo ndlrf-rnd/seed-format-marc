@@ -1,16 +1,16 @@
-const fs = require('fs');
 const path = require('path');
 
+const { registerJsonata } = require('./utils/jsonata');
 
-const { registerJsonata } = require('../../utils/jsonata');
-
+const { BASIC_ENTITIES } = require('./constants-basic-entities');
 const { ALEF_JSON_SCHEMA_URI, ALEF_JSON_SCHEMA_PATH, ALEF_DOC_URI } = require('./alef');
 const { MARC21_JSON_SCHEMA_URI, MARC21_DOC_URI, MARC21_JSON_SCHEMA_PATH } = require('./constants-marc21');
 const { UNIMARC_DOC_URI, UNIMARC_JSON_SCHEMA_URI, UNIMARC_JSON_SCHEMA_PATH } = require('./constants-unimarc');
 const { RUSMARC_DOC_URI, RUSMARC_JSON_SCHEMA_URI, RUSMARC_JSON_SCHEMA_PATH } = require('./constants-rusmarc');
 const { MARC_RECORD_FORMATS } = require('./constants-formats');
-const { BASIC_ENTITIES } = require('../../constants');
-const { JSON_SCHEMA_MEDIA_TYPE } = require('../../schemas/json-schema/constants');
+
+const JSON_SCHEMA_MEDIA_TYPE = 'application/schema+json';
+const JSON_SCHEMA_EXTENSION = '.schema.json';
 
 const COLUMNS = [
   'record_type',
@@ -67,18 +67,17 @@ const MARC_SCHEMAS = {
 // noinspection NonAsciiCharacters
 const INVALID_SOURCE_CODES_MAPPING = {
   'dlib.rsl.ru': 'RuMoRGB',
-  'elar': 'RuMoRGB',
-  'rumoelar': 'RuMoRGB',
-  'rumorgb': 'RuMoRGB',
+  elar: 'RuMoRGB',
+  rumoelar: 'RuMoRGB',
+  rumorgb: 'RuMoRGB',
 
   '07nlr': 'RuSpRNB',
-  'ргб': 'RuSpRNB',
-  'рнб': 'RuSpRNB',
-  'nlr': 'RuSpRNB',
+  ргб: 'RuSpRNB',
+  рнб: 'RuSpRNB',
+  nlr: 'RuSpRNB',
 
-  'ркп': 'RuMoRKP',
+  ркп: 'RuMoRKP',
 };
-
 
 const MARC_FTC_CHAR = '\x1E';
 const MARC_SD_CHAR = '\x1F';
@@ -100,7 +99,7 @@ const FIELD_RELATION_TYPES = {
   x: 'General sequencing',
 };
 
-
+/* eslint-disable no-template-curly-in-string */
 const RECORD_TYPE_GROUP_MANUAL_RELATIONS = {
   [MARC_RECORD_FORMATS.BIBLIOGRAPHIC]: 'http://www.loc.gov/marc/bibliographic/bd${tag}.html',
   [MARC_RECORD_FORMATS.HOLDINGS]: 'http://www.loc.gov/marc/holdings/hd${tag}.html',
@@ -108,7 +107,7 @@ const RECORD_TYPE_GROUP_MANUAL_RELATIONS = {
   [MARC_RECORD_FORMATS.COMMUNITY]: 'http://www.loc.gov/marc/community/ci${tag}.html',
   [MARC_RECORD_FORMATS.CLASSIFICATION]: 'http://www.loc.gov/marc/classification/cd${tag}.html',
 };
-
+/* eslint-enable no-template-curly-in-string */
 
 const MARC_LEADER_MARC_RECORD_STATUS_OFFSET = 5;
 const MARC_LEADER_TYPE_OFFSET = 6;
@@ -130,10 +129,8 @@ const MARC_CONTROL_FIELD_TAGS = [
   '009',
 ];
 
-
 // LEADER 05
 const MARC_TEST_RE = /^[0-9]{5}[|#$u acdn][a-z0-9#| ]{2}/ui;
-
 
 // a - Monographic component part
 // b - Serial component part
@@ -198,6 +195,7 @@ const RUSMARC_TO_JSONLD_BF2_JSONATA = registerJsonata(path.join(__dirname, 'mapp
 // Currently unused
 const BF2_LC_XSLT_PATH = path.join(__dirname, '../../contrib/marc2bibframe2/xsl/marc2bibframe2.xsl');
 
+
 module.exports = {
   BF2_LC_XSLT_PATH,
   MARC21_TO_OPDS2_JSONATA,
@@ -228,4 +226,6 @@ module.exports = {
   MARC_BLANK_CHAR,
   COLUMNS,
   MARC_SCHEMAS,
+  JSON_SCHEMA_MEDIA_TYPE,
+  JSON_SCHEMA_EXTENSION,
 };

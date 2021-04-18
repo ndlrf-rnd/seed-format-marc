@@ -1,13 +1,12 @@
 const { FIELD_RELATION_TYPES } = require('./constants');
 const { MARC21_FIELD_RELATION_SEQ_RE, MARC21_REL_FIELDS } = require('./constants-marc21');
 
-
-const getMarc21Relations = o => Object.keys(MARC21_REL_FIELDS).sort().reduce(
+const getMarc21Relations = (o, config) => Object.keys(MARC21_REL_FIELDS).sort().reduce(
   (a, relk) => {
     const relations = [];
     if (o.record[relk]) {
       (Array.isArray(o.record[relk]) ? o.record[relk] : [o.record[relk]]).forEach(
-        relField => {
+        (relField) => {
           if (relField.w) {
             relations.push({
               source_from: o.source,
@@ -49,7 +48,6 @@ const parseFieldRelationSeq = (str = '') => {
   return null;
 };
 
-
 /**
  * @example:
  * > ['LCD', '012345ZZ'] => '(LCD)012345ZZ'
@@ -59,7 +57,6 @@ const parseFieldRelationSeq = (str = '') => {
  * @returns {string}
  */
 const makeRelationStr = (source, key) => `(${source})${key}`;
-
 
 module.exports = {
   makeRelationStr,

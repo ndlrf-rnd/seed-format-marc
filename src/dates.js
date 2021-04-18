@@ -1,30 +1,27 @@
-const MARC21_RECORD_STATUS = require('./constants-record-status');
-const { getMarkRecordType } = require('./detect');
-const { getType } = require('./detect');
-const { MARC_RECORD_FORMATS } = require('./constants');
+/* eslint-disable no-useless-escape */
+
+const { forceArray, flatten } = require('./utils/arrays');
+const { isEmpty, isNaN } = require('./utils/types');
+const { getMarkRecordType, getType, getRecordStatus, detectMarcSchemaUri, getKind } = require('./detect');
+const { getMarcField } = require('./fields');
 
 const { MARC21_F008_TYPE_OF_RANGE_OFFSET } = require('./constants-marc21');
 const { RUSMARC_F100A_TYPE_OF_RANGE_OFFSET } = require('./constants-unimarc');
-const {
-  isEmpty,
-  isValidDate,
-  debug,
-  forceArray,
-  flatten,
-  error,
-} = require('../../utils');
-const { MARC_SCHEMAS } = require('./constants');
-const { getRecordStatus, detectMarcSchemaUri, getKind } = require('./detect');
-const { getMarcField } = require('./fields');
+const MARC21_RECORD_STATUS = require('./constants-record-status');
+const { MARC_SCHEMAS, MARC_RECORD_FORMATS } = require('./constants');
 
 const MARC_DATE_TIME_RE = /^([0-9]{4})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})(\.[0-9]+)?$/u;
+
+const isValidDate = (date) => ((date instanceof Date) && (!isNaN(date)));
 
 /**
  * TODO: Make more robust and cover by tests
  * @type {RegExp}
  */
-const ROMAN_NUMBERS_RE = /(?<![\p{L}\d])M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})(\p{S}*\p{Pd}+\p{S}*M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3}))?(?![\p{L}\d])/gu;
-// const extractRoman =
+
+// eslint-disable-next-line max-len
+// const ROMAN_NUMBERS_RE = /(?<![\p{L}\d])M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})(\p{S}*\p{Pd}+\p{S}*M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3}))?(?![\p{L}\d])/gu;
+
 /**
  * Documentation: https://www.loc.gov/marc/bibliographic/bd005.html
  * yyyymmddhhmmss.f
@@ -38,7 +35,8 @@ const ROMAN_NUMBERS_RE = /(?<![\p{L}\d])M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(I
 const parseDateStr = (sourceRaw, lowerBound = false) => {
   const marcDate = sourceRaw.match(MARC_DATE_TIME_RE);
   if (marcDate) {
-    const [_, year, month, day, hour, minute, sec, ...other] = marcDate;
+    // eslint-disable-next-line no-unused-vars
+    const [_, year, month, day, hour, minute, sec] = marcDate;
     const result = new Date(`${year}-${month}-${day}T${hour}:${minute}:${sec}Z`);
     if (isValidDate(result)) {
       return result;
@@ -50,7 +48,6 @@ const parseDateStr = (sourceRaw, lowerBound = false) => {
     .replace(/^([0-9]{4})[ u0|#]{4}$/ug, '$10101')
     .replace(/^([0-9]{3})[ u0|#]{5}$/ug, '$100101')
     .replace(/^([0-9]{2})[ u0|#]{6}$/ug, '$1000101')
-
     .replace(/[u#|\[\] ]+/ug, '');
   if (source.match(/^0{4,}/ui)) {
     return null;
@@ -119,7 +116,9 @@ const parseDateStr = (sourceRaw, lowerBound = false) => {
       return dateFromYear;
     }
   }
-  debug(`Can't interpret date string: "${sourceRaw}". Entity 'time_real' property will not be set`);
+  if (process.env.DEBUG) {
+    process.stderr.write(`WARNING: Can't interpret date string: "${sourceRaw}". Entity 'time_real' property will not be set\n`);
+  }
   return null;
 };
 
@@ -130,18 +129,19 @@ const getMarcPublicationDate = (publicationEntity) => {
     getMarcField(publicationEntity, '901', 'c'), // MARC21
     getMarcField(publicationEntity, '210', 'd'), // RUSMARC/UNIMARC
   ]).map(
-    v => forceArray(v)[0],
+    (v) => forceArray(v)[0],
   ).filter(
-    v => !!v,
+    (v) => !!v,
   );
   const vals = candidates.map(
-    // v => v.replace(/[\[\]]/uig, '').replace(/\.[^.]*$/ug, '').replace(/[^0-9]/, 'u').replace(/[^0-9]+/ug, ''),
+    // v => v.replace(/[\[\]]/uig, '')
+    //  .replace(/\.[^.]*$/ug, '')
+    //  .replace(/[^0-9]/, 'u')
+    //  .replace(/[^0-9]+/ug, ''),
     // ).map(
-    v => {
-      v ? parseDateStr(v) : null;
-    },
+    (v) => (v ? parseDateStr(v) : null),
   ).filter(
-    v => !!v,
+    (v) => !!v,
   );
   return (vals.length > 0) ? vals[0] : null;
 };
@@ -156,7 +156,7 @@ const MARC21_DATE_TYPE_PROCESSORS = {
   // c - Continuing resource currently published
   c: (s) => ({
     dateStart: parseDateStr(s.substr(0, 4), true),
-    dateEnd: null,  // 9999
+    dateEnd: null, // 9999
   }),
   // d - Continuing resource ceased publication
   d: (s) => ({
@@ -164,7 +164,7 @@ const MARC21_DATE_TYPE_PROCESSORS = {
     dateEnd: parseDateStr(s.substr(4, 4), false),
   }),
   // e - Detailed date
-  e: s => ({
+  e: (s) => ({
     dateStart: parseDateStr(s.replace(/##/ug, '01'), true),
     dateEnd: null,
   }),
@@ -198,8 +198,10 @@ const MARC21_DATE_TYPE_PROCESSORS = {
     const d2l = parseDateStr(s.substr(4, 4), true);
     const d2u = parseDateStr(s.substr(4, 4), false);
     const isAsc = (d1l && d2l && (d1l.getTime() < d2l.getTime()));
-    const dateStart = d1l && d2l ? (isAsc ? d1l : d2l) : d1l || d2l;
-    const dateEnd = d1l && d2l ? (isAsc ? d2u : d1u) : null;
+    // eslint-disable-next-line no-nested-ternary
+    const dateStart = (d1l && d2l) ? (isAsc ? d1l : d2l) : d1l || d2l;
+    // eslint-disable-next-line no-nested-ternary
+    const dateEnd = (d1l && d2l) ? (isAsc ? d2u : d1u) : null;
     return {
       dateStart,
       dateEnd,
@@ -214,7 +216,7 @@ const MARC21_DATE_TYPE_PROCESSORS = {
   }),
   // r - Reprint/reissue date and original date
   r: (s) => ({
-    dateStart: parseDateStr(s.substr(0, 4), true),  // Earliest
+    dateStart: parseDateStr(s.substr(0, 4), true), // Earliest
     dateEnd: parseDateStr(s.substr(0, 4), false),
     reissueDateStart: parseDateStr(s.substr(4, 4), true),
     reissueDateEnd: parseDateStr(s.substr(4, 4), false),
@@ -246,11 +248,11 @@ const MARC21_DATE_TYPE_PROCESSORS = {
   }),
 };
 
-
 // Используются следующие коды для указания типа даты / дат:
 const RUSMARC_DATE_TYPE_PROCESSORS = {
   // a = текущий продолжающийся ресурс
-  // Дата 1 содержит год начала публикации. Если дата начала публикации точно не известна, вместо любой неизвестной цифры проставляется символ пробела: '#'.
+  // Дата 1 содержит год начала публикации. Если дата начала публикации точно не известна,
+  //    вместо любой неизвестной цифры проставляется символ пробела: '#'.
   // Дата 2 в записи о текущем продолжающемся ресурсе всегда содержит 9999.
   a: MARC21_DATE_TYPE_PROCESSORS.c,
 
@@ -265,11 +267,17 @@ const RUSMARC_DATE_TYPE_PROCESSORS = {
   b: MARC21_DATE_TYPE_PROCESSORS.d,
 
   // c = продолжающийся ресурс с неизвестным статусом
-  // Продолжающийся ресурс, о котором точно не известно, издается ли он сейчас, или его издание прекращено. Дата 1 содержит год начала публикации продолжающегося ресурса. Если дата начала публикации точно не известна, вместо любой неизвестной цифры проставляется знак '#'.
-  //  Дата 2  содержит четыре символа пробела: ####.
+  // Продолжающийся ресурс, о котором точно не известно, издается ли он сейчас,
+  // или его издание прекращено.
+
+  // Дата 1 содержит год начала публикации продолжающегося ресурса.
+  //        Если дата начала публикации точно не известна, вместо любой
+  //        неизвестной цифры проставляется знак '#'.
+  // Дата 2  содержит четыре символа пробела: ####.
   c: MARC21_DATE_TYPE_PROCESSORS.u,
 
-  // d = монографический ресурс, изданный в одном томе или изданный в течение одного календарного года
+  // d = монографический ресурс, изданный в одном томе или изданный
+  //     в течение одного календарного года
   //
   // Монографический ресурс, изданный в одном томе, либо в нескольких томах, изданных в одно время
   // или с одинаковой датой издания, т.е. изданный в течение одного календарного года.
@@ -289,11 +297,16 @@ const RUSMARC_DATE_TYPE_PROCESSORS = {
   d: MARC21_DATE_TYPE_PROCESSORS.s,
 
   // e = репродуцированный ресурс
-  // Каталогизируемый ресурс является репринтом, перепечаткой, факсимильной копией, и т.д., но не новым изданием. Для новых изданий используются коды: 'd', 'f', 'g', или 'h', в соответствии с правилами их применения.
-  // Если это продолжающийся ресурс, то указывается начальный год переиздания и начальный год издания.
+  // Каталогизируемый ресурс является репринтом, перепечаткой, факсимильной копией, и т.д.,
+  // но не новым изданием. Для новых изданий используются коды: 'd', 'f', 'g', или 'h',
+  // в соответствии с правилами их применения.
+  //
+  // Если это продолжающийся ресурс, то указывается начальный год переиздания и
+  //  начальный год издания.
   //  Дата 1  содержит год издания репродукции.
   //  Дата 2  содержит год издания оригинала.
-  // Если одна из дат точно не известна, вместо любой неизвестной цифры указывается символ пробела: '#'.
+  // Если одна из дат точно не известна, вместо любой неизвестной цифры
+  // указывается символ пробела: '#'.
   e: MARC21_DATE_TYPE_PROCESSORS.r,
 
   // f = монографический ресурс, дата публикации которого точно не известна
@@ -302,9 +315,14 @@ const RUSMARC_DATE_TYPE_PROCESSORS = {
   f: MARC21_DATE_TYPE_PROCESSORS.q,
 
   // g = монографический ресурс, публикация которого продолжается более года
-  //  Дата 1  содержит год начала издания. Если начальная дата издания точно не известна, вместо любой неизвестной цифры проставляется пробел: '#'.
-  //  Дата 2  содержит дату окончания издания или 9999, если издание все еще продолжается. Если дата окончания точно не известна, вместо любой неизвестной цифры проставляется пробел: '#'.
-  // В редких случаях в одночастном ресурсе (или выпуске сериального ресурса) указаны два года издания. В этих случаях используется код 'g' с соответствующими датами.
+  //  Дата 1  содержит год начала издания. Если начальная дата издания точно не известна,
+  //          вместо любой неизвестной цифры проставляется пробел: '#'.
+  //  Дата 2  содержит дату окончания издания или 9999, если издание все еще продолжается.
+  //          Если дата окончания точно не известна, вместо любой неизвестной
+  //          цифры проставляется пробел: '#'.
+  // В редких случаях в одночастном ресурсе (или выпуске сериального ресурса)
+  //    указаны два года издания.
+  // В этих случаях используется код 'g' с соответствующими датами.
   g: MARC21_DATE_TYPE_PROCESSORS.m,
 
   // h = монографический ресурс с фактической датой публикации и датой присвоения
@@ -356,7 +374,6 @@ const RUSMARC_DATE_TYPE_PROCESSORS = {
   u: MARC21_DATE_TYPE_PROCESSORS.n,
 };
 
-
 const getMarcRecordDates = (rec, marcSchemaUri = MARC_SCHEMAS.MARC21.uri) => {
   // Fixme: add RusMarc tech field parsing
   marcSchemaUri = detectMarcSchemaUri(rec, marcSchemaUri);
@@ -372,7 +389,8 @@ const getMarcRecordDates = (rec, marcSchemaUri = MARC_SCHEMAS.MARC21.uri) => {
   /*
    RusMarc 801 ind2
    Индикатор 2 : Индикатор функции
-   Этот индикатор определяет функцию, выполняемую организацией, название которой помещено в подполе $b.
+   Этот индикатор определяет функцию, выполняемую организацией, название
+   которой помещено в подполе $b.
     0 - Агентство, производящее первоначальную каталогизацию
         Организация, подготовившая данные для записи.
     1 - Агентство, преобразующее данные
@@ -385,7 +403,7 @@ const getMarcRecordDates = (rec, marcSchemaUri = MARC_SCHEMAS.MARC21.uri) => {
 
   const getFallbackFn = (typeOfRange) => (dateStr) => {
     if (process.env.DEBUG) {
-      error('ERROR No valid date found:', marcSchemaUri, getType(rec), '005:', f005, '008:', f008, '100a:', f100a, '801c:', f801c, 'type:', getKind(rec), `Invalid type of range: "${typeOfRange}" with date string: "${dateStr}", record dates parsing was applied partially.\n${JSON.stringify(rec)}.`);
+      process.stderr.write(`WARNING: No valid date found:${marcSchemaUri}, ${getType(rec)} 005: ${f005} 008: ${f008} 100a: ${f100a} 801c: ${f801c} type: ${getKind(rec)}, Invalid type of range: "${typeOfRange}" with date string: "${dateStr}", record dates parsing was applied partially.\n${JSON.stringify(rec)}.\n`);
     }
     return {};
   };
@@ -397,22 +415,26 @@ const getMarcRecordDates = (rec, marcSchemaUri = MARC_SCHEMAS.MARC21.uri) => {
       if (getMarkRecordType(rec) === MARC_RECORD_FORMATS.BIBLIOGRAPHIC) {
         typeOfRange = (f008[MARC21_F008_TYPE_OF_RANGE_OFFSET] || 'n').toLowerCase(); // 6
         const datesStr = f008.substr(7, 8); // 7 - 15
-        extendedDate = (MARC21_DATE_TYPE_PROCESSORS[typeOfRange] || getFallbackFn(typeOfRange))(datesStr);
+        extendedDate = (
+          MARC21_DATE_TYPE_PROCESSORS[typeOfRange] || getFallbackFn(typeOfRange)
+        )(datesStr);
       }
     }
     if ((!recordDateStart) && (f801c || f100a)) {
       if (forceArray(f100a).length > 0) {
         recordDateStart = recordDateStart || parseDateStr(f100a[0].substr(0, 8)); // 0 - 7
         typeOfRange = (f100a[0][RUSMARC_F100A_TYPE_OF_RANGE_OFFSET] || 'n').toLowerCase(); // 8
-        const datesStr = f100a ? f100a[0].substr(9, 8) : 'uuuuuuuu';  // 9 - 16
-        extendedDate = (RUSMARC_DATE_TYPE_PROCESSORS[typeOfRange] || getFallbackFn(typeOfRange))(datesStr);
+        const datesStr = f100a ? f100a[0].substr(9, 8) : 'uuuuuuuu'; // 9 - 16
+        extendedDate = (
+          RUSMARC_DATE_TYPE_PROCESSORS[typeOfRange] || getFallbackFn(typeOfRange)
+        )(datesStr);
       }
       if (f801c && (f801c.length > 0) && (!recordDateStart)) {
         recordDateStart = recordDateStart || parseDateStr(f801c[0]);
       }
     }
   } catch (e) {
-    error(e);
+    process.stderr.write(`ERROR: ${e}\n`);
     return null;
   }
   const publicationDate = getMarcPublicationDate(rec, marcSchemaUri) || null;
@@ -434,20 +456,17 @@ const getMarcRecordDates = (rec, marcSchemaUri = MARC_SCHEMAS.MARC21.uri) => {
 
   if (result.dateStart && result.dateEnd) {
     if (result.dateStart.getTime() > result.dateEnd.getTime()) {
-      error(
-        [
-          `Got interval date start larger than date end (${result.dateStart} > ${result.dateEnd}),`,
-          `auto-fixing: ${JSON.stringify(rec)}`,
-        ].join('\n'),
+      process.stderr.write(
+        `WARNING: Got interval date start larger than date end (${result.dateStart} > ${result.dateEnd}, auto-fixing: ${JSON.stringify(rec)}\n`,
       );
       result.dateStart = result.dateEnd;
     }
   }
   return Object.keys(result).reduce(
-    (a, k) => isEmpty(result[k]) ? a : ({
+    (a, k) => (isEmpty(result[k]) ? a : ({
       ...a,
       [k]: result[k],
-    }),
+    })),
     {},
   );
 };

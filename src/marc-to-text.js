@@ -1,6 +1,6 @@
-const { DEFAULT_TEXT_FIELD_SEPARATOR, DEFAULT_TEXT_LINE_SEPARATOR } = require('../text/constants');
-const { MARC_BLANK_CHAR } = require('../marc/constants');
-const { getMarcField, isControlFieldTag } = require('../marc/fields');
+const { DEFAULT_TEXT_FIELD_SEPARATOR, DEFAULT_TEXT_LINE_SEPARATOR, MARC_BLANK_CHAR } = require('./constants');
+const { getMarcField, isControlFieldTag } = require('./fields');
+const { Iso2709 } = require('./iso2709');
 
 /**
  * Converts field object to string representation.
@@ -19,20 +19,24 @@ const { getMarcField, isControlFieldTag } = require('../marc/fields');
  */
 const makeFieldStr = (fieldObj) => {
   const tag = fieldObj.tag;
-  let ind1;
-  let ind2;
-  let subfield;
-  let value;
+  let resultInd1;
+  let resultInd2;
+  let resultSubfield;
+  let resultValue;
   if (!isControlFieldTag(fieldObj.tag)) {
-    ind1 = fieldObj.ind1 || MARC_BLANK_CHAR;
-    ind2 = fieldObj.ind2 || MARC_BLANK_CHAR;
-    subfield = (fieldObj.subfield || []).map(({ code, value }) => `\$${code} ${value}`).join('\t');
+    resultInd1 = fieldObj.ind1 || MARC_BLANK_CHAR;
+    resultInd2 = fieldObj.ind2 || MARC_BLANK_CHAR;
+    resultSubfield = (fieldObj.subfield || []).map(
+      // eslint-disable-next-line no-useless-escape
+      ({ code, value }) => `\$${code} ${value}`,
+    ).join('\t');
   } else {
-    value = fieldObj.value;
+    resultValue = fieldObj.value;
   }
-  return [tag, ind1, ind2, subfield, value].filter(v => !!v).join('');
+  return [tag, resultInd1, resultInd2, resultSubfield, resultValue].filter(
+    (v) => !!v,
+  ).join('');
 };
-
 
 /**
  * Pretty-Print fields objects list representation
@@ -63,8 +67,6 @@ const marcToText = (
     )),
   ].join(lineSep);
 };
-
-
 
 module.exports = {
   marcToText,

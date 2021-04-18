@@ -20,8 +20,8 @@ const RUSMARC_RECORD_STATUS = {
   ' ': UNKNOWN,
   '|': UNKNOWN,
   '#': UNKNOWN,
-  '$': UNKNOWN,
-  '0': UNKNOWN,
+  $: UNKNOWN,
+  0: UNKNOWN,
   [NEW]: NEW,
 };
 
@@ -30,7 +30,6 @@ const RUSMARC_F100A_LENGTH = 36;
 
 const RUSMARC_JSON_SCHEMA_PATH = path.join(__dirname, 'schemas/rusmarc/rusmarc-bibliographic-rsl-1.0.0.schema.json');
 const RUSMARC_JSON_SCHEMA_URI = path.join('/schemas/rusmarc-bibliographic-rsl-1.0.0.schema.json');
-
 
 module.exports = {
   RUSMARC_RECORD_STATUS,

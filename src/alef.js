@@ -1,8 +1,8 @@
+/* eslint-disable max-len */
 const path = require('path');
 /**
  * Information source: http://www.library.mcgill.ca/ALEPH/version16/ALEPH_15.2_User_Guide.pdf
  */
-
 
 const ALEF_DOC_URI = 'http://www.library.mcgill.ca/ALEPH/version16/ALEPH_15.2_User_Guide.pdf';
 const ALEF_JSON_SCHEMA_URI = 'https://catalog.rusneb.ru/schemas/alef-rsl-15.2.0.json';
@@ -57,10 +57,9 @@ the LKR field when the cataloger chooses the "Check Record" option on the "Edit"
 the System Librarian must include the "check_doc_lkr" program in the list of programs that appear in
 the check_doc table (UTIL M/8)
 */
-const parseLkr = (field) => {
 
-  return {};
-};
+// eslint-disable-next-line no-unused-vars
+const parseLkr = (field) => ({});
 /*
 10.3 "OWN" FIELD
 The OWN field is used to control update access to all types of MARC records (BIB, HOL, ADM,
@@ -85,9 +84,8 @@ Information, then the OWN values for the user are taken from the proxy's record.
 Note that the system librarian can assign a group of allowed OWN values for a cataloger (see
 Cataloging "OWN" Permissions).
  */
-const parseOwn = (field) => {
-  return {};
-};
+// eslint-disable-next-line no-unused-vars
+const parseOwn = (field) => ({});
 
 /*
 parseLkr

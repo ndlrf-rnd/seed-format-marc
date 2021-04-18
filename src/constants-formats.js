@@ -1,4 +1,3 @@
-
 const BIBLIOGRAPHIC = 'BIBLIOGRAPHIC';
 const HOLDINGS = 'HOLDINGS';
 const AUTHORITY = 'AUTHORITY';
@@ -17,4 +16,4 @@ const MARC_RECORD_FORMATS = {
 
 module.exports = {
   MARC_RECORD_FORMATS,
-}
+};

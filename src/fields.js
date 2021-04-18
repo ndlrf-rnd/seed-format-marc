@@ -1,16 +1,12 @@
-const fs = require('fs')
+/* eslint-disable no-template-curly-in-string */
+const fs = require('fs');
 const { MARC21_JSON_SCHEMA_PATH } = require('./constants-marc21');
-const { jsonParseSafe } = require('../../utils');
-const {
-  MARC_CONTROL_FIELD_TAGS,
-  MARC_NOT_SET,
-  RECORD_TYPE_GROUP_MANUAL_RELATIONS,
-} = require('./constants');
-const {
-  MARC21_FIELD_STR_RE,
-} = require('./constants-marc21');
+const { jsonParseSafe } = require('./utils/json');
+const { forceArray, compact } = require('./utils/arrays');
+const { isObject, isArray } = require('./utils/types');
+const { MARC_CONTROL_FIELD_TAGS, MARC_NOT_SET, RECORD_TYPE_GROUP_MANUAL_RELATIONS } = require('./constants');
+const { MARC21_FIELD_STR_RE } = require('./constants-marc21');
 const { MARC_RECORD_FORMATS } = require('./constants-formats');
-const { forceArray, compact } = require('../../utils/arrays');
 
 const MARC21_JSON_SCHEMA_OBJ = jsonParseSafe(fs.readFileSync(MARC21_JSON_SCHEMA_PATH, 'utf-8'));
 
@@ -79,8 +75,7 @@ const describeField = (
       tag,
       subfield,
       subfieldDescription: subfield
-        ? ((schemaObj.properties || {})[subfield] || { description: null })
-        .description || null
+        ? ((schemaObj.properties || {})[subfield] || { description: null }).description || null
         : null,
       valueDescription: enumIdx !== -1 ? enumDescription[enumIdx] : null,
       ind1Description: ((schemaObj.properties || {}).ind1 || {}).label || null,
@@ -95,7 +90,9 @@ const describeField = (
 
 /**
  * Get given field tag and subfield code from record object having form
- * of NatLibFi Object or straightforward MARCXML mapping to JSON (including controlfield/datafield groups)
+ * of NatLibFi Object or straightforward MARCXML mapping to JSON
+ * (including controlfield/datafield groups)
+ *
  * @param pub
  * @param fieldTag
  * @param subfieldCode
@@ -104,12 +101,14 @@ const describeField = (
 const getMarcField = (pub, fieldTag, subfieldCode) => {
   let result = [];
   if (pub) {
-    const fs = pub.fields || (forceArray(pub.controlfield).concat(forceArray(pub.datafield)).concat([{
-      tag: 'leader',
-      value: pub.leader,
-    }]));
+    const flds = pub.fields || forceArray(pub.controlfield)
+      .concat(forceArray(pub.datafield))
+      .concat([{
+        tag: 'leader',
+        value: pub.leader,
+      }]);
     // const filtered = forceArray(pub[fieldTag])//.filter(({ tag }) => tag === fieldTag);
-    const filtered = fs.filter(field=> (typeof field === 'object') && (field.tag === fieldTag));
+    const filtered = flds.filter((fld) => isObject(fld) && (fld.tag === fieldTag));
     if (isControlFieldTag(fieldTag)) {
       result = filtered.map(({ value }) => value)[0];
     } else if (subfieldCode) {
@@ -123,7 +122,8 @@ const getMarcField = (pub, fieldTag, subfieldCode) => {
       result = compact(filtered);
     }
   }
-  return Array.isArray(result) ? (result.length > 0 ? result : null) : result;
+  // eslint-disable-next-line no-nested-ternary
+  return isArray(result) ? (result.length > 0 ? result : null) : result;
 };
 
 /**
@@ -163,14 +163,13 @@ const parseFieldStr = (fieldStr, value = null) => {
 
   if (isControlFieldTag(tag)) {
     return describeField({ tag }, value);
-  } else {
-    return describeField({
-      tag,
-      ind1,
-      ind2,
-      subfield,
-    }, value);
   }
+  return describeField({
+    tag,
+    ind1,
+    ind2,
+    subfield,
+  }, value);
 };
 
 module.exports = {

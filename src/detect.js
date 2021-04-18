@@ -1,13 +1,12 @@
-const { JSON_MEDIA_TYPE } = require('../json/constants');
-const { flattenDeep } = require('../../utils');
+const { JSON_MEDIA_TYPE } = 'application/json';
+const { flattenDeep } = require('./utils/arrays');
 const { toISO2709 } = require('./iso2709');
 const { MARC_MEDIA_TYPE } = require('./constants');
-const { BASIC_ENTITIES } = require('../../recordTypes');
-const { MARC_LEADER_BIBLIOGRAPHIC_LEVEL_OFFSET } = require('./constants');
-const { flatten, forceArray, compact, zip, get, isEmpty } = require('../../utils');
-
-const { getMarcField } = require('./fields')
-;
+const { MARC_LEADER_BIBLIOGRAPHIC_LEVEL_OFFSET, BASIC_ENTITIES } = require('./constants');
+const { flatten, forceArray, compact, zip } = require('./utils/arrays');
+const { get } = require('./utils/objects');
+const { isEmpty } = require('./utils/types');
+const { getMarcField } = require('./fields');
 const { MARC21_BIBLIOGRAPHIC_LEVEL } = require('./constants-marc21');
 const { MARC_RECORD_FORMATS } = require('./constants-formats');
 const { UNIMARC_RECORD_TYPE_GROUP_CODES } = require('./constants-unimarc');
@@ -24,7 +23,6 @@ const {
   MARC_SCHEMAS,
 } = require('./constants');
 
-
 const getRecordStatus = (rec) => get(rec, ['leader', MARC_LEADER_MARC_RECORD_STATUS_OFFSET], 'd').toLowerCase();
 
 const getMarcSource = (pub, defaultSourceCode) => {
@@ -32,7 +30,7 @@ const getMarcSource = (pub, defaultSourceCode) => {
     return '';
   }
   // noinspection NonAsciiCharacters
-  let possibleSources = compact(flattenDeep([
+  const possibleSources = compact(flattenDeep([
     getMarcField(pub, '040', 'a'),
     (getMarcField(pub, '017') || []).filter(
       ({ subfield }) => (
@@ -56,26 +54,27 @@ const getMarcSource = (pub, defaultSourceCode) => {
     getMarcField(pub, '035', 'a'),
     getMarcField(pub, '852', 'a'),
     defaultSourceCode,
-  ])).map(v => ({
-    'РГБ': 'RuMoRGB',
-    'RkpciviluMoRGB': 'RuMoRGB',
-    'РНБ': 'RuSpRNB',
+  ])).map((v) => ({
+    РГБ: 'RuMoRGB',
+    RkpciviluMoRGB: 'RuMoRGB',
+    РНБ: 'RuSpRNB',
   })[v] || v);
   const source = possibleSources[0];
+  // eslint-disable-next-line no-useless-escape
   if ((!isEmpty(source)) && `${source}`.match(/^[\p{L}\p{N}\/\-\\.@_ ]+$/uig)) {
     return `${source}`;
   }
   return '';
 };
 
-const getMarcKey = rec => `${getMarcField(rec, '001') || ''}`;
+const getMarcKey = (rec) => `${getMarcField(rec, '001') || ''}`;
 
 /**
  * Get electronic locations
  * @param rec
  * @returns {Array<*>}
  */
-const getUrlRecords = (rec) => flatten(forceArray(getMarcField(rec, '856')).map(field856 => {
+const getUrlRecords = (rec) => flatten(forceArray(getMarcField(rec, '856')).map((field856) => {
   const urls = field856.subfield.filter(({ code }) => code === 'u').map(({ value }) => value);
   const types = field856.subfield.filter(({ code }) => code === 'q').map(({ value }) => value);
   return urls.map((url, idx) => {
@@ -91,7 +90,7 @@ const getUrlRecords = (rec) => flatten(forceArray(getMarcField(rec, '856')).map(
         key = url;
       } else if (urlParts.length > 1) {
         source = urlParts[0];
-        key = urlParts.slice(1).map(v => `/${v}`).join('');
+        key = urlParts.slice(1).map((v) => `/${v}`).join('');
       } else {
         key = url;
       }
@@ -100,9 +99,9 @@ const getUrlRecords = (rec) => flatten(forceArray(getMarcField(rec, '856')).map(
     return ({
       title: titleParts.join(' - '),
       rel: {
-        '0': 'http://opds-spec.org/acquisition',
-        '1': 'alternate',
-        '2': 'relatedTo',
+        0: 'http://opds-spec.org/acquisition',
+        1: 'alternate',
+        2: 'relatedTo',
       }[field856.ind2 || '0'] || 'relatedTo',
       kind: BASIC_ENTITIES.URL,
       source,
@@ -110,7 +109,7 @@ const getUrlRecords = (rec) => flatten(forceArray(getMarcField(rec, '856')).map(
       type: types.length >= idx + 1 ? types[idx] : null,
     });
   });
-}).filter(v => !!v));
+}).filter((v) => !!v));
 
 /**
  * Get electronic locations
@@ -119,7 +118,7 @@ const getUrlRecords = (rec) => flatten(forceArray(getMarcField(rec, '856')).map(
  */
 const getPhysicalLocationRecord = (rec) => flattenDeep(['852', '853'].map(
   (fieldNumber) => forceArray(getMarcField(rec, fieldNumber)).map(
-    field => {
+    (field) => {
       const fieldA = field.subfield.filter(({ code }) => code === 'a').map(({ value }) => value);
       const fieldJ = field.subfield.filter(({ code }) => code === 'j').map(({ value }) => value);
       const record = toISO2709({
@@ -137,10 +136,11 @@ const getPhysicalLocationRecord = (rec) => flattenDeep(['852', '853'].map(
               kind: BASIC_ENTITIES.ITEM,
               mediaType: MARC_MEDIA_TYPE,
             },
-          ]));
+          ]),
+      );
     },
   ),
-)).filter(v => !!v);
+)).filter((v) => !!v);
 
 /**
  * Detect MARC standard fork (MARC21, RUSMARC, UNIMARC e.t.c.)
@@ -166,14 +166,16 @@ const detectMarcSchemaUri = (
   // const field200 = forceArray(getMarcField(marcObj, '200'));
   if (field100a && field100a.match(/^[0-9]{8}[a-z].{25,27}$/ui)) {
     return MARC_SCHEMAS.RUSMARC.uri;
-  } else if (
+  }
+  if (
     ['007', '008', '040', '852', '856'].reduce(
       (a, o) => a || (forceArray(getMarcField(marcObj, o, 'a')).length > 0),
       false,
     )
   ) {
     return MARC_SCHEMAS.MARC21.uri;
-  } else if (marcObj.leader) {
+  }
+  if (marcObj.leader) {
     return MARC_SCHEMAS.RUSMARC.uri;
   }
   return defaultMarcSchemaUri;
@@ -189,7 +191,9 @@ const getMarkRecordType = (rec) => {
   const leader = rec.leader;
   // TODO: Here RUSMARC and UNIMARC are about pretty the same,
   //       but i'm not confident about all RUSMARC authority and holdings files
-  const codeMap = (marcSchemaUri === MARC_SCHEMAS.MARC21.uri) ? MARC21_RECORD_TYPE_GROUP_CODES : UNIMARC_RECORD_TYPE_GROUP_CODES;
+  const codeMap = (marcSchemaUri === MARC_SCHEMAS.MARC21.uri)
+    ? MARC21_RECORD_TYPE_GROUP_CODES
+    : UNIMARC_RECORD_TYPE_GROUP_CODES;
 
   const leaderCode = ((
     Array.isArray(leader) ? leader.map((v) => v || ' ').join('') : leader
@@ -199,6 +203,13 @@ const getMarkRecordType = (rec) => {
     (tg) => codeMap[tg].indexOf(leaderCode) !== -1,
   )[0] || MARC_RECORD_FORMATS.UNKNOWN;
 };
+
+const getBibliographicLevel = (rec) => (rec.leader ? (
+  MARC21_BIBLIOGRAPHIC_LEVEL[
+    (rec.leader[MARC_LEADER_BIBLIOGRAPHIC_LEVEL_OFFSET] || '').toLowerCase()
+  ] || { type: null }
+).type : null);
+
 /**
  * Detect MARC record type
  * @param rec {*}
@@ -209,7 +220,9 @@ const getKind = (rec) => {
   // const leader = rec.leader;
   // // TODO: Here RUSMARC and UNIMARC are about pretty the same,
   // //       but i'm not confident about all RUSMARC authority and holdings files
-  // const codeMap = (marcSchemaUri === MARC_SCHEMAS.MARC21.uri) ? MARC21_RECORD_TYPE_GROUP_CODES : UNIMARC_RECORD_TYPE_GROUP_CODES;
+  // const codeMap = (marcSchemaUri === MARC_SCHEMAS.MARC21.uri)
+  //  ? MARC21_RECORD_TYPE_GROUP_CODES
+  //  : UNIMARC_RECORD_TYPE_GROUP_CODES;
   //
   // const leaderCode = ((
   //   Array.isArray(leader) ? leader.map((v) => v || ' ').join('') : leader
@@ -221,11 +234,9 @@ const getKind = (rec) => {
   const marcRecordType = getMarkRecordType(rec);
   if (marcRecordType === MARC_RECORD_FORMATS.BIBLIOGRAPHIC) {
     return `${getBibliographicLevel(rec) || ''}`;
-  } else {
-    return `${marcRecordType || ''}`;
   }
+  return `${marcRecordType || ''}`;
 };
-
 
 /**
  * Detection
@@ -270,24 +281,19 @@ const getRecordLevel = (rec) => {
   return null;
 };
 
+const isSingleRecord = (rec) => (['b', 'd', 'a', 'm'].indexOf(getRecordLevel(rec)) !== -1);
 
-const isSingleRecord = (rec) => {
-  return (['b', 'd', 'a', 'm'].indexOf(getRecordLevel(rec)) !== -1);
-};
-
-const isMultiRecord = (rec) => {
-  return (['s', 'i', 'c'].indexOf(getRecordLevel(rec)) !== -1);
-};
+const isMultiRecord = (rec) => (['s', 'i', 'c'].indexOf(getRecordLevel(rec)) !== -1);
 
 const getType = (rec) => (
   MARC21_RECORD_TYPE_CODES[
     (rec.leader[MARC_LEADER_TYPE_OFFSET] || '').toLowerCase()
-    ] || { type: null }
+  ] || { type: null }
 ).type;
 
 const getRslCollections = (rec) => {
   const field979a = getMarcField(rec, '979', 'a');
-  return (field979a || []).map(key => ({
+  return (field979a || []).map((key) => ({
     kind: BASIC_ENTITIES.COLLECTION,
     source: 'rumorgb',
     key,
@@ -299,14 +305,6 @@ const getRslCollections = (rec) => {
     }),
     mediaType: JSON_MEDIA_TYPE,
   }));
-};
-
-const getBibliographicLevel = (rec) => {
-  return rec.leader ? (
-    MARC21_BIBLIOGRAPHIC_LEVEL[
-      (rec.leader[MARC_LEADER_BIBLIOGRAPHIC_LEVEL_OFFSET] || '').toLowerCase()
-      ] || { type: null }
-  ).type : null;
 };
 
 //

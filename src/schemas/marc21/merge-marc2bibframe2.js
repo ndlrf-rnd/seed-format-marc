@@ -1,10 +1,10 @@
-const { js2xml } = require('xml-js');
 const path = require('path');
 const fs = require('fs');
-const os = require('os');
-const { x2j } = require('../../../../utils/x2j');
+const { js2xml } = require('xml-js');
 
-const BF2_VANILLA_XSLT_NAME = path.join(__dirname, '..', 'contrib', 'marc2bibframe2', 'xsl', 'marc2bibframe2.xsl');
+const { x2j } = require('../../utils/x2j');
+
+const BF2_VANILLA_XSLT_NAME = path.join(__dirname, '../contrib/marc2bibframe2/xsl/marc2bibframe2.xsl');
 const BF2_XSLT_NAME = path.join(__dirname, './marc2bibframe2.merged.xsl');
 
 const forceArray = (x) => (Array.isArray(x) ? x : [x].filter((v) => !!v));

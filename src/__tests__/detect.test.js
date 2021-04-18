@@ -1,8 +1,7 @@
 const path = require('path');
 const fs = require('fs');
-const { BASIC_ENTITIES } = require('../../../constants');
-const { MARC_RECORD_FORMATS } = require('../constants-formats');
-const { MARC_SCHEMAS } = require('../constants');
+
+const { MARC_SCHEMAS, BASIC_ENTITIES } = require('../constants');
 const { detectMarcSchemaUri, getKind } = require('../detect');
 
 const jsonEntity = JSON.parse(

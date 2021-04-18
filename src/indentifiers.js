@@ -1,9 +1,6 @@
-const { compact, forceArray } = require('../../utils/arrays');
-const { MARC21_RELATION_RE } = require('./constants-marc21');
-const {
-  INVALID_SOURCE_CODES_MAPPING,
-  MARC_BLANK_CHAR,
-} = require('./constants');
+const {compact, forceArray} = require('./utils/arrays');
+const {MARC21_RELATION_RE} = require('./constants-marc21');
+const {INVALID_SOURCE_CODES_MAPPING, MARC_BLANK_CHAR,} = require('./constants');
 
 const normalizeSourceCode = (sc) => {
   if (typeof sc !== 'string') {

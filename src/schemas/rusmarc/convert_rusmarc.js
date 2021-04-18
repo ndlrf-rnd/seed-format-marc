@@ -2,11 +2,10 @@ const fs = require('fs');
 const path = require('path');
 const jsonata = require('jsonata');
 const jsyaml = require('js-yaml');
-const { x2j } = require('../../../../utils/x2j');
+const { x2j } = require('../../utils/x2j');
+const { mkdirpSync } = require('../../utils/fs');
 
 const CONVERTOR_VERSION = '0.1.0';
-
-const { mkdirpSync } = require('../../../../utils');
 
 const SCHEMA_PATH = path.join(__dirname, 'RUSMARC20190324.xml');
 const PATH_JSONATA = path.join(__dirname, 'rusmarc-bibliographic-to-json-schema.jsonata');

@@ -1,5 +1,5 @@
 const path = require('path');
-const { BASIC_ENTITIES } = require('../../constants');
+const { BASIC_ENTITIES } = require('./constants-basic-entities');
 const {
   ENCODING_LEVEL_INCREASE_FROM_PREPUBLISH,
   NEW,
@@ -8,9 +8,7 @@ const {
   CORRECTED,
   ENCODING_LEVEL_INCREASE,
 } = require('./constants-record-status');
-const {
-  MARC_RECORD_FORMATS,
-} = require('./constants-formats');
+const { MARC_RECORD_FORMATS } = require('./constants-formats');
 
 const MARC21_RECORD_TYPE_GROUP_CODES = {
   // Holdings
@@ -220,44 +218,44 @@ const MARC21_RECORD_STATUS = {
   ' ': UNKNOWN,
   '|': UNKNOWN,
   '#': UNKNOWN,
-  '$': UNKNOWN,
-  '0': UNKNOWN,
+  $: UNKNOWN,
+  0: UNKNOWN,
   [NEW]: NEW,
   [ENCODING_LEVEL_INCREASE_FROM_PREPUBLISH]: ENCODING_LEVEL_INCREASE_FROM_PREPUBLISH,
 };
 
 const MARC21_BIBLIOGRAPHIC_LEVEL = {
-  'a': {
+  a: {
     type: BASIC_ENTITIES.INSTANCE,
     name: 'Monographic component part',
     description: 'Monographic bibliographic unit that is physically attached to or contained in another unit such that the retrieval of the component part is dependent on the identification and location of the host item or container. Contains fields that describe the component part and data that identify the host, field 773 (Host Item Entry). Examples of monographic component parts with corresponding host items include an article in a single issue of a periodical, a chapter in a book, a band on a phonodisc, and a map on a single sheet that contains several maps.',
   },
-  'b': {
+  b: {
     type: BASIC_ENTITIES.INSTANCE,
     name: 'Serial component part',
     description: 'Serial bibliographic unit that is physically attached to or contained in another unit such that the retrieval of the component part is dependent on the identification and location of the host item or container. Contains fields that describe the component part and data that identify the host, field 773 (Host Item Entry). Example of a serial component part with corresponding host item is a regularly appearing column or feature in a periodical.',
   },
-  'c': {
+  c: {
     type: BASIC_ENTITIES.COLLECTION,
     name: 'Collection',
     description: 'Made-up multipart group of items that were not originally published, distributed, or produced together. The record describes units defined by common provenance or administrative convenience for which the record is intended as the most comprehensive in the system.',
   },
-  'd': {
+  d: {
     type: BASIC_ENTITIES.COLLECTION,
     name: 'Subunit',
     description: 'Part of collection, especially an archival unit described collectively elsewhere in the system. Contains fields that describe the subunit and data that identify the host item. Subunits may be items, folders, boxes, archival series, subgroups, or subcollections.',
   },
-  'i': {
+  i: {
     type: BASIC_ENTITIES.INSTANCE,
     name: 'Integrating resource',
     description: 'Bibliographic resource that is added to or changed by means of updates that do not remain discrete and are integrated into the whole. Examples include updating loose-leafs and updating Web sites. Integrating resources may be finite or continuing.',
   },
-  'm': {
+  m: {
     type: BASIC_ENTITIES.INSTANCE,
     name: 'Monograph/Item',
     description: 'Item either complete in one part (e.g., a single monograph, a single map, a single manuscript, etc.) or intended to be completed, in a finite number of separate parts (e.g., a multivolume monograph, a sound recording with multiple tracks, etc.).',
   },
-  's': {
+  s: {
     type: BASIC_ENTITIES.INSTANCE,
     name: 'Serial',
     description: 'Bibliographic item issued in successive parts bearing numerical or chronological designations and intended to be continued indefinitely. Includes periodicals; newspapers; annuals (reports, yearbooks, etc.); the journals, memoirs, proceedings, transactions, etc., of societies; and numbered monographic series, etc.',
@@ -289,4 +287,3 @@ module.exports = {
   MARC21_JSON_SCHEMA_URI,
   MARC21_BIBLIOGRAPHIC_LEVEL,
 };
-
