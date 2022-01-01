@@ -439,7 +439,7 @@ const getMarcRecordDates = (rec, marcSchemaUri = MARC_SCHEMAS.MARC21.uri) => {
   }
   const publicationDate = getMarcPublicationDate(rec, marcSchemaUri) || null;
   const result = {
-    entity: getType(rec),
+    // entity: getType(rec),
     marcRecordType: getMarkRecordType(rec),
     typeOfRange,
     recordDateUpdated,

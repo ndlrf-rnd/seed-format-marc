@@ -2,16 +2,34 @@ const path = require('path');
 
 const { registerJsonata } = require('./utils/jsonata');
 
-const { BASIC_ENTITIES } = require('./constants-basic-entities');
-const { ALEF_JSON_SCHEMA_URI, ALEF_JSON_SCHEMA_PATH, ALEF_DOC_URI } = require('./alef');
-const { MARC21_JSON_SCHEMA_URI, MARC21_DOC_URI, MARC21_JSON_SCHEMA_PATH } = require('./constants-marc21');
-const { UNIMARC_DOC_URI, UNIMARC_JSON_SCHEMA_URI, UNIMARC_JSON_SCHEMA_PATH } = require('./constants-unimarc');
-const { RUSMARC_DOC_URI, RUSMARC_JSON_SCHEMA_URI, RUSMARC_JSON_SCHEMA_PATH } = require('./constants-rusmarc');
+const {
+  ALEF_JSON_SCHEMA_URI,
+  ALEF_JSON_SCHEMA_PATH,
+  ALEF_DOC_URI,
+} = require('./alef');
+const {
+  MARC21_JSON_SCHEMA_URI,
+  MARC21_DOC_URI,
+  MARC21_JSON_SCHEMA_PATH,
+} = require('./constants-marc21');
+const {
+  UNIMARC_DOC_URI,
+  UNIMARC_JSON_SCHEMA_URI,
+  UNIMARC_JSON_SCHEMA_PATH,
+} = require('./constants-unimarc');
+const {
+  RUSMARC_DOC_URI,
+  RUSMARC_JSON_SCHEMA_URI,
+  RUSMARC_JSON_SCHEMA_PATH,
+} = require('./constants-rusmarc');
 const { MARC_RECORD_FORMATS } = require('./constants-formats');
 
 const JSON_SCHEMA_MEDIA_TYPE = 'application/schema+json';
-const JSON_SCHEMA_EXTENSION = '.schema.json';
+const JSON_MEDIA_TYPE = 'application/json';
+const OPDS2_MEDIA_TYPE = 'application/opds+json';
+const JSONLD_MEDIA_TYPE = 'application/ld+json';
 
+const JSON_SCHEMA_EXTENSION = '.schema.json';
 const COLUMNS = [
   'record_type',
   'field',
@@ -195,6 +213,8 @@ const RUSMARC_TO_JSONLD_BF2_JSONATA = registerJsonata(path.join(__dirname, 'mapp
 // Currently unused
 const BF2_LC_XSLT_PATH = path.join(__dirname, '../../contrib/marc2bibframe2/xsl/marc2bibframe2.xsl');
 
+const MARC_FIELD_LENGTH_START = 3;
+const MARC_DIRECTORY_INDEX_START = 7;
 
 module.exports = {
   BF2_LC_XSLT_PATH,
@@ -218,7 +238,6 @@ module.exports = {
   MARC_RECORD_FORMATS,
   MARC_SD_CHAR,
   RECORD_TYPE_GROUP_MANUAL_RELATIONS,
-  BASIC_ENTITIES,
   MARC_MEDIA_TYPE,
   MARC_EXTENSION,
   DEFAULT_TEXT_FIELD_SEPARATOR,
@@ -228,4 +247,9 @@ module.exports = {
   MARC_SCHEMAS,
   JSON_SCHEMA_MEDIA_TYPE,
   JSON_SCHEMA_EXTENSION,
+  JSON_MEDIA_TYPE,
+  OPDS2_MEDIA_TYPE,
+  JSONLD_MEDIA_TYPE,
+  MARC_FIELD_LENGTH_START,
+  MARC_DIRECTORY_INDEX_START,
 };

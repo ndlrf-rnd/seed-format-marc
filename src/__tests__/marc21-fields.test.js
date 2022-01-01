@@ -1,12 +1,10 @@
 const path = require('path');
 const fs = require('fs');
-const { BASIC_ENTITIES } = require('../../../constants');
 const { MARC_SCHEMAS } = require('../constants');
 const { parseFieldRelationSeq } = require('../relations');
 const { parseIdentifier } = require('../indentifiers');
 const { parseFieldStr } = require('../fields');
-const { MARC_RECORD_FORMATS } = require('../constants');
-const { getKind, detectMarcSchemaUri } = require('../detect');
+const { detectMarcSchemaUri } = require('../detect');
 
 test('field string parsing', () => {
   expect(parseFieldStr('013#3$a'))
@@ -66,17 +64,15 @@ test('field string parsing', () => {
     });
 });
 
-
 test('parseUriRelationSeq', () => {
   expect(parseIdentifier('catalog.rsl.ru/resources/instance/RuMoRGB-rsl')).toEqual({
-    'key_to': 'resources/instance/RuMoRGB-rsl',
-    'source_to': 'catalog.rsl.ru',
+    key_to: 'resources/instance/RuMoRGB-rsl',
+    source_to: 'catalog.rsl.ru',
   });
   expect(parseIdentifier('(RuMoRGB)01010079565')).toEqual({
-    'key_to': '01010079565',
-    'source_to': 'RuMoRGB',
+    key_to: '01010079565',
+    source_to: 'RuMoRGB',
   });
-
 });
 
 test('parseFieldRelationSeq', () => {
@@ -89,6 +85,6 @@ test('detect', () => {
   const jsonEntity = JSON.parse(
     fs.readFileSync(path.join(__dirname, 'data/dates_1_marc21.json'), 'utf-8'),
   );
-  expect(getKind(jsonEntity)).toEqual(BASIC_ENTITIES.INSTANCE);
+  // expect(getKind(jsonEntity)).toEqual(BASIC_ENTITIES.INSTANCE);
   expect(detectMarcSchemaUri(jsonEntity)).toEqual(MARC_SCHEMAS.MARC21.uri);
 });

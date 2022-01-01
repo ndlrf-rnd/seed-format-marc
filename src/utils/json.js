@@ -1,4 +1,3 @@
-const jsonStringifySafe = require('json-stringify-safe');
 const { isString } = require('./types');
 
 /**
@@ -31,7 +30,7 @@ const jsonParseSafe = (input) => {
   return input;
 };
 
-const prettyJson = (val) => jsonStringifySafe(val, null, 2)
+const prettyJson = (val) => JSON.stringify(val, null, 2)
   .replace(/\[ *\n */ug, '[')
   .replace(/ *\n *\]/ug, ']')
   .replace(/([^}\]]) *[,] *\n */ug, '$1, ');

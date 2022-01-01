@@ -1,4 +1,3 @@
-
 /**
  * Pad string on left side
  * @param str
@@ -12,5 +11,5 @@ const padLeft = (str, len, sym = ' ') => [
 ].join('');
 
 module.exports = {
-  padLeft
-}
+  padLeft,
+};

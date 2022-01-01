@@ -2,17 +2,24 @@ const { JSON_MEDIA_TYPE } = 'application/json';
 const { flattenDeep } = require('./utils/arrays');
 const { toISO2709 } = require('./iso2709');
 const { MARC_MEDIA_TYPE } = require('./constants');
-const { MARC_LEADER_BIBLIOGRAPHIC_LEVEL_OFFSET, BASIC_ENTITIES } = require('./constants');
-const { flatten, forceArray, compact, zip } = require('./utils/arrays');
+const {
+  MARC_LEADER_BIBLIOGRAPHIC_LEVEL_OFFSET,
+  BASIC_ENTITIES,
+} = require('./constants');
+const {
+  flatten,
+  forceArray,
+  compact,
+  zip,
+} = require('./utils/arrays');
 const { get } = require('./utils/objects');
 const { isEmpty } = require('./utils/types');
 const { getMarcField } = require('./fields');
-const { MARC21_BIBLIOGRAPHIC_LEVEL } = require('./constants-marc21');
 const { MARC_RECORD_FORMATS } = require('./constants-formats');
 const { UNIMARC_RECORD_TYPE_GROUP_CODES } = require('./constants-unimarc');
 const {
+  MARC21_BIBLIOGRAPHIC_LEVEL,
   MARC21_RECORD_TYPE_GROUP_CODES,
-  MARC21_RECORD_TYPE_CODES,
 } = require('./constants-marc21');
 const {
   MARC_TEST_RE,
@@ -23,7 +30,11 @@ const {
   MARC_SCHEMAS,
 } = require('./constants');
 
-const getRecordStatus = (rec) => get(rec, ['leader', MARC_LEADER_MARC_RECORD_STATUS_OFFSET], 'd').toLowerCase();
+const getRecordStatus = (rec) => get(
+  rec,
+  ['leader', MARC_LEADER_MARC_RECORD_STATUS_OFFSET],
+  'd',
+).toLowerCase();
 
 const getMarcSource = (pub, defaultSourceCode) => {
   if (isEmpty(pub)) {
@@ -35,11 +46,17 @@ const getMarcSource = (pub, defaultSourceCode) => {
     (getMarcField(pub, '017') || []).filter(
       ({ subfield }) => (
         subfield.filter(
-          ({ code, value }) => (code === 'a') && value,
+          ({
+            code,
+            value,
+          }) => (code === 'a') && value,
         ).length > 0
       ) && (
         subfield.filter(
-          ({ code, value }) => (code === 'b') && value,
+          ({
+            code,
+            value,
+          }) => (code === 'b') && value,
         ).length > 0
       ),
     ).map(
@@ -285,12 +302,6 @@ const isSingleRecord = (rec) => (['b', 'd', 'a', 'm'].indexOf(getRecordLevel(rec
 
 const isMultiRecord = (rec) => (['s', 'i', 'c'].indexOf(getRecordLevel(rec)) !== -1);
 
-const getType = (rec) => (
-  MARC21_RECORD_TYPE_CODES[
-    (rec.leader[MARC_LEADER_TYPE_OFFSET] || '').toLowerCase()
-  ] || { type: null }
-).type;
-
 const getRslCollections = (rec) => {
   const field979a = getMarcField(rec, '979', 'a');
   return (field979a || []).map((key) => ({
@@ -307,29 +318,6 @@ const getRslCollections = (rec) => {
   }));
 };
 
-//
-// const detectMarcItemType = (record) => {
-//   // get item type
-//   if (record.leader) {
-//     const marcType = record.leader.substr(6, 1);
-//     if (marcType === 'g') {
-//       return 'film';
-//     } else if (marcType === 'j' || marcType === 'i') {
-//       return 'audioRecording';
-//     } else if (marcType === 'e' || marcType === 'f') {
-//       return 'map';
-//     } else if (marcType === 'k') {
-//       return 'artwork';
-//     } else if (marcType === 't' || marcType === 'b') {
-//       // 20091210: in unimarc, the code for manuscript is b, unused in marc.
-//       return 'manuscript';
-//     } else {
-//       return 'book';
-//     }
-//   } else {
-//     return 'book';
-//   }
-// };
 const isMarc = async (input) => (typeof input === 'string') && (!!input.trim().match(MARC_TEST_RE));
 
 module.exports = {
@@ -340,7 +328,6 @@ module.exports = {
   getMarcKey,
   getMarcSource,
   detectMarcSchemaUri,
-  getType,
   getKind,
   getMarkRecordType,
   getRecordLevel,

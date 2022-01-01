@@ -3,7 +3,6 @@ const sortBy = require('lodash.sortby');
 const uniqBy = require('lodash.uniqby');
 const flattenDeep = require('lodash.flattendeep');
 
-const flatten = (arr) => (forceArray(arr).reduce((acc, out) => acc.concat(out), []));
 /**
  *
  * @param x {any}
@@ -11,6 +10,7 @@ const flatten = (arr) => (forceArray(arr).reduce((acc, out) => acc.concat(out), 
  */
 const forceArray = (x) => (Array.isArray(x) ? x : [x].filter((v) => !!v));
 
+const flatten = (arr) => (forceArray(arr).reduce((acc, out) => acc.concat(out), []));
 
 module.exports = {
   forceArray,

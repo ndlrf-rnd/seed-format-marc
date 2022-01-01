@@ -2,16 +2,32 @@ const fs = require('fs');
 const { isDataFieldTag } = require('./fields');
 const { MARC_BLANK_CHAR } = require('./constants');
 const { isControlFieldTag } = require('./fields');
-const { flatten, forceArray } = require('./utils/arrays');
+const {
+  flatten,
+  forceArray,
+} = require('./utils/arrays');
 const { get } = require('./utils/objects');
 const { MARC21_JSON_SCHEMA_PATH } = require('./constants-marc21');
 
 const MARC21_SCHEMA = JSON.parse(fs.readFileSync(MARC21_JSON_SCHEMA_PATH, 'utf-8'));
+const schemaFields = Object.keys(MARC21_SCHEMA.properties).reduce((a, tag) => {
+  const field = MARC21_SCHEMA.properties[tag];
+  return {
+    ...a,
+    [tag]: field.items || field.properties,
+  };
+});
+// const field = get(
+//   MARC21_SCHEMA,
+//   ['properties', tag],
+//   {},
+// );
 
+// zero size
+// rec.leader.replace(/^[0-9]{5}/ug, '00000')
 const marcObjectToJson = (
   rec,
   options = {
-    zeroSize: false,
     allIndicators: true,
   },
 ) => {
@@ -19,9 +35,7 @@ const marcObjectToJson = (
   const o = options || {};
   const result = rec.leader
     ? {
-      leader: o.zeroSize
-        ? rec.leader.replace(/^[0-9]{5}/ug, '00000')
-        : rec.leader,
+      leader: rec.leader,
     }
     : {};
   const rlds = [
@@ -29,30 +43,26 @@ const marcObjectToJson = (
     ...(rec.datafield || []),
   ];
   rlds.forEach(
-    ({ tag, value, ind1, ind2, subfield }) => {
-      const convertedVal = value || (forceArray(subfield).reduce(
-        (acc, { code, value: subFieldValue }) => {
-          const field = get(
-            MARC21_SCHEMA,
-            ['properties', tag],
-            {},
-          );
-
-          const subfld = get(
-            field,
-            (field.type === 'array') ? ['items', 'properties', code] : ['properties', code],
-            {},
-          );
-          return ({
-            ...acc,
-            // eslint-disable-next-line no-nested-ternary
-            [code]: (subfld.type === 'array')
-              ? forceArray(subFieldValue)
-              : Array.isArray(subFieldValue) ? subFieldValue[0] : subFieldValue,
-          });
-        },
+    ({
+      tag,
+      value,
+      ind1,
+      ind2,
+      subfield,
+    }) => {
+      const convertedVal = value || forceArray(subfield).reduce(
+        (acc, {
+          code,
+          value: subFieldValue,
+        }) => ({
+          ...acc,
+          // eslint-disable-next-line no-nested-ternary
+          [code]: (get(schemaFields, [tag, code, 'type'], 'array') === 'array')
+            ? forceArray(subFieldValue)
+            : Array.isArray(subFieldValue) ? subFieldValue[0] : subFieldValue,
+        }),
         {},
-      ));
+      );
       if (isControlFieldTag(tag)) {
         result[tag] = convertedVal;
       } else {

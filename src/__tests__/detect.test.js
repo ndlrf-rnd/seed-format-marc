@@ -1,8 +1,8 @@
 const path = require('path');
 const fs = require('fs');
 
-const { MARC_SCHEMAS, BASIC_ENTITIES } = require('../constants');
-const { detectMarcSchemaUri, getKind } = require('../detect');
+const { MARC_SCHEMAS } = require('../constants');
+const { detectMarcSchemaUri } = require('../detect');
 
 const jsonEntity = JSON.parse(
   fs.readFileSync(
@@ -10,14 +10,6 @@ const jsonEntity = JSON.parse(
     'utf-8',
   ),
 );
-
-test('detect MARC record kind', () => {
-  expect(
-    getKind(jsonEntity),
-  ).toEqual(
-    BASIC_ENTITIES.INSTANCE,
-  );
-});
 
 test('detect MARC fork', () => {
   expect(

@@ -1,6 +1,6 @@
-const {compact, forceArray} = require('./utils/arrays');
-const {MARC21_RELATION_RE} = require('./constants-marc21');
-const {INVALID_SOURCE_CODES_MAPPING, MARC_BLANK_CHAR,} = require('./constants');
+const { compact, forceArray } = require('./utils/arrays');
+const { MARC21_RELATION_RE } = require('./constants-marc21');
+const { INVALID_SOURCE_CODES_MAPPING, MARC_BLANK_CHAR } = require('./constants');
 
 const normalizeSourceCode = (sc) => {
   if (typeof sc !== 'string') {
@@ -23,7 +23,6 @@ const parseIdentifier = (str = '', source = null, isRelation = true) => {
   // Test for Marc
   const resParts = str.match(MARC21_RELATION_RE);
   if (resParts) {
-
     if ((source || '').trim()) {
       res = [source, resParts ? resParts[2] : str];
     } else if (resParts) {
@@ -37,28 +36,25 @@ const parseIdentifier = (str = '', source = null, isRelation = true) => {
     }
     if (compact(forceArray(res)).length < 2) {
       return res;
-    } else {
-      return res ? {
-        [isRelation ? 'key_to' : 'key']: res[1],
-        [isRelation ? 'source_to' : 'source']: normalizeSourceCode(res[0]),
-      } : {
-        [isRelation ? 'source_to' : 'source']: normalizeSourceCode(str),
-      };
     }
-  } else {
-    // Test on URI-like
-    const entChunks = str.replace(/^[a-z0-9_-]*:\/\//ui, '').split('/').filter(
-      (x) => !!x,
-    );
-    if (entChunks.filter(v => !!v).length > 1) {
-      return {
-        [isRelation ? 'source_to' : 'source']: entChunks[0],
-        [isRelation ? 'key_to' : 'key']: entChunks.slice(1).join('/'),
-      };
-    } else {
-      return res;
-    }
+    return res ? {
+      [isRelation ? 'key_to' : 'key']: res[1],
+      [isRelation ? 'source_to' : 'source']: normalizeSourceCode(res[0]),
+    } : {
+      [isRelation ? 'source_to' : 'source']: normalizeSourceCode(str),
+    };
   }
+  // Test on URI-like
+  const entChunks = str.replace(/^[a-z0-9_-]*:\/\//ui, '').split('/').filter(
+    (x) => !!x,
+  );
+  if (entChunks.filter((v) => !!v).length > 1) {
+    return {
+      [isRelation ? 'source_to' : 'source']: entChunks[0],
+      [isRelation ? 'key_to' : 'key']: entChunks.slice(1).join('/'),
+    };
+  }
+  return res;
 };
 
 module.exports = {

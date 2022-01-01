@@ -1,6 +1,9 @@
 const fs = require('fs');
 const path = require('path');
-const { parseDateStr, getMarcRecordDates } = require('../dates');
+const {
+  parseDateStr,
+  getMarcRecordDates,
+} = require('../dates');
 
 test('get marc record dates', () => {
   const jsonEntity = JSON.parse(
@@ -14,7 +17,8 @@ test('get marc record dates', () => {
   ).toEqual(
     {
       marcRecordType: 'BIBLIOGRAPHIC',
-      entity: 'instance',
+      dateStart: new Date('1999-12-31T00:00:00.000Z'),
+      publicationDate: new Date('1999-12-31T00:00:00.000Z'),
       typeOfRange: 'л',
       recordDateStart: new Date('2018-09-14T15:34:23.000Z'),
       recordDateUpdated: new Date('2018-09-14T15:34:23.000Z'),
@@ -42,7 +46,6 @@ test('get rusmarc record dates', () => {
   ).toEqual(
     {
       marcRecordType: 'BIBLIOGRAPHIC',
-      entity: 'instance',
       recordDateStart: new Date('2019-10-07T13:31:00.000Z'),
       recordDateUpdated: new Date('2019-10-07T13:31:00.000Z'),
     },
@@ -289,7 +292,7 @@ test('get full marc record dates', () => {
   ).toEqual(
     {
       marcRecordType: 'BIBLIOGRAPHIC',
-      entity: 'instance',
+      publicationDate: new Date('1779-12-31T00:00:00.000Z'),
       dateStart: new Date('1779-01-01T00:00:00.000Z'),
       recordDateStart: new Date('2007-11-01T00:00:00.000Z'),
       recordDateUpdated: new Date('2019-09-23T12:12:54.000Z'),

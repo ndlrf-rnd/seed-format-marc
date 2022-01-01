@@ -3,46 +3,32 @@ const fs = require('fs');
 const { parseFieldRelationSeq } = require('../relations');
 const { parseIdentifier } = require('../indentifiers');
 const { omit } = require('../utils/objects');
-const { cleanDatesAndUUIDs } = require('../utils/testHelpers');
-const { jsonParseSafe, jsonStringifySafe } = require('../utils/json');
 const { detectMarcSchemaUri } = require('../detect');
-const { BASIC_ENTITIES, MARC_SCHEMAS } = require('../constants');
-const { MARC_MEDIA_TYPE } = require('../constants');
-const { getKind } = require('../detect');
+const { MARC_SCHEMAS } = require('../constants');
+const { JSONLD_MEDIA_TYPE } = require('../constants');
+const MarcIf = require('../index');
 
-const JSONLD_MEDIA_TYPE = 'application/json';
-const formats = {
-  [MARC_MEDIA_TYPE]: {
-    to: {
-      [JSONLD_MEDIA_TYPE]: (rec) => {
-        // eslint-disable-next-line no-console
-        console.error(rec);
-        return rec;
-      },
-    },
-    toObjects: (rec) => {
-      // eslint-disable-next-line no-console
-      console.error(rec);
-      return rec;
-    },
-    toEntities: (rec) => {
-      // eslint-disable-next-line no-console
-      console.error(rec);
-      return rec;
-    },
-  },
-};
+test('MARC21 with CP1251 -> split', async () => {
+  const input = fs.readFileSync(path.join(__dirname, 'data/1251.mrc'), 'ascii');
+  const output = JSON.parse(fs.readFileSync(
+    path.join(__dirname, 'data/1251.record-strings.json'),
+    'ascii',
+  ));
+
+  const res = (await MarcIf.splitRecords(input)).map((rec) => rec.toString('utf-8'));
+  expect(res).toEqual(output);
+});
 
 test('MARC21 with CP1251 -> entities', async () => {
   const input = fs.readFileSync(path.join(__dirname, 'data/1251.mrc'), 'ascii');
-  const res = (await formats[MARC_MEDIA_TYPE].toEntities(input)).map(
+  const res = (await MarcIf.toObjects(input)).map(
     (v) => omit(v, ['time_source']),
   );
   expect(
     res,
   ).toEqual(
     JSON.parse(
-      fs.readFileSync(path.join(__dirname, 'data/1251.mrc.entity.json'), 'utf-8'),
+      fs.readFileSync(path.join(__dirname, 'data/1251.objects.json'), 'utf-8'),
     ).map(
       (v) => omit(v, ['time_source']),
     ),
@@ -51,54 +37,21 @@ test('MARC21 with CP1251 -> entities', async () => {
 
 test('MARC21 with CP1251 -> objets', async () => {
   const input = fs.readFileSync(path.join(__dirname, 'data/1251.mrc'), 'ascii');
-  const res = (await formats[MARC_MEDIA_TYPE].toObjects(input)).map(
-    (v) => omit(v, ['time_source']),
-  );
-  expect(
-    res.map((v) => omit(v, ['time_source'])).map((rec) => ({
-      ...rec,
-      leader: rec.leader.replace(/^[0-9]{5}/ug, '00000'),
-    })),
-  ).toEqual(
-    JSON.parse(fs.readFileSync(path.join(__dirname, 'data/1251.mrc.record.json'), 'utf-8')).map(
-      (v) => omit(v, ['time_source']),
-    ).map((rec) => ({
-      ...rec,
-      leader: rec.leader.replace(/^[0-9]{5}/ug, '00000'),
-    })),
-  );
-});
-
-test('MARC21 with Unicode with leader flag -> entities', async () => {
-  const input = fs.readFileSync(path.join(__dirname, 'data/utf8_with_leader_flag.mrc'));
-  const converted = await formats[MARC_MEDIA_TYPE].toEntities(input);
-
-  const ref = fs.readFileSync(path.join(__dirname, 'data/utf8_with_leader_flag.mrc.entity.json'), 'utf-8');
-
-  expect(
-    converted.map((v) => omit(v, ['time_source'])),
-  ).toEqual(
-    JSON.parse(ref).map((v) => omit(v, ['time_source'])),
+  const res = await MarcIf.toObjects(input);
+  //   .map(
+  //   (v) => omit(v, ['time_source']),
+  // );
+  expect(res).toEqual(
+    JSON.parse(fs.readFileSync(path.join(__dirname, 'data/1251.objects.json'), 'utf-8')),
   );
 });
 
 test('MARC21 with Unicode with leader flag -> objects', async () => {
   const input = fs.readFileSync(path.join(__dirname, 'data/utf8_with_leader_flag.mrc'));
-  const converted = await formats[MARC_MEDIA_TYPE].toObjects(input);
+  const converted = await MarcIf.toObjects(input);
 
-  const ref = fs.readFileSync(path.join(__dirname, 'data/utf8_with_leader_flag.mrc.record.json'), 'utf-8');
+  const ref = fs.readFileSync(path.join(__dirname, 'data/utf8_with_leader_flag.objects.json'), 'utf-8');
 
-  expect(
-    converted.map((v) => omit(v, ['time_source'])),
-  ).toEqual(
-    JSON.parse(ref).map((v) => omit(v, ['time_source'])),
-  );
-});
-
-test('MARC21 with Unicode without leader flag -> entities', async () => {
-  const input = fs.readFileSync(path.join(__dirname, 'data/utf8_without_leader_flag.mrc'));
-  const ref = fs.readFileSync(path.join(__dirname, 'data/utf8_without_leader_flag.mrc.entity.json'), 'utf-8');
-  const converted = await formats[MARC_MEDIA_TYPE].toEntities(input);
   expect(
     converted.map((v) => omit(v, ['time_source'])),
   ).toEqual(
@@ -108,8 +61,8 @@ test('MARC21 with Unicode without leader flag -> entities', async () => {
 
 test('MARC21 with Unicode without leader flag -> objects', async () => {
   const input = fs.readFileSync(path.join(__dirname, 'data/utf8_without_leader_flag.mrc'));
-  const ref = fs.readFileSync(path.join(__dirname, 'data/utf8_without_leader_flag.mrc.record.json'), 'utf-8');
-  const converted = await formats[MARC_MEDIA_TYPE].toObjects(input);
+  const ref = fs.readFileSync(path.join(__dirname, 'data/utf8_without_leader_flag.objects.json'), 'utf-8');
+  const converted = await MarcIf.toObjects(input);
   expect(
     converted.map((v) => omit(v, ['time_source'])),
   ).toEqual(
@@ -141,28 +94,18 @@ test('detect', () => {
       'utf-8',
     ),
   );
-  expect(getKind(jsonEntity)).toEqual(BASIC_ENTITIES.INSTANCE);
+  // expect(getKind(jsonEntity)).toEqual(BASIC_ENTITIES.INSTANCE);
 
   expect(detectMarcSchemaUri(jsonEntity)).toEqual(MARC_SCHEMAS.MARC21.uri);
-});
-
-test('no key regression', async () => {
-  const input = fs.readFileSync(path.join(__dirname, 'data/nokey.mrc'));
-  const res = await formats[MARC_MEDIA_TYPE].toEntities(input);
-  expect(
-    cleanDatesAndUUIDs(jsonParseSafe(jsonStringifySafe(res))),
-  ).toEqual(
-    cleanDatesAndUUIDs(jsonParseSafe(fs.readFileSync(path.join(__dirname, 'data/nokey.json'), 'utf-8'))),
-  );
 });
 
 describe.skip('rusmarc -> marc 21', () => {
   test('MARC21 -> OPDS vs same RUSMARC -> OPDS rsl01002988236', async () => {
     expect.assertions(1);
-    const marc21Json = (await formats[MARC_MEDIA_TYPE].to[JSONLD_MEDIA_TYPE](
+    const marc21Json = (await MarcIf.to[JSONLD_MEDIA_TYPE](
       fs.readFileSync(path.join(__dirname, 'history_xvii/RuMoRGB/01002988236_marc21.mrc'), 'utf-8'),
     ));
-    const rusmarcMappedJson = await formats[MARC_MEDIA_TYPE].to[JSONLD_MEDIA_TYPE](
+    const rusmarcMappedJson = await MarcIf.to[JSONLD_MEDIA_TYPE](
       fs.readFileSync(path.join(__dirname, 'history_xvii/RuMoRGB/01002988236_rusmarc.iso'), 'utf-8'),
     );
     expect(
@@ -174,11 +117,11 @@ describe.skip('rusmarc -> marc 21', () => {
 
   test('mapping rusmarc -> marc - ISBN-978-5-901202-50-0', async () => {
     expect.assertions(1);
-    const marc21Json = (await formats[MARC_MEDIA_TYPE].toObjects(
+    const marc21Json = (await MarcIf.toObjects(
       fs.readFileSync(path.join(__dirname, 'data/ISBN-978-5-901202-50-0/01003120729.mrc'), 'utf-8'),
     ));
     // to['http://rusmarc.ru/soft/RUSMARC20191213.rar']
-    const rusmarcMappedJson = await formats[MARC_MEDIA_TYPE].toObjects(
+    const rusmarcMappedJson = await MarcIf.toObjects(
       fs.readFileSync(path.join(__dirname, 'data/ISBN-978-5-901202-50-0/01003120729.iso'), 'utf-8'),
     );
     expect(
@@ -193,10 +136,10 @@ describe.skip('rusmarc -> marc 21', () => {
 
   test('mapping rusmarc -> marc - rsl01002988236 VS NLR005177748.mrc', async () => {
     expect.assertions(1);
-    const marc21Json = await formats[MARC_MEDIA_TYPE].to[JSONLD_MEDIA_TYPE](
+    const marc21Json = await MarcIf.to[JSONLD_MEDIA_TYPE](
       fs.readFileSync(path.join(__dirname, 'history_xvii/RuMoRGB/01002988236_marc21.mrc')),
     );
-    const rusmarcMappedJson = await formats[MARC_MEDIA_TYPE].to[JSONLD_MEDIA_TYPE](
+    const rusmarcMappedJson = await MarcIf.to[JSONLD_MEDIA_TYPE](
       fs.readFileSync(path.join(__dirname, 'history_xvii/RuSpRNB/NLR005177748.mrc')),
     );
     expect(

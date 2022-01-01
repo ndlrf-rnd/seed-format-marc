@@ -25,7 +25,7 @@ Object.keys(rusmarcCodes).sort().forEach((rusmarcCode) => {
   }
   if (!mappedMarc21Code) {
     // eslint-disable-next-line no-console
-    process.stderr.write(`ERROR: Code ${rusmarcCode} not found, ${rusmarcCodes[rusmarcCode]} ${rmTe} ${mappedMarc21Code}\n`,);
+    process.stderr.write(`ERROR: Code ${rusmarcCode} not found, ${rusmarcCodes[rusmarcCode]} ${rmTe} ${mappedMarc21Code}\n`);
   }
 
   if (fs.existsSync(OUTPUT_PATH)) {
