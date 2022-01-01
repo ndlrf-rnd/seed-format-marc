@@ -39,6 +39,4 @@ module.exports = {
   prettyJson,
   jsonParseSafe,
   parse: jsonParseSafe,
-  jsonStringifySafe,
-  stringify: jsonStringifySafe,
 };
