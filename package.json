@@ -1,5 +1,5 @@
 {
-  "name": "@ndlrf/seed-format-marc",
+  "name": "@seed/format-marc",
   "description": "NDLRF SEED - MARC (serialization: ISO 2709) standards and formats family compatibility package",
   "authors": [
     {
@@ -40,7 +40,7 @@
     "url": "git@github.com:ndlrf-rnd/seed-format-marc.git"
   },
   "license": "Apache-2.0",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "./src/index.js",
   "engines": {
     "node": ">=8"
