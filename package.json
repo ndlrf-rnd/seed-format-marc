@@ -40,7 +40,7 @@
     "url": "git@github.com:ndlrf-rnd/seed-format-marc.git"
   },
   "license": "Apache-2.0",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "main": "./src/index.js",
   "engines": {
     "node": ">=8"
@@ -54,7 +54,7 @@
     "test:coverage": "jest ./src --coverage"
   },
   "dependencies": {
-    "jsonata": "1.8.4",
+    "jsonata": "1.8.5",
     "lodash.compact": "3.0.1",
     "lodash.flattendeep": "4.4.0",
     "lodash.get": "4.4.2",

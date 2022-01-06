@@ -216,6 +216,8 @@ const BF2_LC_XSLT_PATH = path.join(__dirname, '../../contrib/marc2bibframe2/xsl/
 const MARC_FIELD_LENGTH_START = 3;
 const MARC_DIRECTORY_INDEX_START = 7;
 
+const MAPPING_ERROR_CTX_LINES = 3;
+
 module.exports = {
   BF2_LC_XSLT_PATH,
   MARC21_TO_OPDS2_JSONATA,
@@ -252,4 +254,5 @@ module.exports = {
   JSONLD_MEDIA_TYPE,
   MARC_FIELD_LENGTH_START,
   MARC_DIRECTORY_INDEX_START,
+  MAPPING_ERROR_CTX_LINES,
 };
