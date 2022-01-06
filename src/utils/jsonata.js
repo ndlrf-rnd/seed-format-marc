@@ -1,6 +1,7 @@
 const fs = require('fs');
 const jsonata = require('jsonata');
-const { MAPPING_ERROR_CTX_LINES } = require('../constants');
+
+const MAPPING_ERROR_CTX_LINES = 3;
 
 const buildStack = (schema, e, output) => {
   const stack = (schema || '').split('\n').reduce(

@@ -211,12 +211,10 @@ const RUSMARC_TO_MARC21_JSONATA = registerJsonata(path.join(__dirname, 'mappings
 const RUSMARC_TO_JSONLD_BF2_JSONATA = registerJsonata(path.join(__dirname, 'mappings/marc21-to-bibframe2-0.7.0.jsonata'));
 
 // Currently unused
-const BF2_LC_XSLT_PATH = path.join(__dirname, '../../contrib/marc2bibframe2/xsl/marc2bibframe2.xsl');
+const BF2_LC_XSLT_PATH = path.join(__dirname, '../thirdparty/marc2bibframe2/xsl/marc2bibframe2.xsl');
 
 const MARC_FIELD_LENGTH_START = 3;
 const MARC_DIRECTORY_INDEX_START = 7;
-
-const MAPPING_ERROR_CTX_LINES = 3;
 
 module.exports = {
   BF2_LC_XSLT_PATH,
@@ -254,5 +252,4 @@ module.exports = {
   JSONLD_MEDIA_TYPE,
   MARC_FIELD_LENGTH_START,
   MARC_DIRECTORY_INDEX_START,
-  MAPPING_ERROR_CTX_LINES,
 };

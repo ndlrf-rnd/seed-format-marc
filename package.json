@@ -40,7 +40,7 @@
     "url": "git@github.com:ndlrf-rnd/seed-format-marc.git"
   },
   "license": "Apache-2.0",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "main": "./src/index.js",
   "engines": {
     "node": ">=8"
