@@ -4,6 +4,7 @@ const fs = require('fs');
 const { padLeft } = require('../utils/formatting');
 const { flattenDeep } = require('../utils/arrays');
 const MarcIf = require('../index');
+const { OPDS2_MEDIA_TYPE } = require('../constants');
 
 const PERF_TEST_RECORDS = 1000;
 const REPORT_EVERY_N_RECORDS = 100;
@@ -38,7 +39,7 @@ for (let i = 0; i < PERF_TEST_RECORDS; i += 1) {
   RECORDS.forEach(
     // eslint-disable-next-line no-loop-func
     (rec) => {
-      const opdsRec = MarcIf.toObjects(rec.input);
+      const opdsRec = MarcIf.export[OPDS2_MEDIA_TYPE](rec.input);
       res1 += flattenDeep(opdsRec).length;
     },
   );

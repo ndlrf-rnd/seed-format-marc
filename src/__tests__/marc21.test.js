@@ -155,3 +155,18 @@ describe.skip('rusmarc -> marc 21', () => {
     );
   }, 15 * 1000);
 });
+
+test('MARC21 -> OPDS vs same RUSMARC -> OPDS rsl01002988236', async () => {
+  expect.assertions(1);
+  const marc21Json = (await MarcIf.export[JSONLD_MEDIA_TYPE](
+    fs.readFileSync(path.join(__dirname, 'data/history_xvii/RuMoRGB/01002988236_marc21.mrc'), 'utf-8'),
+  ));
+  const rusmarcMappedJson = await MarcIf.export[JSONLD_MEDIA_TYPE](
+    fs.readFileSync(path.join(__dirname, 'data/history_xvii/RuMoRGB/01002988236_rusmarc.iso'), 'utf-8'),
+  );
+  expect(
+    rusmarcMappedJson,
+  ).toEqual(
+    marc21Json,
+  );
+}, 60 * 1000);
