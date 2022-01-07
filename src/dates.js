@@ -1,14 +1,27 @@
 /* eslint-disable no-useless-escape */
 
-const { forceArray, flatten } = require('./utils/arrays');
-const { isEmpty, isNaN } = require('./utils/types');
-const { getMarkRecordType, getType, getRecordStatus, detectMarcSchemaUri, getKind } = require('./detect');
-const { getMarcField } = require('./fields');
+const {
+  forceArray,
+  flatten,
+} = require('./utils/arrays');
+const {
+  isEmpty,
+  isNaN,
+} = require('./utils/types');
+const {
+  getMarkRecordType,
+  getKind,
+  getRecordStatus,
+  detectMarcFormat,
+} = require('./detect');
 
 const { MARC21_F008_TYPE_OF_RANGE_OFFSET } = require('./constants-marc21');
 const { RUSMARC_F100A_TYPE_OF_RANGE_OFFSET } = require('./constants-unimarc');
 const MARC21_RECORD_STATUS = require('./constants-record-status');
-const { MARC_SCHEMAS, MARC_RECORD_FORMATS } = require('./constants');
+const {
+  MARC_RECORD_FORMATS,
+  MARC_FORMAT_MARC21,
+} = require('./constants');
 
 const MARC_DATE_TIME_RE = /^([0-9]{4})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})(\.[0-9]+)?$/u;
 
@@ -35,8 +48,10 @@ const isValidDate = (date) => ((date instanceof Date) && (!isNaN(date)));
 const parseDateStr = (sourceRaw, lowerBound = false) => {
   const marcDate = sourceRaw.match(MARC_DATE_TIME_RE);
   if (marcDate) {
-    // eslint-disable-next-line no-unused-vars
+    /* eslint-disable no-unused-vars */
+    // noinspection JSUnusedLocalSymbols
     const [_, year, month, day, hour, minute, sec] = marcDate;
+    /* eslint-enable no-unused-vars */
     const result = new Date(`${year}-${month}-${day}T${hour}:${minute}:${sec}Z`);
     if (isValidDate(result)) {
       return result;
@@ -124,10 +139,10 @@ const parseDateStr = (sourceRaw, lowerBound = false) => {
 
 const getMarcPublicationDate = (publicationEntity) => {
   const candidates = flatten([
-    getMarcField(publicationEntity, '260', 'c'),
-    getMarcField(publicationEntity, '260', 'g'),
-    getMarcField(publicationEntity, '901', 'c'), // MARC21
-    getMarcField(publicationEntity, '210', 'd'), // RUSMARC/UNIMARC
+    forceArray(publicationEntity['260']).map((f) => f.c).filter((f) => !!f),
+    forceArray(publicationEntity['260']).map((f) => f.g).filter((f) => !!f),
+    forceArray(publicationEntity['901']).map((f) => f.c).filter((f) => !!f),
+    forceArray(publicationEntity['210']).map((f) => f.d).filter((f) => !!f),
   ]).map(
     (v) => forceArray(v)[0],
   ).filter(
@@ -374,17 +389,18 @@ const RUSMARC_DATE_TYPE_PROCESSORS = {
   u: MARC21_DATE_TYPE_PROCESSORS.n,
 };
 
-const getMarcRecordDates = (rec, marcSchemaUri = MARC_SCHEMAS.MARC21.uri) => {
+const getMarcRecordDates = (rec, marcFormat = MARC_FORMAT_MARC21) => {
   // Fixme: add RusMarc tech field parsing
-  marcSchemaUri = detectMarcSchemaUri(rec, marcSchemaUri);
+  marcFormat = detectMarcFormat(rec, marcFormat);
   let extendedDate = {};
-  const f005 = getMarcField(rec, '005');
+  const f005 = rec['005'];
   const recordDateEnd = (getRecordStatus(rec) === MARC21_RECORD_STATUS.DELETED) && f005
     ? parseDateStr(f005)
     : null;
   const recordDateUpdated = f005 ? parseDateStr(f005) : null;
-  const f008 = getMarcField(rec, '008');
-  const f100a = getMarcField(rec, '100', 'a');
+
+  const f008 = rec['008'];
+  const f100a = forceArray(rec['100']).map((f) => f.a).filter((f) => !!f);
 
   /*
    RusMarc 801 ind2
@@ -399,18 +415,18 @@ const getMarcRecordDates = (rec, marcSchemaUri = MARC_SCHEMAS.MARC21.uri) => {
         Организация, модифицировавшая содержание записи, либо ее структуру.
     3 - Агентство, распространяющее запись
   */
-  const f801c = getMarcField(rec, '801', 'c');
+  const f801c = forceArray(rec['801']).map((f) => f.c).filter((f) => !!f)[0];
 
   const getFallbackFn = (typeOfRange) => (dateStr) => {
     if (process.env.DEBUG) {
-      process.stderr.write(`WARNING: No valid date found:${marcSchemaUri}, ${getType(rec)} 005: ${f005} 008: ${f008} 100a: ${f100a} 801c: ${f801c} type: ${getKind(rec)}, Invalid type of range: "${typeOfRange}" with date string: "${dateStr}", record dates parsing was applied partially.\n${JSON.stringify(rec)}.\n`);
+      process.stderr.write(`WARNING: No valid date found:${marcFormat}, ${getKind(rec)} 005: ${f005} 008: ${f008} 100a: ${f100a} 801c: ${f801c} type: ${getKind(rec)}, Invalid type of range: "${typeOfRange}" with date string: "${dateStr}", record dates parsing was applied partially.\n${JSON.stringify(rec)}.\n`);
     }
     return {};
   };
   let recordDateStart;
   let typeOfRange;
   try {
-    if (f008 && (marcSchemaUri === MARC_SCHEMAS.MARC21.uri)) {
+    if (f008 && (marcFormat === MARC_FORMAT_MARC21)) {
       recordDateStart = parseDateStr(f008.substr(0, 6)); // 0 - 5
       if (getMarkRecordType(rec) === MARC_RECORD_FORMATS.BIBLIOGRAPHIC) {
         typeOfRange = (f008[MARC21_F008_TYPE_OF_RANGE_OFFSET] || 'n').toLowerCase(); // 6
@@ -437,9 +453,9 @@ const getMarcRecordDates = (rec, marcSchemaUri = MARC_SCHEMAS.MARC21.uri) => {
     process.stderr.write(`ERROR: ${e}\n`);
     return null;
   }
-  const publicationDate = getMarcPublicationDate(rec, marcSchemaUri) || null;
+  const publicationDate = getMarcPublicationDate(rec, marcFormat) || null;
   const result = {
-    // entity: getType(rec),
+    // entity: getKind(rec),
     marcRecordType: getMarkRecordType(rec),
     typeOfRange,
     recordDateUpdated,

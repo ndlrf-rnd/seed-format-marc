@@ -3,6 +3,7 @@ const path = require('path');
 /**
  * Information source: http://www.library.mcgill.ca/ALEPH/version16/ALEPH_15.2_User_Guide.pdf
  */
+const MARC_FORMAT_ALEF = 'ALEF';
 
 const ALEF_DOC_URI = 'http://www.library.mcgill.ca/ALEPH/version16/ALEPH_15.2_User_Guide.pdf';
 const ALEF_JSON_SCHEMA_URI = 'https://catalog.rusneb.ru/schemas/alef-rsl-15.2.0.json';
@@ -93,6 +94,7 @@ parseLkr
 module.exports = {
   parseLkr,
   parseOwn,
+  MARC_FORMAT_ALEF,
   ALEF_JSON_SCHEMA_PATH,
   ALEF_JSON_SCHEMA_URI,
   ALEF_DOC_URI,

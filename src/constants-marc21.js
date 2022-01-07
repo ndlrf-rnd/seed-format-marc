@@ -9,6 +9,8 @@ const {
 } = require('./constants-record-status');
 const { MARC_RECORD_FORMATS } = require('./constants-formats');
 
+const MARC_FORMAT_MARC21 = 'MARC21';
+
 const MARC21_RECORD_TYPE_GROUP_CODES = {
   // Holdings
   // 06 - Type of record
@@ -193,6 +195,7 @@ const MARC21_BIBLIOGRAPHIC_LEVEL = {
 };
 
 module.exports = {
+  MARC_FORMAT_MARC21,
   MARC21_DOC_URI,
   MARC21_RECORD_TYPE_GROUP_CODES,
   MARC21_FIELD_RELATION_SEQ_RE,

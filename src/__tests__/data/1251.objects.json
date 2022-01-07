@@ -1,1670 +1,826 @@
-[
-  {
-    "100": {
+ [
+   {"100": {
       "a": [
-        {
-          "ind1": "1",
-          "ind2": "#",
-          "value": "Hk|hm`, R`r|m` Mhjnk`ebm`"
-        }
+    {
+          "ind1": "1", "ind2": "#", "value": "Hk|hm`, R`r|m` Mhjnk`ebm`"}
       ]
     },
     "245": {
       "a": [
-        {
-          "ind1": "1",
-          "ind2": "0",
-          "value": "Nqmnb{ chdp`bkhweqjncn p`qwer` hmfemepm{u qerei"
-        }
+    {"ind1": "1", "ind2": "0", "value": "Nqmnb{ chdp`bkhweqjncn p`qwer` hmfemepm{u qerei"}
       ],
       "b": [
-        {
-          "ind1": "1",
-          "ind2": "0",
-          "value": "[swea. onqnahe dk bsgnb on qoevh`k|mnqrl <Reoknc`gnqm`afemhe h bemrhkvh>, <Bndnqm`afemhe h bndnnrbedemhe>]"
-        }
+    {"ind1": "1", "ind2": "0", "value": "[swea. onqnahe dk bsgnb on qoevh`k|mnqrl <Reoknc`gnqm`afemhe h bemrhkvh>, <Bndnqm`afemhe h bndnnrbedemhe>]"}
       ],
       "c": [
-        {
-          "ind1": "1",
-          "ind2": "0",
-          "value": "R. M. Hk|hm`"
-        }
+    {"ind1": "1", "ind2": "0", "value": "R. M. Hk|hm`"}
       ]
     },
     "260": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "L."
-        }
+    {"ind1": "#", "ind2": "#", "value": "L."}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "Hgd-bn @qqnv. qrpnhr. bsgnb"
-        }
+    {"ind1": "#", "ind2": "#", "value": "Hgd-bn @qqnv. qrpnhr. bsgnb"}
       ],
       "c": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "2005"
-        }
+    {"ind1": "#", "ind2": "#", "value": "2005"}
       ]
     },
     "300": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "186 q."
-        }
+    {"ind1": "#", "ind2": "#", "value": "186 q."}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "hk."
-        }
+    {"ind1": "#", "ind2": "#", "value": "hk."}
       ],
       "c": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "21 ql."
-        }
+    {"ind1": "#", "ind2": "#", "value": "21 ql."}
       ]
     },
     "504": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "Ahakhncp.: q. 183"
-        }
+    {"ind1": "#", "ind2": "#", "value": "Ahakhncp.: q. 183"}
       ]
     },
     "650": {
       "2": [
-        {
-          "ind1": "#",
-          "ind2": "7",
-          "value": "RuMoRKP"
-        }
+    {"ind1": "#", "ind2": "7", "value": "RuMoRKP"}
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "7",
-          "value": "Rpsanopnbnd{"
-        }
+    {"ind1": "#", "ind2": "7", "value": "Rpsanopnbnd{"}
       ],
       "x": [
-        {
-          "ind1": "#",
-          "ind2": "7",
-          "value": "Chdp`bkhweqjhi p`qwer"
-        }
+    {"ind1": "#", "ind2": "7", "value": "Chdp`bkhweqjhi p`qwer"}
       ]
     },
     "852": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "RU-RKP"
-        }
+    {"ind1": "#", "ind2": "#", "value": "RU-RKP"}
       ],
       "i": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "H46"
-        }
+    {"ind1": "#", "ind2": "#", "value": "H46"}
       ]
     },
     "920": {
       "9": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "1000 }jg."
+    {
+          "ind1": "#", "ind2": "#", "value": "1000 }jg."
         }
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "5-93093-342-1"
-        }
+    {"ind1": "#", "ind2": "#", "value": "5-93093-342-1"}
       ]
     },
-    "001": "ru03-000001RKP",
-    "003": "RU-RKP",
-    "005": "20151116141356",
-    "008": "151116s2005    ru a                rus",
-    "015": {
+    "001": "ru03-000001RKP", "003": "RU-RKP", "005": "20151116141356", "008": "151116s2005    ru a                rus", "015": {
       "9": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "Knizhnaja letopis"
-        }
+    {"ind1": "#", "ind2": "#", "value": "Knizhnaja letopis"}
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "30533"
-        }
+    {"ind1": "#", "ind2": "#", "value": "30533"}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "05/19"
-        }
+    {"ind1": "#", "ind2": "#", "value": "05/19"}
       ]
     },
     "017": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "05-22137"
-        }
+    {"ind1": "#", "ind2": "#", "value": "05-22137"}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "RuMoRKP"
-        }
+    {"ind1": "#", "ind2": "#", "value": "RuMoRKP"}
       ]
     },
     "020": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "5930933421"
-        }
+    {"ind1": "#", "ind2": "#", "value": "5930933421"}
       ]
     },
     "040": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "RuMoRKP"
-        }
+    {"ind1": "#", "ind2": "#", "value": "RuMoRKP"}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "rus"
-        }
+    {"ind1": "#", "ind2": "#", "value": "rus"}
       ],
       "c": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "RuMoRKP"
-        }
+    {"ind1": "#", "ind2": "#", "value": "RuMoRKP"}
       ]
     },
     "041": {
       "a": [
-        {
-          "ind1": "0",
-          "ind2": "#",
-          "value": "rus"
-        }
+    {"ind1": "0", "ind2": "#", "value": "rus"}
       ]
     },
     "080": {
       "2": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "4"
-        }
+    {"ind1": "#", "ind2": "#", "value": "4"}
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "624.01:532.5(075.8)"
-        }
+    {"ind1": "#", "ind2": "#", "value": "624.01:532.5(075.8)"}
       ]
     },
     "084": {
       "2": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "rubbkm"
-        }
+    {"ind1": "#", "ind2": "#", "value": "rubbkm"}
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "38.173"
-        }
+    {"ind1": "#", "ind2": "#", "value": "38.173"}
       ]
     },
     "leader": "001001500000003000700015"
   },
-  {
-    "100": {
+  {"100": {
       "a": [
-        {
-          "ind1": "1",
-          "ind2": "#",
-          "value": "@mm, K~dlhk` Tednpnbm`"
-        }
+    {
+          "ind1": "1", "ind2": "#", "value": "@mm, K~dlhk` Tednpnbm`"}
       ]
     },
     "245": {
       "a": [
-        {
-          "ind1": "1",
-          "ind2": "0",
-          "value": "Oqhunknchweqjhi rpemhmc q ondpnqrj`lh"
-        }
+    {"ind1": "1", "ind2": "0", "value": "Oqhunknchweqjhi rpemhmc q ondpnqrj`lh"}
       ],
       "c": [
-        {
-          "ind1": "1",
-          "ind2": "0",
-          "value": "K~dlhk` @mm"
-        }
+    {"ind1": "1", "ind2": "0", "value": "K~dlhk` @mm"}
       ]
     },
     "260": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "QOa. [h dp.]"
-        }
+    {"ind1": "#", "ind2": "#", "value": "QOa. [h dp.]"}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "Ohrep"
-        },
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "Ohrep Ophmr"
-        }
+    {"ind1": "#", "ind2": "#", "value": "Ohrep"},
+        {"ind1": "#", "ind2": "#", "value": "Ohrep Ophmr"}
       ],
       "c": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "2005"
-        }
+    {"ind1": "#", "ind2": "#", "value": "2005"}
       ]
     },
     "300": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "270 q."
-        }
+    {"ind1": "#", "ind2": "#", "value": "270 q."}
       ],
       "c": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "21 ql."
-        }
+    {"ind1": "#", "ind2": "#", "value": "21 ql."}
       ]
     },
     "440": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "0",
-          "value": "Qeph <]ttejrhbm{i rpemhmc>"
-        }
+    {"ind1": "#", "ind2": "0", "value": "Qeph <]ttejrhbm{i rpemhmc>"}
       ]
     },
     "504": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "Ahakhncp.: q. 269-270"
-        }
+    {"ind1": "#", "ind2": "#", "value": "Ahakhncp.: q. 269-270"}
       ]
     },
     "650": {
       "2": [
-        {
-          "ind1": "#",
-          "ind2": "7",
-          "value": "RuMoRKP"
-        },
-        {
-          "ind1": "#",
-          "ind2": "7",
-          "value": "RuMoRKP"
-        }
+    {"ind1": "#", "ind2": "7", "value": "RuMoRKP"},
+        {"ind1": "#", "ind2": "7", "value": "RuMoRKP"}
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "7",
-          "value": "Ondpnqrjh"
-        },
-        {
-          "ind1": "#",
-          "ind2": "7",
-          "value": "Oqhunknchweqjhi rpemhmc"
-        }
+    {"ind1": "#", "ind2": "7", "value": "Ondpnqrjh"},
+        {"ind1": "#", "ind2": "7", "value": "Oqhunknchweqjhi rpemhmc"}
       ],
       "x": [
-        {
-          "ind1": "#",
-          "ind2": "7",
-          "value": "Oqhunknch"
-        }
+    {"ind1": "#", "ind2": "7", "value": "Oqhunknch"}
       ]
     },
     "852": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "RU-RKP"
-        }
+    {"ind1": "#", "ind2": "#", "value": "RU-RKP"}
       ],
       "i": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "@68"
-        }
+    {"ind1": "#", "ind2": "#", "value": "@68"}
       ]
     },
     "920": {
       "9": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "3500 }jg."
+    {
+          "ind1": "#", "ind2": "#", "value": "3500 }jg."
         }
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "5-94723-492-0"
-        }
+    {"ind1": "#", "ind2": "#", "value": "5-94723-492-0"}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "b oep."
-        }
+    {"ind1": "#", "ind2": "#", "value": "b oep."}
       ]
     },
-    "001": "ru03-000002RKP",
-    "003": "RU-RKP",
-    "005": "20151116141356",
-    "008": "151116s2005    ru                  rus",
-    "015": {
+    "001": "ru03-000002RKP", "003": "RU-RKP", "005": "20151116141356", "008": "151116s2005    ru                  rus", "015": {
       "9": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "Knizhnaja letopis"
-        }
+    {"ind1": "#", "ind2": "#", "value": "Knizhnaja letopis"}
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "31506"
-        }
+    {"ind1": "#", "ind2": "#", "value": "31506"}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "05/20"
-        }
+    {"ind1": "#", "ind2": "#", "value": "05/20"}
       ]
     },
     "017": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "05-22593"
-        }
+    {"ind1": "#", "ind2": "#", "value": "05-22593"}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "RuMoRKP"
-        }
+    {"ind1": "#", "ind2": "#", "value": "RuMoRKP"}
       ]
     },
     "020": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "5947234920"
-        }
+    {"ind1": "#", "ind2": "#", "value": "5947234920"}
       ]
     },
     "040": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "RuMoRKP"
-        }
+    {"ind1": "#", "ind2": "#", "value": "RuMoRKP"}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "rus"
-        }
+    {"ind1": "#", "ind2": "#", "value": "rus"}
       ],
       "c": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "RuMoRKP"
-        }
+    {"ind1": "#", "ind2": "#", "value": "RuMoRKP"}
       ]
     },
     "041": {
       "a": [
-        {
-          "ind1": "0",
-          "ind2": "#",
-          "value": "rus"
-        }
+    {"ind1": "0", "ind2": "#", "value": "rus"}
       ]
     },
     "080": {
       "2": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "4"
-        }
+    {"ind1": "#", "ind2": "#", "value": "4"}
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "159.922.7"
-        }
+    {"ind1": "#", "ind2": "#", "value": "159.922.7"}
       ]
     },
     "084": {
       "2": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "rubbkm"
-        }
+    {"ind1": "#", "ind2": "#", "value": "rubbkm"}
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "88.4"
-        }
+    {"ind1": "#", "ind2": "#", "value": "88.4"}
       ]
     },
     "leader": "001001500000003000700015"
   },
-  {
-    "100": {
+  {"100": {
       "a": [
-        {
-          "ind1": "1",
-          "ind2": "#",
-          "value": "M`m`qnb, O`bek Qspemnbhw"
-        }
+    {
+          "ind1": "1", "ind2": "#", "value": "M`m`qnb, O`bek Qspemnbhw"}
       ]
     },
     "245": {
       "a": [
-        {
-          "ind1": "1",
-          "ind2": "0",
-          "value": "Sop`bkemhe opnejrmn-qrpnhrek|m{l opnveqqnl"
-        }
+    {"ind1": "1", "ind2": "0", "value": "Sop`bkemhe opnejrmn-qrpnhrek|m{l opnveqqnl"}
       ],
       "b": [
-        {
-          "ind1": "1",
-          "ind2": "0",
-          "value": "renph, op`bhk`, op`jrhj` : [swea. onqnahe dk bsgnb on `puhrejrsp.-qrpnhr. qoevh`k|mnqrl]"
-        }
+    {"ind1": "1", "ind2": "0", "value": "renph, op`bhk`, op`jrhj` : [swea. onqnahe dk bsgnb on `puhrejrsp.-qrpnhr. qoevh`k|mnqrl]"}
       ],
       "c": [
-        {
-          "ind1": "1",
-          "ind2": "0",
-          "value": "O. Q. M`m`qnb"
-        }
+    {"ind1": "1", "ind2": "0", "value": "O. Q. M`m`qnb"}
       ]
     },
     "250": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "[Oepep`a. h dno. hgd.]"
-        }
+    {"ind1": "#", "ind2": "#", "value": "[Oepep`a. h dno. hgd.]"}
       ]
     },
     "260": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "L."
-        }
+    {"ind1": "#", "ind2": "#", "value": "L."}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "Hgd-bn @qqnv. qrpnhr. bsgnb"
-        }
+    {"ind1": "#", "ind2": "#", "value": "Hgd-bn @qqnv. qrpnhr. bsgnb"}
       ],
       "c": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "2005"
-        }
+    {"ind1": "#", "ind2": "#", "value": "2005"}
       ]
     },
     "300": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "159 q."
-        }
+    {"ind1": "#", "ind2": "#", "value": "159 q."}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "quel{"
-        }
+    {"ind1": "#", "ind2": "#", "value": "quel{"}
       ],
       "c": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "22 ql."
-        }
+    {"ind1": "#", "ind2": "#", "value": "22 ql."}
       ]
     },
     "504": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "Ahakhncp.: q. 153"
-        }
+    {"ind1": "#", "ind2": "#", "value": "Ahakhncp.: q. 153"}
       ]
     },
     "547": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "G`ck. oped{dsyecn hgd.: Sop`bkemhe opnejrnl"
-        }
+    {"ind1": "#", "ind2": "#", "value": "G`ck. oped{dsyecn hgd.: Sop`bkemhe opnejrnl"}
       ]
     },
     "650": {
       "2": [
-        {
-          "ind1": "#",
-          "ind2": "7",
-          "value": "RuMoRKP"
-        },
-        {
-          "ind1": "#",
-          "ind2": "7",
-          "value": "RuMoRKP"
-        }
+    {"ind1": "#", "ind2": "7", "value": "RuMoRKP"},
+        {"ind1": "#", "ind2": "7", "value": "RuMoRKP"}
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "7",
-          "value": "Sop`bkemhe opnejr`lh"
-        },
-        {
-          "ind1": "#",
-          "ind2": "7",
-          "value": "Qrpnhrek|mne opnejrhpnb`mhe"
-        }
+    {"ind1": "#", "ind2": "7", "value": "Sop`bkemhe opnejr`lh"},
+        {"ind1": "#", "ind2": "7", "value": "Qrpnhrek|mne opnejrhpnb`mhe"}
       ]
     },
     "852": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "RU-RKP"
-        }
+    {"ind1": "#", "ind2": "#", "value": "RU-RKP"}
       ],
       "i": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "M25"
-        }
+    {"ind1": "#", "ind2": "#", "value": "M25"}
       ]
     },
     "920": {
       "9": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "1000 }jg."
+    {
+          "ind1": "#", "ind2": "#", "value": "1000 }jg."
         }
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "5-93093-346-4"
-        }
+    {"ind1": "#", "ind2": "#", "value": "5-93093-346-4"}
       ]
     },
-    "001": "ru03-000003RKP",
-    "003": "RU-RKP",
-    "005": "20151116141356",
-    "008": "151116s2005    ru                  rus",
-    "015": {
+    "001": "ru03-000003RKP", "003": "RU-RKP", "005": "20151116141356", "008": "151116s2005    ru                  rus", "015": {
       "9": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "Knizhnaja letopis"
-        }
+    {"ind1": "#", "ind2": "#", "value": "Knizhnaja letopis"}
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "35999"
-        }
+    {"ind1": "#", "ind2": "#", "value": "35999"}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "05/22"
-        }
+    {"ind1": "#", "ind2": "#", "value": "05/22"}
       ]
     },
     "017": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "05-29382"
-        }
+    {"ind1": "#", "ind2": "#", "value": "05-29382"}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "RuMoRKP"
-        }
+    {"ind1": "#", "ind2": "#", "value": "RuMoRKP"}
       ]
     },
     "020": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "5930933464"
-        }
+    {"ind1": "#", "ind2": "#", "value": "5930933464"}
       ]
     },
     "040": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "RuMoRKP"
-        }
+    {"ind1": "#", "ind2": "#", "value": "RuMoRKP"}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "rus"
-        }
+    {"ind1": "#", "ind2": "#", "value": "rus"}
       ],
       "c": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "RuMoRKP"
-        }
+    {"ind1": "#", "ind2": "#", "value": "RuMoRKP"}
       ]
     },
     "041": {
       "a": [
-        {
-          "ind1": "0",
-          "ind2": "#",
-          "value": "rus"
-        }
+    {"ind1": "0", "ind2": "#", "value": "rus"}
       ]
     },
     "080": {
       "2": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "4"
-        }
+    {"ind1": "#", "ind2": "#", "value": "4"}
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "69:658.012(075.8)"
-        }
+    {"ind1": "#", "ind2": "#", "value": "69:658.012(075.8)"}
       ]
     },
     "084": {
       "2": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "rubbkm"
-        }
+    {"ind1": "#", "ind2": "#", "value": "rubbkm"}
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "65.3173"
-        }
+    {"ind1": "#", "ind2": "#", "value": "65.3173"}
       ]
     },
     "leader": "001001500000003000700015"
   },
-  {
-    "100": {
+  {"100": {
       "a": [
-        {
-          "ind1": "1",
-          "ind2": "#",
-          "value": "O`qrsunb`, R`r|m` Pnl`mnbm`"
-        }
+    {
+          "ind1": "1", "ind2": "#", "value": "O`qrsunb`, R`r|m` Pnl`mnbm`"}
       ]
     },
     "245": {
       "a": [
-        {
-          "ind1": "1",
-          "ind2": "0",
-          "value": "]jnmnlhj` qrpnhrek|qrb`"
-        }
+    {"ind1": "1", "ind2": "0", "value": "]jnmnlhj` qrpnhrek|qrb`"}
       ],
       "b": [
-        {
-          "ind1": "1",
-          "ind2": "0",
-          "value": "jp`r. jspq : [swea. onqnahe on m`op`bkemh~ 653500 <Qrp-bn>]"
-        }
+    {"ind1": "1", "ind2": "0", "value": "jp`r. jspq : [swea. onqnahe on m`op`bkemh~ 653500 <Qrp-bn>]"}
       ],
       "c": [
-        {
-          "ind1": "1",
-          "ind2": "0",
-          "value": "R. P. O`qrsunb`"
-        }
+    {"ind1": "1", "ind2": "0", "value": "R. P. O`qrsunb`"}
       ]
     },
     "260": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "L."
-        }
+    {"ind1": "#", "ind2": "#", "value": "L."}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "Hgd-bn @qqnv. qrpnhr. bsgnb"
-        }
+    {"ind1": "#", "ind2": "#", "value": "Hgd-bn @qqnv. qrpnhr. bsgnb"}
       ],
       "c": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "2004"
-        }
+    {"ind1": "#", "ind2": "#", "value": "2004"}
       ]
     },
     "300": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "127 q."
-        }
+    {"ind1": "#", "ind2": "#", "value": "127 q."}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "cp`t."
-        }
+    {"ind1": "#", "ind2": "#", "value": "cp`t."}
       ],
       "c": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "22 ql."
-        }
+    {"ind1": "#", "ind2": "#", "value": "22 ql."}
       ]
     },
     "504": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "Ahakhncp.: q. 127"
-        }
+    {"ind1": "#", "ind2": "#", "value": "Ahakhncp.: q. 127"}
       ]
     },
     "650": {
       "2": [
-        {
-          "ind1": "#",
-          "ind2": "7",
-          "value": "RuMoRKP"
-        }
+    {"ind1": "#", "ind2": "7", "value": "RuMoRKP"}
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "7",
-          "value": "Qrpnhrek|m{e npc`mhg`vhh"
-        }
+    {"ind1": "#", "ind2": "7", "value": "Qrpnhrek|m{e npc`mhg`vhh"}
       ],
       "x": [
-        {
-          "ind1": "#",
-          "ind2": "7",
-          "value": "]jnmnlhj`"
-        }
+    {"ind1": "#", "ind2": "7", "value": "]jnmnlhj`"}
       ]
     },
     "852": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "RU-RKP"
-        }
+    {"ind1": "#", "ind2": "#", "value": "RU-RKP"}
       ],
       "i": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "O196"
-        }
+    {"ind1": "#", "ind2": "#", "value": "O196"}
       ]
     },
     "920": {
       "9": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "1000 }jg."
+    {
+          "ind1": "#", "ind2": "#", "value": "1000 }jg."
         }
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "5-93093-308-1"
-        }
+    {"ind1": "#", "ind2": "#", "value": "5-93093-308-1"}
       ]
     },
-    "001": "ru03-000004RKP",
-    "003": "RU-RKP",
-    "005": "20151116141356",
-    "008": "151116s2004    ru                  rus",
-    "015": {
+    "001": "ru03-000004RKP", "003": "RU-RKP", "005": "20151116141356", "008": "151116s2004    ru                  rus", "015": {
       "9": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "Knizhnaja letopis"
-        }
+    {"ind1": "#", "ind2": "#", "value": "Knizhnaja letopis"}
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "36000"
-        }
+    {"ind1": "#", "ind2": "#", "value": "36000"}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "05/22"
-        }
+    {"ind1": "#", "ind2": "#", "value": "05/22"}
       ]
     },
     "017": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "05-29383"
-        }
+    {"ind1": "#", "ind2": "#", "value": "05-29383"}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "RuMoRKP"
-        }
+    {"ind1": "#", "ind2": "#", "value": "RuMoRKP"}
       ]
     },
     "020": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "5930933081"
-        }
+    {"ind1": "#", "ind2": "#", "value": "5930933081"}
       ]
     },
     "040": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "RuMoRKP"
-        }
+    {"ind1": "#", "ind2": "#", "value": "RuMoRKP"}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "rus"
-        }
+    {"ind1": "#", "ind2": "#", "value": "rus"}
       ],
       "c": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "RuMoRKP"
-        }
+    {"ind1": "#", "ind2": "#", "value": "RuMoRKP"}
       ]
     },
     "041": {
       "a": [
-        {
-          "ind1": "0",
-          "ind2": "#",
-          "value": "rus"
-        }
+    {"ind1": "0", "ind2": "#", "value": "rus"}
       ]
     },
     "080": {
       "2": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "4"
-        }
+    {"ind1": "#", "ind2": "#", "value": "4"}
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "69:658(075.8)"
-        }
+    {"ind1": "#", "ind2": "#", "value": "69:658(075.8)"}
       ]
     },
     "084": {
       "2": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "rubbkm"
-        }
+    {"ind1": "#", "ind2": "#", "value": "rubbkm"}
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "65.3173"
-        }
+    {"ind1": "#", "ind2": "#", "value": "65.3173"}
       ]
     },
     "leader": "001001500000003000700015"
   },
-  {
-    "100": {
+  {"100": {
       "a": [
-        {
-          "ind1": "1",
-          "ind2": "#",
-          "value": "Khmdcpem, @qrphd"
-        }
+    {
+          "ind1": "1", "ind2": "#", "value": "Khmdcpem, @qrphd"}
       ]
     },
     "245": {
       "a": [
-        {
-          "ind1": "1",
-          "ind2": "0",
-          "value": "Lhn, lni Lhn!"
-        }
+    {"ind1": "1", "ind2": "0", "value": "Lhn, lni Lhn!"}
       ],
       "b": [
-        {
-          "ind1": "1",
-          "ind2": "0",
-          "value": "[onbeqrh-qj`gjh : dk derei : oep. qn xbed.]"
-        }
+    {"ind1": "1", "ind2": "0", "value": "[onbeqrh-qj`gjh : dk derei : oep. qn xbed.]"}
       ],
       "c": [
-        {
-          "ind1": "1",
-          "ind2": "0",
-          "value": "@qrphd Khmdcpem; [hk. B. Ejkephq`]"
-        }
+    {"ind1": "1", "ind2": "0", "value": "@qrphd Khmdcpem; [hk. B. Ejkephq`]"}
       ]
     },
     "260": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "QOa."
-        }
+    {"ind1": "#", "ind2": "#", "value": "QOa."}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "@gasj`-jk`qqhj`"
-        }
+    {"ind1": "#", "ind2": "#", "value": "@gasj`-jk`qqhj`"}
       ],
       "c": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "2005"
-        }
+    {"ind1": "#", "ind2": "#", "value": "2005"}
       ]
     },
     "300": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "347 q."
-        }
+    {"ind1": "#", "ind2": "#", "value": "347 q."}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "hk."
-        }
+    {"ind1": "#", "ind2": "#", "value": "hk."}
       ],
       "c": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "21 ql."
-        }
+    {"ind1": "#", "ind2": "#", "value": "21 ql."}
       ]
     },
     "440": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "0",
-          "value": "Lnh k~ahl{e jmhfjh"
-        }
+    {"ind1": "#", "ind2": "0", "value": "Lnh k~ahl{e jmhfjh"}
       ]
     },
     "505": {
       "a": [
-        {
-          "ind1": "0",
-          "ind2": "#",
-          "value": "Qndepf.: Lhn, lni Lhn! ; L`dhjem ; Qnkmewm` onkmj`"
-        }
+    {"ind1": "0", "ind2": "#", "value": "Qndepf.: Lhn, lni Lhn! ; L`dhjem ; Qnkmewm` onkmj`"}
       ]
     },
     "650": {
       "2": [
-        {
-          "ind1": "#",
-          "ind2": "7",
-          "value": "RuMoRKP"
-        }
+    {"ind1": "#", "ind2": "7", "value": "RuMoRKP"}
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "7",
-          "value": "Qj`gjh xbedqjhe (d. k.)"
-        }
+    {"ind1": "#", "ind2": "7", "value": "Qj`gjh xbedqjhe (d. k.)"}
       ]
     },
     "700": {
       "4": [
-        {
-          "ind1": "1",
-          "ind2": "#",
-          "value": "ill"
-        }
+    {"ind1": "1", "ind2": "#", "value": "ill"}
       ],
       "a": [
-        {
-          "ind1": "1",
-          "ind2": "#",
-          "value": "Ejkephq, Bhr`khi"
-        }
+    {"ind1": "1", "ind2": "#", "value": "Ejkephq, Bhr`khi"}
       ]
     },
     "852": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "RU-RKP"
-        }
+    {"ind1": "#", "ind2": "#", "value": "RU-RKP"}
       ],
       "i": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "K59"
-        }
+    {"ind1": "#", "ind2": "#", "value": "K59"}
       ]
     },
     "920": {
       "9": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "5000 }jg."
+    {
+          "ind1": "#", "ind2": "#", "value": "5000 }jg."
         }
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "5-352-01286-7"
-        }
+    {"ind1": "#", "ind2": "#", "value": "5-352-01286-7"}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "b oep."
-        }
+    {"ind1": "#", "ind2": "#", "value": "b oep."}
       ]
     },
-    "001": "ru03-000005RKP",
-    "003": "RU-RKP",
-    "005": "20151116141356",
-    "008": "151116s2005    ru a                rus",
-    "015": {
+    "001": "ru03-000005RKP", "003": "RU-RKP", "005": "20151116141356", "008": "151116s2005    ru a                rus", "015": {
       "9": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "Knizhnaja letopis"
-        }
+    {"ind1": "#", "ind2": "#", "value": "Knizhnaja letopis"}
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "38445"
-        }
+    {"ind1": "#", "ind2": "#", "value": "38445"}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "05/23"
-        }
+    {"ind1": "#", "ind2": "#", "value": "05/23"}
       ]
     },
     "017": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "05-30009"
-        }
+    {"ind1": "#", "ind2": "#", "value": "05-30009"}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "RuMoRKP"
-        }
+    {"ind1": "#", "ind2": "#", "value": "RuMoRKP"}
       ]
     },
     "020": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "5352012867"
-        }
+    {"ind1": "#", "ind2": "#", "value": "5352012867"}
       ]
     },
     "040": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "RuMoRKP"
-        }
+    {"ind1": "#", "ind2": "#", "value": "RuMoRKP"}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "rus"
-        }
+    {"ind1": "#", "ind2": "#", "value": "rus"}
       ],
       "c": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "RuMoRKP"
-        }
+    {"ind1": "#", "ind2": "#", "value": "RuMoRKP"}
       ]
     },
     "041": {
       "a": [
-        {
-          "ind1": "1",
-          "ind2": "#",
-          "value": "rus"
-        }
+    {"ind1": "1", "ind2": "#", "value": "rus"}
       ]
     },
     "080": {
       "2": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "4"
-        }
+    {"ind1": "#", "ind2": "#", "value": "4"}
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "821.113.6-93"
-        }
+    {"ind1": "#", "ind2": "#", "value": "821.113.6-93"}
       ]
     },
     "084": {
       "2": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "rubbkm"
-        }
+    {"ind1": "#", "ind2": "#", "value": "rubbkm"}
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "84(4Xbe)-44"
-        }
+    {"ind1": "#", "ind2": "#", "value": "84(4Xbe)-44"}
       ]
     },
     "leader": "001001500000003000700015"
   },
-  {
-    "100": {
+  {"100": {
       "a": [
-        {
-          "ind1": "1",
-          "ind2": "#",
-          "value": "Jp`qmnyewemjn, Bk`dhlhp Hb`mnbhw"
-        }
+    {
+          "ind1": "1", "ind2": "#", "value": "Jp`qmnyewemjn, Bk`dhlhp Hb`mnbhw"}
       ]
     },
     "245": {
       "a": [
-        {
-          "ind1": "1",
-          "ind2": "0",
-          "value": "Mekhmeim{e qhqrel{: cenlerphweqjhe lernd{ `m`khg` h qhmreg`"
-        }
+    {"ind1": "1", "ind2": "0", "value": "Mekhmeim{e qhqrel{: cenlerphweqjhe lernd{ `m`khg` h qhmreg`"}
       ],
       "c": [
-        {
-          "ind1": "1",
-          "ind2": "0",
-          "value": "B. H. Jp`qmnyewemjn, @. O. Jphyemjn"
-        }
+    {"ind1": "1", "ind2": "0", "value": "B. H. Jp`qmnyewemjn, @. O. Jphyemjn"}
       ]
     },
     "260": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "L."
-        }
+    {"ind1": "#", "ind2": "#", "value": "L."}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "Hgd-bn LCRS"
-        }
+    {"ind1": "#", "ind2": "#", "value": "Hgd-bn LCRS"}
       ],
       "c": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "2005"
-        }
+    {"ind1": "#", "ind2": "#", "value": "2005"}
       ]
     },
     "300": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "519 q."
-        }
+    {"ind1": "#", "ind2": "#", "value": "519 q."}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "hk."
-        }
+    {"ind1": "#", "ind2": "#", "value": "hk."}
       ],
       "c": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "22 ql."
-        }
+    {"ind1": "#", "ind2": "#", "value": "22 ql."}
       ]
     },
     "504": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "Ahakhncp.: q. 509-516"
-        }
+    {"ind1": "#", "ind2": "#", "value": "Ahakhncp.: q. 509-516"}
       ]
     },
     "650": {
       "2": [
-        {
-          "ind1": "#",
-          "ind2": "7",
-          "value": "RuMoRKP"
-        },
-        {
-          "ind1": "#",
-          "ind2": "7",
-          "value": "RuMoRKP"
-        }
+    {"ind1": "#", "ind2": "7", "value": "RuMoRKP"},
+        {"ind1": "#", "ind2": "7", "value": "RuMoRKP"}
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "7",
-          "value": "@brnl`rhweqjhe qhqrel{ sop`bkemh mekhmeim{e"
-        },
-        {
-          "ind1": "#",
-          "ind2": "7",
-          "value": "@brnl`rhweqjhe qhqrel{ sop`bkemh mekhmeim{e"
-        }
+    {"ind1": "#", "ind2": "7", "value": "@brnl`rhweqjhe qhqrel{ sop`bkemh mekhmeim{e"},
+        {"ind1": "#", "ind2": "7", "value": "@brnl`rhweqjhe qhqrel{ sop`bkemh mekhmeim{e"}
       ],
       "x": [
-        {
-          "ind1": "#",
-          "ind2": "7",
-          "value": "@m`khg"
-        },
-        {
-          "ind1": "#",
-          "ind2": "7",
-          "value": "Cenlerphweqjhe lernd{"
-        },
-        {
-          "ind1": "#",
-          "ind2": "7",
-          "value": "Qhmreg"
-        },
-        {
-          "ind1": "#",
-          "ind2": "7",
-          "value": "Cenlerphweqjhe lernd{"
-        }
+    {"ind1": "#", "ind2": "7", "value": "@m`khg"},
+        {"ind1": "#", "ind2": "7", "value": "Cenlerphweqjhe lernd{"},
+        {"ind1": "#", "ind2": "7", "value": "Qhmreg"},
+        {"ind1": "#", "ind2": "7", "value": "Cenlerphweqjhe lernd{"}
       ]
     },
     "700": {
       "4": [
-        {
-          "ind1": "1",
-          "ind2": "#",
-          "value": "aut"
-        }
+    {"ind1": "1", "ind2": "#", "value": "aut"}
       ],
       "a": [
-        {
-          "ind1": "1",
-          "ind2": "#",
-          "value": "Jphyemjn, @kejq`mdp Oerpnbhw"
-        }
+    {"ind1": "1", "ind2": "#", "value": "Jphyemjn, @kejq`mdp Oerpnbhw"}
       ]
     },
     "852": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "RU-RKP"
-        }
+    {"ind1": "#", "ind2": "#", "value": "RU-RKP"}
       ],
       "i": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "J782"
-        }
+    {"ind1": "#", "ind2": "#", "value": "J782"}
       ]
     },
     "920": {
       "9": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "1000 }jg."
+    {
+          "ind1": "#", "ind2": "#", "value": "1000 }jg."
         }
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "5-7038-2182-7"
-        }
+    {"ind1": "#", "ind2": "#", "value": "5-7038-2182-7"}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "b oep."
-        }
+    {"ind1": "#", "ind2": "#", "value": "b oep."}
       ]
     },
-    "001": "ru03-000006RKP",
-    "003": "RU-RKP",
-    "005": "20151116141356",
-    "008": "151116s2005    ru a                rus",
-    "015": {
+    "001": "ru03-000006RKP", "003": "RU-RKP", "005": "20151116141356", "008": "151116s2005    ru a                rus", "015": {
       "9": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "Knizhnaja letopis"
-        }
+    {"ind1": "#", "ind2": "#", "value": "Knizhnaja letopis"}
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "43315"
-        }
+    {"ind1": "#", "ind2": "#", "value": "43315"}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "05/26"
-        }
+    {"ind1": "#", "ind2": "#", "value": "05/26"}
       ]
     },
     "017": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "05-35153"
-        }
+    {"ind1": "#", "ind2": "#", "value": "05-35153"}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "RuMoRKP"
-        }
+    {"ind1": "#", "ind2": "#", "value": "RuMoRKP"}
       ]
     },
     "020": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "5703821827"
-        }
+    {"ind1": "#", "ind2": "#", "value": "5703821827"}
       ]
     },
     "040": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "RuMoRKP"
-        }
+    {"ind1": "#", "ind2": "#", "value": "RuMoRKP"}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "rus"
-        }
+    {"ind1": "#", "ind2": "#", "value": "rus"}
       ],
       "c": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "RuMoRKP"
-        }
+    {"ind1": "#", "ind2": "#", "value": "RuMoRKP"}
       ]
     },
     "041": {
       "a": [
-        {
-          "ind1": "0",
-          "ind2": "#",
-          "value": "rus"
-        }
+    {"ind1": "0", "ind2": "#", "value": "rus"}
       ]
     },
     "080": {
       "2": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "4"
-        }
+    {"ind1": "#", "ind2": "#", "value": "4"}
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "530.182"
-        }
+    {"ind1": "#", "ind2": "#", "value": "530.182"}
       ]
     },
     "084": {
       "2": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "rubbkm"
-        }
+    {"ind1": "#", "ind2": "#", "value": "rubbkm"}
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "22.31"
-        }
+    {"ind1": "#", "ind2": "#", "value": "22.31"}
       ]
     },
     "leader": "001001500000003000700015"

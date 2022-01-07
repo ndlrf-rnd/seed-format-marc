@@ -1,14 +1,16 @@
 /* eslint-disable no-template-curly-in-string */
 const fs = require('fs');
 const { MARC21_JSON_SCHEMA_PATH } = require('./constants-marc21');
-const { jsonParseSafe } = require('./utils/json');
-const { forceArray, compact } = require('./utils/arrays');
-const { isObject, isArray } = require('./utils/types');
-const { MARC_CONTROL_FIELD_TAGS, MARC_NOT_SET, RECORD_TYPE_GROUP_MANUAL_RELATIONS } = require('./constants');
+
+const {
+  MARC_CONTROL_FIELD_TAGS,
+  MARC_NOT_SET,
+  RECORD_TYPE_GROUP_MANUAL_RELATIONS,
+} = require('./constants');
 const { MARC21_FIELD_STR_RE } = require('./constants-marc21');
 const { MARC_RECORD_FORMATS } = require('./constants-formats');
 
-const MARC21_JSON_SCHEMA_OBJ = jsonParseSafe(fs.readFileSync(MARC21_JSON_SCHEMA_PATH, 'utf-8'));
+const MARC21_JSON_SCHEMA_OBJ = JSON.parse(fs.readFileSync(MARC21_JSON_SCHEMA_PATH, 'utf-8'));
 
 const MARC_CONTROL_FIELD_TAGS_DICT = MARC_CONTROL_FIELD_TAGS.reduce(
   (a, o) => ({
@@ -35,7 +37,7 @@ const isDataFieldTag = (fieldTag) => fieldTag && (!isControlFieldTag(fieldTag));
  * @param value
  * @param rType
  * @param marcSchema
- * @returns {?{
+ * @returns Object<{
  *    tag: {str},
  *    description: {?str},
  *    ind1: {?str},
@@ -46,10 +48,15 @@ const isDataFieldTag = (fieldTag) => fieldTag && (!isControlFieldTag(fieldTag));
  *    subfieldDescription: {?str},
  *    positions: {?Object},
  *    uri: {?str},
- * }}
+ * }>
  */
 const describeField = (
-  { tag, subfield, ind1, ind2 } = {},
+  {
+    tag,
+    subfield,
+    ind1,
+    ind2,
+  } = {},
   value = null,
   rType = MARC_RECORD_FORMATS.BIBLIOGRAPHIC,
   marcSchema = MARC21_JSON_SCHEMA_OBJ,
@@ -89,44 +96,6 @@ const describeField = (
 };
 
 /**
- * Get given field tag and subfield code from record object having form
- * of NatLibFi Object or straightforward MARCXML mapping to JSON
- * (including controlfield/datafield groups)
- *
- * @param pub
- * @param fieldTag
- * @param subfieldCode
- * @returns {*}
- */
-const getMarcField = (pub, fieldTag, subfieldCode) => {
-  let result = [];
-  if (pub) {
-    const flds = pub.fields || forceArray(pub.controlfield)
-      .concat(forceArray(pub.datafield))
-      .concat([{
-        tag: 'leader',
-        value: pub.leader,
-      }]);
-    // const filtered = forceArray(pub[fieldTag])//.filter(({ tag }) => tag === fieldTag);
-    const filtered = flds.filter((fld) => isObject(fld) && (fld.tag === fieldTag));
-    if (isControlFieldTag(fieldTag)) {
-      result = filtered.map(({ value }) => value)[0];
-    } else if (subfieldCode) {
-      result = filtered.reduce((a, o) => {
-        const sfs = forceArray(o.subfield || o.subfields || [])
-          .filter((sf) => `${sf.code}` === `${subfieldCode}`)
-          .map(({ value }) => value);
-        return [...a, ...sfs];
-      }, []);
-    } else {
-      result = compact(filtered);
-    }
-  }
-  // eslint-disable-next-line no-nested-ternary
-  return isArray(result) ? (result.length > 0 ? result : null) : result;
-};
-
-/**
  * Parse following formats:
  * DDSOURCES$S
  * DDSOURCESS
@@ -134,7 +103,7 @@ const getMarcField = (pub, fieldTag, subfieldCode) => {
  * DDDS
  * @param fieldStr {string} - field textStr representation
  * @param value {?string} - field value
- * @returns {{
+ * @returns Object<{
  *    tag: str,
  *    description: {?str},
  *    ind1: {?str},
@@ -148,7 +117,7 @@ const getMarcField = (pub, fieldTag, subfieldCode) => {
  *    positions: ?object,
  *    uri: {?str},
  *    value: {?str},
- *  })
+ *  }>
  */
 const parseFieldStr = (fieldStr, value = null) => {
   // parts example:  [ '009#3$a', '009', '#3', '#', '3', '$a' ]
@@ -173,7 +142,6 @@ const parseFieldStr = (fieldStr, value = null) => {
 };
 
 module.exports = {
-  getMarcField,
   describeField,
   parseFieldStr,
   isDataFieldTag,

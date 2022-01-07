@@ -1,6 +1,6 @@
 const { JSON_MEDIA_TYPE } = 'application/json';
 const { flattenDeep } = require('./utils/arrays');
-const { toISO2709 } = require('./iso2709');
+const { toISO2709 } = require('./serial/iso2709');
 const { MARC_MEDIA_TYPE } = require('./constants');
 const {
   MARC_LEADER_BIBLIOGRAPHIC_LEVEL_OFFSET,
@@ -14,7 +14,6 @@ const {
 } = require('./utils/arrays');
 const { get } = require('./utils/objects');
 const { isEmpty } = require('./utils/types');
-const { getMarcField } = require('./fields');
 const { MARC_RECORD_FORMATS } = require('./constants-formats');
 const { UNIMARC_RECORD_TYPE_GROUP_CODES } = require('./constants-unimarc');
 const {
@@ -27,7 +26,8 @@ const {
   RECORD_LEVELS,
   MARC_LEADER_MARC_RECORD_STATUS_OFFSET,
   MARC_LEADER_TYPE_OFFSET,
-  MARC_SCHEMAS,
+  MARC_FORMAT_MARC21,
+  MARC_FORMAT_RUSMARC,
 } = require('./constants');
 
 const getRecordStatus = (rec) => get(
@@ -42,8 +42,8 @@ const getMarcSource = (pub, defaultSourceCode) => {
   }
   // noinspection NonAsciiCharacters
   const possibleSources = compact(flattenDeep([
-    getMarcField(pub, '040', 'a'),
-    (getMarcField(pub, '017') || []).filter(
+    forceArray(pub['040']).map((f) => f.a).filter((f) => !!f),
+    (pub['017'] || []).filter(
       ({ subfield }) => (
         subfield.filter(
           ({
@@ -66,10 +66,10 @@ const getMarcSource = (pub, defaultSourceCode) => {
         ({ value }) => value,
       ),
     ).reverse(),
-    getMarcField(pub, '003'),
-    getMarcField(pub, '801', 'b'),
-    getMarcField(pub, '035', 'a'),
-    getMarcField(pub, '852', 'a'),
+    pub['003'],
+    forceArray(pub['801']).map((f) => f.b).filter((f) => !!f),
+    forceArray(pub['035']).map((f) => f.a).filter((f) => !!f),
+    forceArray(pub['852']).map((f) => f.a).filter((f) => !!f),
     defaultSourceCode,
   ])).map((v) => ({
     РГБ: 'RuMoRGB',
@@ -84,14 +84,14 @@ const getMarcSource = (pub, defaultSourceCode) => {
   return '';
 };
 
-const getMarcKey = (rec) => `${getMarcField(rec, '001') || ''}`;
+const getMarcKey = (rec) => `${rec['001'] || ''}`;
 
 /**
  * Get electronic locations
  * @param rec
  * @returns {Array<*>}
  */
-const getUrlRecords = (rec) => flatten(forceArray(getMarcField(rec, '856')).map((field856) => {
+const getUrlRecords = (rec) => flatten(forceArray(rec['856']).map((field856) => {
   const urls = field856.subfield.filter(({ code }) => code === 'u').map(({ value }) => value);
   const types = field856.subfield.filter(({ code }) => code === 'q').map(({ value }) => value);
   return urls.map((url, idx) => {
@@ -134,7 +134,7 @@ const getUrlRecords = (rec) => flatten(forceArray(getMarcField(rec, '856')).map(
  * @returns {Array<*>}
  */
 const getPhysicalLocationRecord = (rec) => flattenDeep(['852', '853'].map(
-  (fieldNumber) => forceArray(getMarcField(rec, fieldNumber)).map(
+  (fieldNumber) => forceArray(rec[fieldNumber]).map(
     (field) => {
       const fieldA = field.subfield.filter(({ code }) => code === 'a').map(({ value }) => value);
       const fieldJ = field.subfield.filter(({ code }) => code === 'j').map(({ value }) => value);
@@ -171,29 +171,31 @@ const getPhysicalLocationRecord = (rec) => flattenDeep(['852', '853'].map(
  * @param defaultMarcSchemaUri
  * @returns {Object<{uri: string, path: string, doc_uri: string}>|null}
  */
-const detectMarcSchemaUri = (
+const detectMarcFormat = (
   marcObj,
-  defaultMarcSchemaUri = MARC_SCHEMAS.MARC21.uri,
+  defaultMarcSchemaUri = MARC_FORMAT_MARC21,
 ) => {
   if (!marcObj) {
     return null;
   }
-  const field100a = forceArray(getMarcField(marcObj, '100', 'a')).join('');
-  // const field801 = forceArray(getMarcField(marcObj, '801'));
-  // const field200 = forceArray(getMarcField(marcObj, '200'));
+  const field100a = forceArray(marcObj['100']).map((f) => f.a).join('');
   if (field100a && field100a.match(/^[0-9]{8}[a-z].{25,27}$/ui)) {
-    return MARC_SCHEMAS.RUSMARC.uri;
+    return MARC_FORMAT_RUSMARC;
   }
-  if (
-    ['007', '008', '040', '852', '856'].reduce(
-      (a, o) => a || (forceArray(getMarcField(marcObj, o, 'a')).length > 0),
-      false,
-    )
-  ) {
-    return MARC_SCHEMAS.MARC21.uri;
+  if ([
+    ...['007', '008'].filter(
+      (o) => (typeof marcObj[o] === 'string') && (marcObj[o].length > 0),
+    ),
+    ...['040', '852', '856'].filter(
+      (a, o) => forceArray(marcObj[o]).filter(
+        (f) => (forceArray(f.a).length > 0),
+      ).length > 0,
+    ),
+  ].length > 0) {
+    return MARC_FORMAT_MARC21;
   }
   if (marcObj.leader) {
-    return MARC_SCHEMAS.RUSMARC.uri;
+    return MARC_FORMAT_RUSMARC;
   }
   return defaultMarcSchemaUri;
 };
@@ -204,11 +206,11 @@ const detectMarcSchemaUri = (
  * @returns {string}
  */
 const getMarkRecordType = (rec) => {
-  const marcSchemaUri = detectMarcSchemaUri(rec);
+  const marcSchemaUri = detectMarcFormat(rec);
   const leader = rec.leader;
   // TODO: Here RUSMARC and UNIMARC are about pretty the same,
   //       but i'm not confident about all RUSMARC authority and holdings files
-  const codeMap = (marcSchemaUri === MARC_SCHEMAS.MARC21.uri)
+  const codeMap = (marcSchemaUri === MARC_FORMAT_MARC21)
     ? MARC21_RECORD_TYPE_GROUP_CODES
     : UNIMARC_RECORD_TYPE_GROUP_CODES;
 
@@ -233,21 +235,6 @@ const getBibliographicLevel = (rec) => (rec.leader ? (
  * @returns {string}
  */
 const getKind = (rec) => {
-  // const marcSchemaUri = detectMarcSchemaUri(rec);
-  // const leader = rec.leader;
-  // // TODO: Here RUSMARC and UNIMARC are about pretty the same,
-  // //       but i'm not confident about all RUSMARC authority and holdings files
-  // const codeMap = (marcSchemaUri === MARC_SCHEMAS.MARC21.uri)
-  //  ? MARC21_RECORD_TYPE_GROUP_CODES
-  //  : UNIMARC_RECORD_TYPE_GROUP_CODES;
-  //
-  // const leaderCode = ((
-  //   Array.isArray(leader) ? leader.map((v) => v || ' ').join('') : leader
-  // )[MARC_LEADER_TYPE_OFFSET] || '').toLowerCase();
-  //
-  // const type = Object.keys(codeMap).filter(
-  //   (tg) => codeMap[tg].indexOf(leaderCode) !== -1,
-  // )[0] || MARC_RECORD_FORMATS.UNKNOWN;
   const marcRecordType = getMarkRecordType(rec);
   if (marcRecordType === MARC_RECORD_FORMATS.BIBLIOGRAPHIC) {
     return `${getBibliographicLevel(rec) || ''}`;
@@ -303,7 +290,7 @@ const isSingleRecord = (rec) => (['b', 'd', 'a', 'm'].indexOf(getRecordLevel(rec
 const isMultiRecord = (rec) => (['s', 'i', 'c'].indexOf(getRecordLevel(rec)) !== -1);
 
 const getRslCollections = (rec) => {
-  const field979a = getMarcField(rec, '979', 'a');
+  const field979a = forceArray(rec['979']).map((f) => f.a).filter((f) => !!f);
   return (field979a || []).map((key) => ({
     kind: BASIC_ENTITIES.COLLECTION,
     source: 'rumorgb',
@@ -327,7 +314,7 @@ module.exports = {
   isMultiRecord,
   getMarcKey,
   getMarcSource,
-  detectMarcSchemaUri,
+  detectMarcFormat,
   getKind,
   getMarkRecordType,
   getRecordLevel,

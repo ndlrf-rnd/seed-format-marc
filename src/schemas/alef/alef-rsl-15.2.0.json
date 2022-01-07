@@ -8,12 +8,26 @@
     "LEADER": {
       "type": "string"
     },
-    "OWN": {"type": "string"},
-    "GLOBAL": {"type": "string"},
-    "LKR": {"type": "string"},
-    "ITM": {"type": "string"},
-    "UP": {"type": "string"},
-    "DN": {"type": "string"},
-    "PAR": {"type": "string"}
+    "OWN": {
+      "type": "string"
+    },
+    "GLOBAL": {
+      "type": "string"
+    },
+    "LKR": {
+      "type": "string"
+    },
+    "ITM": {
+      "type": "string"
+    },
+    "UP": {
+      "type": "string"
+    },
+    "DN": {
+      "type": "string"
+    },
+    "PAR": {
+      "type": "string"
+    }
   }
 }

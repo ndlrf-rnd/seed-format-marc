@@ -1,10 +1,8 @@
-const path = require('path');
-const fs = require('fs');
-const { MARC_SCHEMAS } = require('../constants');
+// noinspection HttpUrlsUsage
+
 const { parseFieldRelationSeq } = require('../relations');
 const { parseIdentifier } = require('../indentifiers');
 const { parseFieldStr } = require('../fields');
-const { detectMarcSchemaUri } = require('../detect');
 
 test('field string parsing', () => {
   expect(parseFieldStr('013#3$a'))
@@ -79,12 +77,4 @@ test('parseFieldRelationSeq', () => {
   expect(parseFieldRelationSeq('1.1\\a')).toEqual([1, 1, 'a']);
   expect(parseFieldRelationSeq('1.1\\aa')).toEqual(null);
   expect(parseFieldRelationSeq('1\\a')).toEqual([1, null, 'a']);
-});
-
-test('detect', () => {
-  const jsonEntity = JSON.parse(
-    fs.readFileSync(path.join(__dirname, 'data/dates_1_marc21.json'), 'utf-8'),
-  );
-  // expect(getKind(jsonEntity)).toEqual(BASIC_ENTITIES.INSTANCE);
-  expect(detectMarcSchemaUri(jsonEntity)).toEqual(MARC_SCHEMAS.MARC21.uri);
 });

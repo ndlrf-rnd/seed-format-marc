@@ -13,128 +13,73 @@
       }
     },
     "bf:contribution": [
-      {
-        "@type": "bf:PrimaryContribution",
-        "bf:agent": {
-          "@type": "bf:Person",
-          "bflc:name": "Добровольский, Семен Михайлович"
-        },
+    {"@type": "bf:PrimaryContribution", "bf:agent": {
+          "@type": "bf:Person", "bflc:name": "Добровольский, Семен Михайлович"},
         "bf:role": {
-          "@id": "http://id.loc.gov/vocabulary/relators/aut",
-          "@type": "bf:Role",
-          "rdfs:label": "Author"
+          "@id": "http://id.loc.gov/vocabulary/relators/aut", "@type": "bf:Role", "rdfs:label": "Author"
         }
       }
     ],
     "bf:hasInstance": [
-      {
-        "@type": "bf:instance",
-        "bf:content": {
-          "@id": "http://id.loc.gov/vocabulary/contentTypes/Text",
-          "@type": "bf:Content"
-        },
+    {"@type": "bf:instance", "bf:content": {
+          "@id": "http://id.loc.gov/vocabulary/contentTypes/Text", "@type": "bf:Content"},
         "bf:extent": {
-          "@type": "bf:Note",
-          "rdfs:label": "[2], 426, XXII с."
+          "@type": "bf:Note", "rdfs:label": "[2], 426, XXII с."
         },
         "item": [
-          {
-            "@type": "bf:Item",
-            "bf:acquisitionSource": [
-              "РГБ",
-              "FB",
-              "ALII"
-            ],
+    {"@type": "bf:Item", "bf:acquisitionSource": [
+    "РГБ", "FB", "ALII"],
             "bf:identifiedBy": [
-              {
-                "@type": "bf:ShelfMark",
-                "rdfs:label": "U 308/193"
-              }
+    {
+                "@type": "bf:ShelfMark", "rdfs:label": "U 308/193"}
             ]
           },
-          {
-            "@type": "bf:Item",
-            "bf:acquisitionSource": [
-              "РГБ",
-              "FB"
-            ],
+          {"@type": "bf:Item", "bf:acquisitionSource": [
+    "РГБ", "FB"],
             "bf:identifiedBy": [
-              {
-                "@type": "bf:ShelfMark",
-                "rdfs:label": "U 408/317"
-              }
+    {
+                "@type": "bf:ShelfMark", "rdfs:label": "U 408/317"}
             ]
           },
-          {
-            "@type": "bf:Item",
-            "bf:acquisitionSource": [
-              "РГБ",
-              "FB"
-            ],
+          {"@type": "bf:Item", "bf:acquisitionSource": [
+    "РГБ", "FB"],
             "bf:identifiedBy": [
-              {
-                "@type": "bf:ShelfMark",
-                "rdfs:label": "W 233/2"
-              }
+    {
+                "@type": "bf:ShelfMark", "rdfs:label": "W 233/2"}
             ]
           },
-          {
-            "@type": "bf:Item",
-            "bf:acquisitionSource": [
-              "РГБ",
-              "FB"
-            ],
+          {"@type": "bf:Item", "bf:acquisitionSource": [
+    "РГБ", "FB"],
             "bf:identifiedBy": [
-              {
-                "@type": "bf:ShelfMark",
-                "rdfs:label": "ВО 13/70"
-              }
+    {
+                "@type": "bf:ShelfMark", "rdfs:label": "ВО 13/70"}
             ]
           }
         ],
         "bf:hasSeries": [
-          {
-            "@type": "bf:Instance",
-            "bf:title": {
-              "@type": "bf:Title",
-              "bf:CollectiveTitle": "Учебные руководства для военно-учебных заведений"
-            }
+    {"@type": "bf:Instance", "bf:title": {
+              "@type": "bf:Title", "bf:CollectiveTitle": "Учебные руководства для военно-учебных заведений"}
           }
         ],
         "bf:note": [
-          {
-            "@type": "bf:Note",
-            "bf:noteType": "Reproduction Note",
-            "rdfs:label": "Имеется электронная копия"
-          }
+    {"@type": "bf:Note", "bf:noteType": "Reproduction Note", "rdfs:label": "Имеется электронная копия"}
         ],
         "bf:provisionActivity": [
-          {
-            "@type": [
-              "bf:Publication",
-              "bf:ProvisionActivity"
-            ],
+    {"@type": [
+    "bf:Publication", "bf:ProvisionActivity"],
             "bf:agent": {
-              "@type": "bf:Agent",
-              "rdfs:label": [
-                "тип. Штаба воен.-учеб. заведений",
-                "Санкт-Петербург"
-              ]
-            },
+              "@type": "bf:Agent", "rdfs:label": [
+    "тип. Штаба воен.-учеб. заведений", "Санкт-Петербург"]},
             "bf:date": "1853"
           }
         ]
       }
     ],
     "bf:language": {
-      "@id": "http://id.loc.gov/vocabulary/languages/",
-      "@type": "bf:Language",
-      "rdfs:label": "rus"
+      "@id": "http://id.loc.gov/vocabulary/languages/", "@type": "bf:Language", "rdfs:label": "rus"
     },
     "bf:title": {
-      "@type": "bf:Title",
-      "bf:MainTitle": "Руководство законоведения",
-      "bf:Subtitle": "Курс 1 спец. кл."
+      "@type": "bf:Title", "bf:MainTitle": "Руководство законоведения", "bf:Subtitle": "Курс 1 спец. кл."
     }
   }
 }

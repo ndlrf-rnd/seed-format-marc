@@ -1,303 +1,144 @@
-[
-  {
-    "100": {
+ [
+   {"100": {
       "a": [
-        {
-          "ind1": "1",
-          "ind2": "0",
-          "value": "Tournier, Paul."
-        }
+    {
+          "ind1": "1", "ind2": "0", "value": "Tournier, Paul."}
       ]
     },
     "240": {
       "a": [
-        {
-          "ind1": "1",
-          "ind2": "0",
-          "value": "De la solitude à la communauté."
-        }
+    {"ind1": "1", "ind2": "0", "value": "De la solitude à la communauté."}
       ],
       "l": [
-        {
-          "ind1": "1",
-          "ind2": "0",
-          "value": "English."
-        }
+    {"ind1": "1", "ind2": "0", "value": "English."}
       ]
     },
     "245": {
       "a": [
-        {
-          "ind1": "1",
-          "ind2": "0",
-          "value": "Escape from loneliness /"
-        }
+    {"ind1": "1", "ind2": "0", "value": "Escape from loneliness /"}
       ],
       "c": [
-        {
-          "ind1": "1",
-          "ind2": "0",
-          "value": "by Paul Tournier ; translated by John S. Gilmour."
-        }
+    {"ind1": "1", "ind2": "0", "value": "by Paul Tournier ; translated by John S. Gilmour."}
       ]
     },
     "260": {
       "a": [
-        {
-          "ind1": "0",
-          "ind2": "#",
-          "value": "Philadelphia :"
-        }
+    {"ind1": "0", "ind2": "#", "value": "Philadelphia :"}
       ],
       "b": [
-        {
-          "ind1": "0",
-          "ind2": "#",
-          "value": "Westminster Press,"
-        }
+    {"ind1": "0", "ind2": "#", "value": "Westminster Press,"}
       ],
       "c": [
-        {
-          "ind1": "0",
-          "ind2": "#",
-          "value": "c1962."
-        }
+    {"ind1": "0", "ind2": "#", "value": "c1962."}
       ]
     },
     "300": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "192 p. ;"
-        }
+    {"ind1": "#", "ind2": "#", "value": "192 p. ;"}
       ],
       "c": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "21 cm."
-        }
+    {"ind1": "#", "ind2": "#", "value": "21 cm."}
       ]
     },
     "500": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "Translation of De la solitude à la communauté."
-        }
+    {"ind1": "#", "ind2": "#", "value": "Translation of De la solitude à la communauté."}
       ]
     },
     "504": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "Includes bibliographical references (p. 190-192)."
-        }
+    {"ind1": "#", "ind2": "#", "value": "Includes bibliographical references (p. 190-192)."}
       ]
     },
     "650": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "0",
-          "value": "Loneliness."
-        },
-        {
-          "ind1": "#",
-          "ind2": "0",
-          "value": "Self."
-        },
-        {
-          "ind1": "#",
-          "ind2": "0",
-          "value": "Social psychology."
-        },
-        {
-          "ind1": "#",
-          "ind2": "2",
-          "value": "Loneliness."
-        },
-        {
-          "ind1": "#",
-          "ind2": "2",
-          "value": "Social Isolation."
-        }
+    {"ind1": "#", "ind2": "0", "value": "Loneliness."},
+        {"ind1": "#", "ind2": "0", "value": "Self."},
+        {"ind1": "#", "ind2": "0", "value": "Social psychology."},
+        {"ind1": "#", "ind2": "2", "value": "Loneliness."},
+        {"ind1": "#", "ind2": "2", "value": "Social Isolation."}
       ]
     },
     "730": {
       "a": [
-        {
-          "ind1": "0",
-          "ind2": "1",
-          "value": "De la solitude à la communauté."
-        }
+    {"ind1": "0", "ind2": "1", "value": "De la solitude à la communauté."}
       ],
       "l": [
-        {
-          "ind1": "0",
-          "ind2": "1",
-          "value": "English."
-        }
+    {"ind1": "0", "ind2": "1", "value": "English."}
       ]
     },
     "951": {
       "x": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "070101"
-        }
+    {"ind1": "#", "ind2": "#", "value": "070101"}
       ]
     },
     "957": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "BF 575.L7 T728d 1962"
-        }
+    {"ind1": "#", "ind2": "#", "value": "BF 575.L7 T728d 1962"}
       ]
     },
-    "001": "2",
-    "005": "19900316000000.0",
-    "008": "840112s1962    pau      b    00010 eng  ",
-    "010": {
+    "001": "2", "005": "19900316000000.0", "008": "840112s1962    pau      b    00010 eng  ", "010": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "   61014599/L/r83"
-        }
+    {"ind1": "#", "ind2": "#", "value": "   61014599/L/r83"}
       ],
       "o": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "00204096"
-        }
+    {"ind1": "#", "ind2": "#", "value": "00204096"}
       ]
     },
     "035": {
       "9": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "AAA-0425"
-        }
+    {"ind1": "#", "ind2": "#", "value": "AAA-0425"}
       ],
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "ocmDCLC6114599B"
-        }
+    {"ind1": "#", "ind2": "#", "value": "ocmDCLC6114599B"}
       ]
     },
     "040": {
       "d": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "PPT-M"
-        }
+    {"ind1": "#", "ind2": "#", "value": "PPT-M"}
       ]
     },
     "041": {
       "a": [
-        {
-          "ind1": "1",
-          "ind2": "#",
-          "value": "engund"
-        }
+    {"ind1": "1", "ind2": "#", "value": "engund"}
       ]
     },
     "049": {
       "a": [
-        {
-          "ind1": "9",
-          "ind2": "8",
-          "value": "TMYM"
-        },
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "PPCM"
-        }
+    {"ind1": "9", "ind2": "8", "value": "TMYM"},
+        {"ind1": "#", "ind2": "#", "value": "PPCM"}
       ],
       "b": [
-        {
-          "ind1": "9",
-          "ind2": "8",
-          "value": "BF575.L7 T68 1962"
-        }
+    {"ind1": "9", "ind2": "8", "value": "BF575.L7 T68 1962"}
       ],
       "c": [
-        {
-          "ind1": "9",
-          "ind2": "8",
-          "value": "1"
-        },
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "1"
-        }
+    {"ind1": "9", "ind2": "8", "value": "1"},
+        {"ind1": "#", "ind2": "#", "value": "1"}
       ],
       "l": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "Fred B. Rogers, M.D."
-        }
+    {"ind1": "#", "ind2": "#", "value": "Fred B. Rogers, M.D."}
       ],
       "o": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "Gift"
-        }
+    {"ind1": "#", "ind2": "#", "value": "Gift"}
       ],
       "z": [
-        {
-          "ind1": "9",
-          "ind2": "8",
-          "value": "39074500724638"
-        }
+    {"ind1": "9", "ind2": "8", "value": "39074500724638"}
       ]
     },
     "050": {
       "a": [
-        {
-          "ind1": "0",
-          "ind2": "#",
-          "value": "BF697"
-        }
+    {"ind1": "0", "ind2": "#", "value": "BF697"}
       ],
       "b": [
-        {
-          "ind1": "0",
-          "ind2": "#",
-          "value": ".T623"
-        }
+    {"ind1": "0", "ind2": "#", "value": ".T623"}
       ]
     },
     "090": {
       "a": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "BF575.L7"
-        }
+    {"ind1": "#", "ind2": "#", "value": "BF575.L7"}
       ],
       "b": [
-        {
-          "ind1": "#",
-          "ind2": "#",
-          "value": "T68 1962"
-        }
+    {"ind1": "#", "ind2": "#", "value": "T68 1962"}
       ]
     },
     "leader": "001000200000005001700002"

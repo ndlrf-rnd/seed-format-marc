@@ -13,6 +13,9 @@ const {
     d = исключенная запись
     с = откорректированная запись
 */
+
+const MARC_FORMAT_RUSMARC = 'RUSMARC';
+
 const RUSMARC_RECORD_STATUS = {
   [CORRECTED]: CORRECTED,
   [DELETED]: DELETED,
@@ -32,6 +35,7 @@ const RUSMARC_JSON_SCHEMA_PATH = path.join(__dirname, 'schemas/rusmarc/rusmarc-b
 const RUSMARC_JSON_SCHEMA_URI = path.join('/schemas/rusmarc-bibliographic-rsl-1.0.0.schema.json');
 
 module.exports = {
+  MARC_FORMAT_RUSMARC,
   RUSMARC_RECORD_STATUS,
   RUSMARC_JSON_SCHEMA_URI,
   RUSMARC_JSON_SCHEMA_PATH,

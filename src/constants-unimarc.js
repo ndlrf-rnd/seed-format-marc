@@ -1,6 +1,8 @@
 const path = require('path');
 const { MARC_RECORD_FORMATS } = require('./constants-formats');
 
+const MARC_FORMAT_UNIMARC = 'UNIMARC';
+
 /*
 Тип записи (позиция символа 6)
 Используются следующие коды, обозначающие тип записи:
@@ -54,6 +56,7 @@ const UNIMARC_JSON_SCHEMA_PATH = path.join(__dirname, 'schemas/unimarc/unimarc-b
 const UNIMARC_JSON_SCHEMA_URI = '/schemas/unimarc-bibliographic-rsl-1.0.0.schema.json';
 const RUSMARC_F100A_TYPE_OF_RANGE_OFFSET = 8;
 module.exports = {
+  MARC_FORMAT_UNIMARC,
   UNIMARC_JSON_SCHEMA_URI,
   UNIMARC_RECORD_TYPE_GROUP_CODES,
   UNIMARC_SCHEMA_URI,

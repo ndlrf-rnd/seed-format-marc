@@ -40,7 +40,7 @@
     "url": "git@github.com:ndlrf-rnd/seed-format-marc.git"
   },
   "license": "Apache-2.0",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "main": "./src/index.js",
   "engines": {
     "node": ">=8"
@@ -56,16 +56,19 @@
   "dependencies": {
     "jsonata": "1.8.5",
     "lodash.compact": "3.0.1",
+    "lodash.defaults": "^4.2.0",
     "lodash.flattendeep": "4.4.0",
     "lodash.get": "4.4.2",
     "lodash.isdate": "4.0.1",
     "lodash.mapvalues": "4.6.0",
     "lodash.omit": "4.5.0",
     "lodash.sortby": "4.7.0",
-    "lodash.uniqby": "4.7.0"
+    "lodash.uniqby": "4.7.0",
+    "traverse": "^0.6.6",
+    "xml-js": "1.6.11",
+    "xmldom": "0.4.0"
   },
   "devDependencies": {
-    "xml-js": "1.6.11",
     "eslint": "8.6.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-plugin-import": "2.25.3",
