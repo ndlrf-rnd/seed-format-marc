@@ -6,27 +6,27 @@ const {
   ALEF_JSON_SCHEMA_URI,
   ALEF_JSON_SCHEMA_PATH,
   ALEF_DOC_URI,
-  MARC_FORMAT_ALEF,
-} = require('./alef');
+  MARC_DIALECT_ALEF,
+} = require('./dialects/alef/alef');
 const {
-  MARC_FORMAT_MARC21,
+  MARC_DIALECT_MARC21,
   MARC21_JSON_SCHEMA_URI,
   MARC21_DOC_URI,
   MARC21_JSON_SCHEMA_PATH,
-} = require('./constants-marc21');
+} = require('./dialects/marc21/constants-marc21');
 const {
-  MARC_FORMAT_UNIMARC,
+  MARC_DIALECT_UNIMARC,
   UNIMARC_DOC_URI,
   UNIMARC_JSON_SCHEMA_URI,
   UNIMARC_JSON_SCHEMA_PATH,
-} = require('./constants-unimarc');
+} = require('./dialects/unimarc/constants-unimarc');
 const {
-  MARC_FORMAT_RUSMARC,
+  MARC_DIALECT_RUSMARC,
   RUSMARC_DOC_URI,
   RUSMARC_JSON_SCHEMA_URI,
   RUSMARC_JSON_SCHEMA_PATH,
-} = require('./constants-rusmarc');
-const { MARC_RECORD_FORMATS } = require('./constants-formats');
+} = require('./dialects/rusmarc/constants-rusmarc');
+const { MARC_RECORD_FORMATS } = require('./constants-record-formats');
 
 const JSON_SCHEMA_MEDIA_TYPE = 'application/schema+json';
 const JSON_MEDIA_TYPE = 'application/json';
@@ -52,25 +52,25 @@ const COLUMNS = [
  */
 
 const MARC_FORMATS = {
-  [MARC_FORMAT_UNIMARC]: {
+  [MARC_DIALECT_UNIMARC]: {
     uri: UNIMARC_JSON_SCHEMA_URI,
     path: UNIMARC_JSON_SCHEMA_PATH,
     doc_uri: UNIMARC_DOC_URI,
     mediaType: JSON_SCHEMA_MEDIA_TYPE,
   },
-  [MARC_FORMAT_RUSMARC]: {
+  [MARC_DIALECT_RUSMARC]: {
     uri: RUSMARC_JSON_SCHEMA_URI,
     path: RUSMARC_JSON_SCHEMA_PATH,
     doc_uri: RUSMARC_DOC_URI,
     mediaType: JSON_SCHEMA_MEDIA_TYPE,
   },
-  [MARC_FORMAT_MARC21]: {
+  [MARC_DIALECT_MARC21]: {
     uri: MARC21_JSON_SCHEMA_URI,
     path: MARC21_JSON_SCHEMA_PATH,
     doc_uri: MARC21_DOC_URI,
     mediaType: JSON_SCHEMA_MEDIA_TYPE,
   },
-  [MARC_FORMAT_ALEF]: {
+  [MARC_DIALECT_ALEF]: {
     uri: ALEF_JSON_SCHEMA_URI,
     path: ALEF_JSON_SCHEMA_PATH,
     doc_uri: ALEF_DOC_URI,
@@ -202,9 +202,8 @@ const RECORD_LEVELS = {
   // Non-formal code for unknown level
   u: 'UNKNOWN',
 };
-const MARC21_TO_OPDS2_JSONATA = registerJsonata(path.join(__dirname, 'mappings/marc21-to-opds2-0.7.0.jsonata'));
-const RUSMARC_TO_MARC21_JSONATA = registerJsonata(path.join(__dirname, 'mappings/rusmarc-to-marc21-bibliographic-0.8.0.jsonata'));
-const RUSMARC_TO_JSONLD_BF2_JSONATA = registerJsonata(path.join(__dirname, 'mappings/marc21-to-bibframe2-0.7.0.jsonata'));
+const RUSMARC_TO_MARC21_JSONATA = registerJsonata(path.join(__dirname, 'dialects', 'rusmarc-to-marc21-bibliographic-0.9.0.jsonata'));
+const RUSMARC_TO_JSONLD_BF2_JSONATA = registerJsonata(path.join(__dirname, 'dialects', 'marc21-to-bibframe2-0.9.0.jsonata'));
 
 // Currently unused
 const BF2_LC_XSLT_PATH = path.join(__dirname, '../thirdparty/marc2bibframe2/xsl/marc2bibframe2.xsl');
@@ -214,7 +213,6 @@ const MARC_DIRECTORY_INDEX_START = 7;
 
 module.exports = {
   BF2_LC_XSLT_PATH,
-  MARC21_TO_OPDS2_JSONATA,
   RUSMARC_TO_MARC21_JSONATA,
   RUSMARC_TO_JSONLD_BF2_JSONATA,
   RECORD_LEVELS,
@@ -241,10 +239,10 @@ module.exports = {
   MARC_BLANK_CHAR,
   COLUMNS,
   MARC_FORMATS,
-  MARC_FORMAT_MARC21,
-  MARC_FORMAT_UNIMARC,
-  MARC_FORMAT_RUSMARC,
-  MARC_FORMAT_ALEF,
+  MARC_DIALECT_MARC21,
+  MARC_DIALECT_UNIMARC,
+  MARC_DIALECT_RUSMARC,
+  MARC_DIALECT_ALEF,
   JSON_SCHEMA_MEDIA_TYPE,
   JSON_SCHEMA_EXTENSION,
   JSON_MEDIA_TYPE,

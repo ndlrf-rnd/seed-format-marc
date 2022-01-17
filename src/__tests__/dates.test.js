@@ -18,21 +18,11 @@ test('get marc record dates', () => {
     {
       dateEnd: new Date('1957-12-31T00:00:00.000Z'),
       dateStart: new Date('1957-12-31T00:00:00.000Z'),
-      marcRecordType: 'BIBLIOGRAPHIC',
       publicationDate: new Date('1999-12-31T00:00:00.000Z'),
       recordDateStart: new Date('2012-10-25T00:00:00.000Z'),
       recordDateUpdated: new Date('2018-09-14T15:34:23.000Z'),
       typeOfRange: 'd',
     },
-    // {
-    //   dateEnd: '1957-12-31T00:00:00.000Z',
-    //   dateStart: '1957-12-31T00:00:00.000Z',
-    //   marcRecordType: 'BIBLIOGRAPHIC',
-    //   publicationDate: '1999-12-31T00:00:00.000Z',
-    //   recordDateStart: '2012-10-25T00:00:00.000Z',
-    //   recordDateUpdated: '2018-09-14T15:34:23.000Z',
-    //   typeOfRange: 'd',
-    // },
   );
 });
 
@@ -46,7 +36,6 @@ test('get rusmarc record dates', () => {
     getMarcRecordDates(jsonEntity),
   ).toEqual(
     {
-      marcRecordType: 'BIBLIOGRAPHIC',
       recordDateStart: new Date('2019-10-07T13:31:00.000Z'),
       recordDateUpdated: new Date('2019-10-07T13:31:00.000Z'),
     },
@@ -59,7 +48,6 @@ test('get full marc record dates', () => {
     getMarcRecordDates(jsonEntity),
   ).toEqual(
     {
-      marcRecordType: 'BIBLIOGRAPHIC',
       publicationDate: new Date('1779-12-31T00:00:00.000Z'),
       dateStart: new Date('1779-01-01T00:00:00.000Z'),
       recordDateStart: new Date('2007-11-01T00:00:00.000Z'),

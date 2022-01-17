@@ -1,14 +1,14 @@
 /* eslint-disable no-template-curly-in-string */
 const fs = require('fs');
-const { MARC21_JSON_SCHEMA_PATH } = require('./constants-marc21');
+const { MARC21_JSON_SCHEMA_PATH } = require('./dialects/marc21/constants-marc21');
 
 const {
   MARC_CONTROL_FIELD_TAGS,
   MARC_NOT_SET,
   RECORD_TYPE_GROUP_MANUAL_RELATIONS,
 } = require('./constants');
-const { MARC21_FIELD_STR_RE } = require('./constants-marc21');
-const { MARC_RECORD_FORMATS } = require('./constants-formats');
+const { MARC21_FIELD_STR_RE } = require('./dialects/marc21/constants-marc21');
+const { MARC_RECORD_FORMATS } = require('./constants-record-formats');
 
 const MARC21_JSON_SCHEMA_OBJ = JSON.parse(fs.readFileSync(MARC21_JSON_SCHEMA_PATH, 'utf-8'));
 

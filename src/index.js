@@ -1,15 +1,26 @@
-const { forceArray, flatten } = require('./utils/arrays');
-const { detectMarcFormat } = require('./detect');
+const {
+  forceArray,
+} = require('./utils/arrays');
+const {
+  isAlef,
+  isMarc21,
+  isUnimarc,
+  isRusmarc,
+} = require('./detect');
 
 const {
-  MARC21_TO_OPDS2_JSONATA,
   MARC_EXTENSION,
   RUSMARC_TO_MARC21_JSONATA,
   JSON_MEDIA_TYPE,
-  MARC_FORMAT_RUSMARC,
-  MARC_FORMAT_UNIMARC,
+  MARC_DIALECT_RUSMARC,
+  MARC_DIALECT_UNIMARC,
+  MARC_DIALECT_MARC21,
+  MARC_DIALECT_ALEF,
 } = require('./constants');
-const { toISO2709, fromISO2709 } = require('./serial/iso2709');
+const {
+  toISO2709,
+  fromISO2709,
+} = require('./serial/iso2709');
 const {
   MARC_ENCODING,
   MARC_RECORD_SEPARATION_CHAR,
@@ -23,27 +34,24 @@ const {
   MARCXML_ENCODING,
   MARCXML_START_MARKER,
   MARCXML_END_MARKER,
-} = require('./serial/constants-marcxml');
-const { toSlimXml,
+  toSlimXml,
   fromSlimXml,
 } = require('./serial/marcxml');
+const { marcToOpds } = require('./export/opds2');
 
-const marcToOpds = (input) => {
-  if ((typeof input === 'string') || (Buffer.isBuffer(input))) {
-    input = fromISO2709(input);
-  }
-  const marcObjs = flatten(forceArray(input).map(
-    (o) => (
-      ([
-        MARC_FORMAT_RUSMARC,
-        MARC_FORMAT_UNIMARC,
-      ].indexOf(detectMarcFormat(o)) !== -1)
-        ? RUSMARC_TO_MARC21_JSONATA(forceArray(o))
-        : forceArray(o)
-    ),
-  ));
-  return marcObjs.map(MARC21_TO_OPDS2_JSONATA);
-};
+// const marcToOpds = (input) => {
+//   if ((typeof input === 'string') || (Buffer.isBuffer(input))) {
+//     input = fromISO2709(input);
+//   }
+//   const marcObjs = flatten(forceArray(input).map(
+//     (o) => (
+//       (isRusmarc(o) || isUnimarc(o))
+//         ? RUSMARC_TO_MARC21_JSONATA(forceArray(o))
+//         : forceArray(o)
+//     ),
+//   ));
+//   return marcObjs.map(MARC21_TO_OPDS2_JSONATA);
+// };
 
 module.exports = {
   // is: isMarc,
@@ -64,6 +72,31 @@ module.exports = {
       encoding: MARCXML_ENCODING,
       startMarker: MARCXML_START_MARKER,
       endMarker: MARCXML_END_MARKER,
+    },
+  },
+  defaultDialect: MARC_DIALECT_MARC21,
+  dialects: {
+    [MARC_DIALECT_MARC21]: {
+      is: isMarc21,
+    },
+    [MARC_DIALECT_UNIMARC]: {
+      is: isUnimarc,
+      to: {
+        [MARC_DIALECT_MARC21]: (recs) => RUSMARC_TO_MARC21_JSONATA(forceArray(recs)),
+        [MARC_DIALECT_RUSMARC]: (recs) => recs,
+      },
+    },
+    [MARC_DIALECT_RUSMARC]: {
+      is: isRusmarc,
+      to: {
+        [MARC_DIALECT_MARC21]: (recs) => forceArray(recs).map(
+          (rec) => RUSMARC_TO_MARC21_JSONATA(rec),
+        ),
+        [MARC_DIALECT_UNIMARC]: (recs) => recs,
+      },
+    },
+    [MARC_DIALECT_ALEF]: {
+      is: isAlef,
     },
   },
   export: {

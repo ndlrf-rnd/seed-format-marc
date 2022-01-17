@@ -7,7 +7,7 @@ const {
   forceArray,
 } = require('../utils/arrays');
 const { get } = require('../utils/objects');
-const { MARC21_JSON_SCHEMA_PATH } = require('../constants-marc21');
+const { MARC21_JSON_SCHEMA_PATH } = require('../dialects/marc21/constants-marc21');
 
 const MARC21_SCHEMA = JSON.parse(fs.readFileSync(MARC21_JSON_SCHEMA_PATH, 'utf-8'));
 const schemaFields = Object.keys(MARC21_SCHEMA.properties).reduce((a, tag) => {

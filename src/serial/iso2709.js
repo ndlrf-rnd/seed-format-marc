@@ -160,7 +160,9 @@ const sanitizeIndicator = (indStr) => {
  */
 const convertRecordFromISO2709 = (input) => {
   const recordStr = toString(input);
-
+  const fieldsAcc = {
+    leader: recordStr.substring(0, MARC_LEADER_LENGTH),
+  };
   // Locate start of data fields (First occurrence of '\x1E')
   const dataFieldStr = recordStr.substring(
     recordStr.search(MARC_FTC_CHAR) + 1,
@@ -189,9 +191,7 @@ const convertRecordFromISO2709 = (input) => {
       throw new Error(`Invalid record: ${recordStr} with length ${recordStr.length}`);
     }
   }
-  const fieldsAcc = {
-    leader: directoryStr.substring(0, MARC_LEADER_LENGTH),
-  };
+
   pos = 0;
   while (directoryStr.length - pos >= MARC_DIRECTORY_INDEX_SIZE) {
     const entryStr = directoryStr.substring(pos, pos + MARC_DIRECTORY_INDEX_SIZE);
@@ -220,15 +220,30 @@ const convertRecordFromISO2709 = (input) => {
 
       // Parse subfields
       const sfStr = dataElementStr.substring(2);
-      processSubfieldStr(sfStr).forEach((subfield) => {
-        fieldsAcc[tag] = fieldsAcc[tag] || {};
-        fieldsAcc[tag][subfield.code] = fieldsAcc[tag][subfield.code] || [];
-        fieldsAcc[tag][subfield.code].push({
-          ind1: sanitizeIndicator(dataElementStr.charAt(0)),
-          ind2: sanitizeIndicator(dataElementStr.charAt(1)),
-          value: subfield.value,
-        });
-      });
+      fieldsAcc[tag] = fieldsAcc[tag] || [];
+      /*
+        subfield code - The two-character combination of a delimiter followed by a data element
+        identifier. Subfield codes are not used in control fields.
+        subfield code length.
+        A data element in the leader which contains the sum of the lengths of the delimiter
+        and the data element identifier used in the record. Always set to 2 in MARC 21 records.
+       */
+      fieldsAcc[tag].push(
+        processSubfieldStr(sfStr).reduce(
+          (acc, {
+            code,
+            value,
+          }) => {
+            acc[code] = acc[code] || [];
+            acc[code].push(value);
+            return acc;
+          },
+          {
+            ind1: sanitizeIndicator(dataElementStr.charAt(0)),
+            ind2: sanitizeIndicator(dataElementStr.charAt(1)),
+          },
+        ),
+      );
     }
     pos += MARC_DIRECTORY_INDEX_SIZE;
   }

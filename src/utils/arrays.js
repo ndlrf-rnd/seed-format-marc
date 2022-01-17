@@ -1,5 +1,6 @@
 const compact = require('lodash.compact');
 const sortBy = require('lodash.sortby');
+const intersection = require('lodash.intersection');
 const uniqBy = require('lodash.uniqby');
 const flattenDeep = require('lodash.flattendeep');
 
@@ -18,5 +19,6 @@ module.exports = {
   compact,
   uniqBy,
   sortBy,
+  intersection,
   flattenDeep,
 };

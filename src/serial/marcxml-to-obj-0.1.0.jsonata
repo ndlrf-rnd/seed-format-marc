@@ -1,26 +1,19 @@
-**.elements[$.name = 'record'].{
-  "leader": $.elements[$.name = 'leader'].elements.text,
-  'controlfield': $.elements[$.name = 'controlfield'].$merge(
-    [
-      $.attributes,
-      {
-        'value': $.elements.text
-      }
-    ]
+**.elements[$.name = 'record'].$merge([
+  {
+    "leader": $.elements[$.name = 'leader'].elements.text
+  },
+  $merge(
+    $.elements[$.name = 'controlfield'].{
+      $.attributes.tag: $.elements.text
+    }
   ),
-  'datafield': $.elements[$.name = 'datafield'].$merge(
-    [
-      $.attributes,
-      {
-        'subfield': $.[
-          elements[$.name='subfield'].$merge(
-            [
-              $.attributes,
-              {'value': $.elements.text }
-            ]
-          )
-        ]
-      }
-    ]
+  $merge(
+    $.elements[$.name = 'datafield'].{
+      $.attributes.tag: $.$merge(
+        elements[$.name='subfield'].{
+          $.attributes.code: [$.elements.text]
+        }
+      )
+    }
   )
-}
+])

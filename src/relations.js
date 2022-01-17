@@ -1,5 +1,5 @@
 const { FIELD_RELATION_TYPES } = require('./constants');
-const { MARC21_FIELD_RELATION_SEQ_RE, MARC21_REL_FIELDS } = require('./constants-marc21');
+const { MARC21_FIELD_RELATION_SEQ_RE, MARC21_REL_FIELDS } = require('./dialects/marc21/constants-marc21');
 
 const getMarc21Relations = (o, config) => Object.keys(MARC21_REL_FIELDS).sort().reduce(
   (a, relk) => {

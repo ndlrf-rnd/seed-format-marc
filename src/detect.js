@@ -1,39 +1,34 @@
-const { JSON_MEDIA_TYPE } = 'application/json';
-const { flattenDeep } = require('./utils/arrays');
-const { toISO2709 } = require('./serial/iso2709');
-const { MARC_MEDIA_TYPE } = require('./constants');
 const {
-  MARC_LEADER_BIBLIOGRAPHIC_LEVEL_OFFSET,
-  BASIC_ENTITIES,
-} = require('./constants');
-const {
+  flattenDeep,
+  intersection,
   flatten,
   forceArray,
   compact,
   zip,
 } = require('./utils/arrays');
-const { get } = require('./utils/objects');
 const { isEmpty } = require('./utils/types');
-const { MARC_RECORD_FORMATS } = require('./constants-formats');
-const { UNIMARC_RECORD_TYPE_GROUP_CODES } = require('./constants-unimarc');
+
+const { toISO2709 } = require('./serial/iso2709');
 const {
-  MARC21_BIBLIOGRAPHIC_LEVEL,
-  MARC21_RECORD_TYPE_GROUP_CODES,
-} = require('./constants-marc21');
-const {
+  MARC_MEDIA_TYPE,
+  MARC_LEADER_BIBLIOGRAPHIC_LEVEL_OFFSET,
   MARC_TEST_RE,
   MARC_LEADER_DESCRIPTION_LEVEL_OFFSET,
   RECORD_LEVELS,
   MARC_LEADER_MARC_RECORD_STATUS_OFFSET,
   MARC_LEADER_TYPE_OFFSET,
-  MARC_FORMAT_MARC21,
-  MARC_FORMAT_RUSMARC,
 } = require('./constants');
 
-const getRecordStatus = (rec) => get(
-  rec,
-  ['leader', MARC_LEADER_MARC_RECORD_STATUS_OFFSET],
-  'd',
+const { MARC_RECORD_FORMATS } = require('./constants-record-formats');
+const { UNIMARC_RECORD_TYPE_GROUP_CODES } = require('./dialects/unimarc/constants-unimarc');
+const {
+  MARC21_BIBLIOGRAPHIC_LEVEL,
+  MARC21_RECORD_TYPE_GROUP_CODES,
+} = require('./dialects/marc21/constants-marc21');
+const MARC_RECORD_STATUS = require('./constants-record-status');
+
+const getRecordStatus = (rec) => (
+  rec.leader ? rec.leader[MARC_LEADER_MARC_RECORD_STATUS_OFFSET] : MARC_RECORD_STATUS.UNKNOWN
 ).toLowerCase();
 
 const getMarcSource = (pub, defaultSourceCode) => {
@@ -120,7 +115,6 @@ const getUrlRecords = (rec) => flatten(forceArray(rec['856']).map((field856) => 
         1: 'alternate',
         2: 'relatedTo',
       }[field856.ind2 || '0'] || 'relatedTo',
-      kind: BASIC_ENTITIES.URL,
       source,
       key,
       type: types.length >= idx + 1 ? types[idx] : null,
@@ -150,7 +144,6 @@ const getPhysicalLocationRecord = (rec) => flattenDeep(['852', '853'].map(
               source,
               key,
               record,
-              kind: BASIC_ENTITIES.ITEM,
               mediaType: MARC_MEDIA_TYPE,
             },
           ]),
@@ -160,59 +153,60 @@ const getPhysicalLocationRecord = (rec) => flattenDeep(['852', '853'].map(
 )).filter((v) => !!v);
 
 /**
- * Detect MARC standard fork (MARC21, RUSMARC, UNIMARC e.t.c.)
- *
+ * Detectors
+ */
+
+/**
  * TODO: RUSMARC is UNIMARC compliant so it would be better to have of multi-level classification
  *       at the other hand [IFLA see](https://www.ifla.org/publications/unimarc-formats-and-related-documentation)
  *       them as the same level branches.
  * TODO: Differentiate other forms of UNIMARC from RUSMARC
- *
- * @param marcObj
- * @param defaultMarcSchemaUri
- * @returns {Object<{uri: string, path: string, doc_uri: string}>|null}
  */
-const detectMarcFormat = (
-  marcObj,
-  defaultMarcSchemaUri = MARC_FORMAT_MARC21,
-) => {
-  if (!marcObj) {
-    return null;
-  }
+
+const isMarc = async (input) => (typeof input === 'string') && (!!input.trim().match(MARC_TEST_RE));
+
+const isRusmarc = (marcObj) => {
   const field100a = forceArray(marcObj['100']).map((f) => f.a).join('');
-  if (field100a && field100a.match(/^[0-9]{8}[a-z].{25,27}$/ui)) {
-    return MARC_FORMAT_RUSMARC;
-  }
-  if ([
-    ...['007', '008'].filter(
-      (o) => (typeof marcObj[o] === 'string') && (marcObj[o].length > 0),
-    ),
-    ...['040', '852', '856'].filter(
-      (a, o) => forceArray(marcObj[o]).filter(
-        (f) => (forceArray(f.a).length > 0),
-      ).length > 0,
-    ),
-  ].length > 0) {
-    return MARC_FORMAT_MARC21;
-  }
-  if (marcObj.leader) {
-    return MARC_FORMAT_RUSMARC;
-  }
-  return defaultMarcSchemaUri;
+  return !!(field100a && field100a.match(/^[0-9]{8}[a-z].{25,27}$/ui));
 };
+
+const isMarc21 = (marcObj) => ([
+  ...['007', '008'].filter(
+    (o) => (typeof marcObj[o] === 'string') && (marcObj[o].length > 0),
+  ),
+  ...['040', '852', '856'].filter(
+    (a, o) => forceArray(marcObj[o]).filter(
+      (f) => (forceArray(f.a).length > 0),
+    ).length > 0,
+  ),
+].length > 0);
+const isAlef = (marcObj) => intersection(...[
+  [
+    'OWN',
+    'GLOBAL',
+    'LKR',
+    'ITM',
+    'UP',
+    'DN',
+    'PAR',
+  ],
+  Object.keys(marcObj),
+].map((k) => k.toLocaleString()).sort()).length > 0;
+
+const isUnimarc = (marcObj) => !(
+  isRusmarc(marcObj) || isMarc21(marcObj) || isAlef(marcObj)
+);
 
 /**
  * Detect MARC record type
  * @param rec {*}
  * @returns {string}
  */
-const getMarkRecordType = (rec) => {
-  const marcSchemaUri = detectMarcFormat(rec);
-  const leader = rec.leader;
+const getMarcRecordFormat = (rec) => {
   // TODO: Here RUSMARC and UNIMARC are about pretty the same,
   //       but i'm not confident about all RUSMARC authority and holdings files
-  const codeMap = (marcSchemaUri === MARC_FORMAT_MARC21)
-    ? MARC21_RECORD_TYPE_GROUP_CODES
-    : UNIMARC_RECORD_TYPE_GROUP_CODES;
+  const codeMap = isMarc21(rec) ? MARC21_RECORD_TYPE_GROUP_CODES : UNIMARC_RECORD_TYPE_GROUP_CODES;
+  const leader = rec.leader;
 
   const leaderCode = ((
     Array.isArray(leader) ? leader.map((v) => v || ' ').join('') : leader
@@ -224,9 +218,7 @@ const getMarkRecordType = (rec) => {
 };
 
 const getBibliographicLevel = (rec) => (rec.leader ? (
-  MARC21_BIBLIOGRAPHIC_LEVEL[
-    (rec.leader[MARC_LEADER_BIBLIOGRAPHIC_LEVEL_OFFSET] || '').toLowerCase()
-  ] || { type: null }
+  MARC21_BIBLIOGRAPHIC_LEVEL[(rec.leader[MARC_LEADER_BIBLIOGRAPHIC_LEVEL_OFFSET] || '').toLowerCase()] || { type: null }
 ).type : null);
 
 /**
@@ -235,7 +227,7 @@ const getBibliographicLevel = (rec) => (rec.leader ? (
  * @returns {string}
  */
 const getKind = (rec) => {
-  const marcRecordType = getMarkRecordType(rec);
+  const marcRecordType = getMarcRecordFormat(rec);
   if (marcRecordType === MARC_RECORD_FORMATS.BIBLIOGRAPHIC) {
     return `${getBibliographicLevel(rec) || ''}`;
   }
@@ -289,37 +281,21 @@ const isSingleRecord = (rec) => (['b', 'd', 'a', 'm'].indexOf(getRecordLevel(rec
 
 const isMultiRecord = (rec) => (['s', 'i', 'c'].indexOf(getRecordLevel(rec)) !== -1);
 
-const getRslCollections = (rec) => {
-  const field979a = forceArray(rec['979']).map((f) => f.a).filter((f) => !!f);
-  return (field979a || []).map((key) => ({
-    kind: BASIC_ENTITIES.COLLECTION,
-    source: 'rumorgb',
-    key,
-    record: JSON.stringify({
-      metadata: {
-        description: 'Auto-generated collection',
-        title: key,
-      },
-    }),
-    mediaType: JSON_MEDIA_TYPE,
-  }));
-};
-
-const isMarc = async (input) => (typeof input === 'string') && (!!input.trim().match(MARC_TEST_RE));
-
 module.exports = {
+  getMarcRecordFormat,
   isMarc,
   getRecordStatus,
   isSingleRecord,
   isMultiRecord,
   getMarcKey,
   getMarcSource,
-  detectMarcFormat,
   getKind,
-  getMarkRecordType,
   getRecordLevel,
   getUrlRecords,
   getPhysicalLocationRecord,
-  getRslCollections,
   getBibliographicLevel,
+  isRusmarc,
+  isMarc21,
+  isAlef,
+  isUnimarc,
 };

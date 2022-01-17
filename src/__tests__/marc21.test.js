@@ -2,11 +2,17 @@ const path = require('path');
 const fs = require('fs');
 const { parseFieldRelationSeq } = require('../relations');
 const { omit } = require('../utils/objects');
-const { detectMarcFormat } = require('../detect');
 const {
-  MARC_FORMAT_MARC21,
-  MARC_FORMAT_RUSMARC,
+  isMarc21,
+  isRusmarc,
+  isUnimarc,
+  isAlef,
+} = require('../detect');
+const {
   MARC_MEDIA_TYPE,
+  OPDS2_MEDIA_TYPE,
+  MARC_DIALECT_RUSMARC,
+  MARC_DIALECT_MARC21,
 } = require('../constants');
 const { JSONLD_MEDIA_TYPE } = require('../constants');
 const { splitRecords } = require('../serial/iso2709');
@@ -82,37 +88,40 @@ test('parseFieldRelationSeq', () => {
 
 test('detect', () => {
   const jsonEntities = [
-    JSON.parse(
-      fs.readFileSync(
-        path.join(__dirname, 'data/history_xvii/marc21.json'),
-        'utf-8',
-      ),
-    ),
-    JSON.parse(
-      fs.readFileSync(
-        path.join(__dirname, 'data/history_xvii/rusmarc.json'),
-        'utf-8',
-      ),
-    ),
-  ];
+    path.join(__dirname, 'data/history_xvii/marc21.json'),
+    path.join(__dirname, 'data/history_xvii/rusmarc.json'),
+    path.join(__dirname, 'data/dates_1_marc21.json'),
+  ].map(
+    (p) => JSON.parse(fs.readFileSync(p, 'utf-8')),
+  );
+
   expect(
-    jsonEntities.map(detectMarcFormat),
+    jsonEntities.map(
+      (rec) => ([
+        isMarc21,
+        isRusmarc,
+        isUnimarc,
+        isAlef,
+      ].map((fn) => fn(rec))
+      ),
+    ),
   ).toEqual(
     [
-      MARC_FORMAT_MARC21,
-      MARC_FORMAT_RUSMARC,
+      [true, false, false, false],
+      [false, true, false, false],
+      [true, false, false, false],
     ],
   );
 });
 
-describe.skip('rusmarc -> marc 21', () => {
+describe('rusmarc -> marc 21', () => {
   test('MARC21 -> OPDS vs same RUSMARC -> OPDS rsl01002988236', async () => {
     expect.assertions(1);
     const marc21Json = (await MarcIf.export[JSONLD_MEDIA_TYPE](
-      fs.readFileSync(path.join(__dirname, 'history_xvii/RuMoRGB/01002988236_marc21.mrc'), 'utf-8'),
+      fs.readFileSync(path.join(__dirname, 'data', 'history_xvii', 'RuMoRGB', '01002988236_marc21.mrc'), 'utf-8'),
     ));
     const rusmarcMappedJson = await MarcIf.export[JSONLD_MEDIA_TYPE](
-      fs.readFileSync(path.join(__dirname, 'history_xvii/RuMoRGB/01002988236_rusmarc.iso'), 'utf-8'),
+      fs.readFileSync(path.join(__dirname, 'data', 'history_xvii', 'RuMoRGB', '01002988236_rusmarc.iso'), 'utf-8'),
     );
     expect(
       rusmarcMappedJson,
@@ -121,32 +130,33 @@ describe.skip('rusmarc -> marc 21', () => {
     );
   }, 60 * 1000);
 
-  test('mapping rusmarc -> marc - ISBN-978-5-901202-50-0', async () => {
+  test.skip('mapping rusmarc -> marc - ISBN-978-5-901202-50-0', async () => {
     expect.assertions(1);
-    const marc21Json = (await MarcIf.toObjects(
-      fs.readFileSync(path.join(__dirname, 'data/ISBN-978-5-901202-50-0/01003120729.mrc'), 'utf-8'),
+    const marc21Json = (await MarcIf.serial[MARC_MEDIA_TYPE].from(
+      fs.readFileSync(path.join(__dirname, 'data', 'ISBN-978-5-901202-50-0', '01003120729.mrc'), 'utf-8'),
     ));
-    // to['http://rusmarc.ru/soft/RUSMARC20191213.rar']
-    const rusmarcMappedJson = await MarcIf.toObjects(
-      fs.readFileSync(path.join(__dirname, 'data/ISBN-978-5-901202-50-0/01003120729.iso'), 'utf-8'),
-    );
+    const rusmarcMappedJson = (await MarcIf.dialects[MARC_DIALECT_RUSMARC].to[MARC_DIALECT_MARC21](
+      await MarcIf.serial[MARC_MEDIA_TYPE].from(
+        fs.readFileSync(path.join(__dirname, 'data/ISBN-978-5-901202-50-0', '01003120729.iso'), 'utf-8'),
+      ),
+    ));
     expect(
       rusmarcMappedJson.map((rec) => ({
         ...rec,
         leader: rec.leader.replace(/^[0-9]{5}/ug, '00000'),
-      })),
+      })).sort((a, b) => a['001'] > b['001']),
     ).toEqual(
-      marc21Json,
+      marc21Json.sort((a, b) => a['001'] > b['001']),
     );
   }, 60 * 1000);
 
   test('mapping rusmarc -> marc - rsl01002988236 VS NLR005177748.mrc', async () => {
     expect.assertions(1);
     const marc21Json = await MarcIf.export[JSONLD_MEDIA_TYPE](
-      fs.readFileSync(path.join(__dirname, 'history_xvii/RuMoRGB/01002988236_marc21.mrc')),
+      fs.readFileSync(path.join(__dirname, 'data', 'history_xvii', 'RuMoRGB', '01002988236_marc21.mrc')),
     );
     const rusmarcMappedJson = await MarcIf.export[JSONLD_MEDIA_TYPE](
-      fs.readFileSync(path.join(__dirname, 'history_xvii/RuSpRNB/NLR005177748.mrc')),
+      fs.readFileSync(path.join(__dirname, 'data', 'history_xvii', 'RuSpRNB', 'NLR005177748.mrc')),
     );
     expect(
       rusmarcMappedJson,
@@ -156,17 +166,30 @@ describe.skip('rusmarc -> marc 21', () => {
   }, 15 * 1000);
 });
 
-test('MARC21 -> OPDS vs same RUSMARC -> OPDS rsl01002988236', async () => {
+test('009913303 to OPDS', async () => {
   expect.assertions(1);
-  const marc21Json = (await MarcIf.export[JSONLD_MEDIA_TYPE](
-    fs.readFileSync(path.join(__dirname, 'data/history_xvii/RuMoRGB/01002988236_marc21.mrc'), 'utf-8'),
-  ));
-  const rusmarcMappedJson = await MarcIf.export[JSONLD_MEDIA_TYPE](
-    fs.readFileSync(path.join(__dirname, 'data/history_xvii/RuMoRGB/01002988236_rusmarc.iso'), 'utf-8'),
-  );
+  const data = fs.readFileSync(path.join(__dirname, 'data/009913303_marc21.mrc'));
+  // expect(MarcIf.dialects[MARC_DIALECT_RUSMARC].is(UB)).toBeTruthy();
+  const rObjs = await MarcIf.serial[MARC_MEDIA_TYPE].from(data);
+  // expect(rObjs).toEqual([]);
+  // expect(rObjs).toEqual([]);
   expect(
-    rusmarcMappedJson,
+    await MarcIf.export[OPDS2_MEDIA_TYPE](rObjs),
   ).toEqual(
-    marc21Json,
+    JSON.parse(fs.readFileSync(path.join(__dirname, 'data/009913303_opds.json'), 'utf-8')),
+  );
+}, 60 * 1000);
+
+test('rusmarc detection OPDS2', async () => {
+  expect.assertions(1);
+  const data = fs.readFileSync(path.join(__dirname, 'data/rusmarc2marc-rusmarc.mrc'));
+  // expect(MarcIf.dialects[MARC_DIALECT_RUSMARC].is(UB)).toBeTruthy();
+  const rObjs = await MarcIf.serial[MARC_MEDIA_TYPE].from(data);
+
+  const marc21recs = await MarcIf.dialects[MARC_DIALECT_RUSMARC].to[MARC_DIALECT_MARC21](rObjs);
+  expect(
+    await MarcIf.export[OPDS2_MEDIA_TYPE](marc21recs),
+  ).toEqual(
+    JSON.parse(fs.readFileSync(path.join(__dirname, 'data/rusmarc2marc-opds.json'), 'utf-8')),
   );
 }, 60 * 1000);
