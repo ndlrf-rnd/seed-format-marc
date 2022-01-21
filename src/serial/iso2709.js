@@ -91,7 +91,7 @@ const substrUTF8 = (str, start_in_bytes, length_in_bytes) => toString(
 const toBuffer = (input) => (
   // eslint-disable-next-line no-nested-ternary
   isObject(input)
-    ? input
+    ? input.type === 'Buffer' ? Buffer.from(input.data) : input
     : (
       Buffer.isBuffer(input)
         ? input
