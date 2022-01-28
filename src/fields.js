@@ -6,8 +6,14 @@ const {
   MARC_CONTROL_FIELD_TAGS,
   MARC_NOT_SET,
   RECORD_TYPE_GROUP_MANUAL_RELATIONS,
+  MARC_BLANK_CHAR,
 } = require('./constants');
-const { MARC21_FIELD_STR_RE } = require('./dialects/marc21/constants-marc21');
+
+const {
+  compact,
+  forceArray,
+} = require('./utils/arrays');
+const { MARC21_RELATION_RE, MARC21_FIELD_STR_RE } = require('./dialects/marc21/constants-marc21');
 const { MARC_RECORD_FORMATS } = require('./constants-record-formats');
 
 const MARC21_JSON_SCHEMA_OBJ = JSON.parse(fs.readFileSync(MARC21_JSON_SCHEMA_PATH, 'utf-8'));
@@ -139,6 +145,50 @@ const parseFieldStr = (fieldStr, value = null) => {
     ind2,
     subfield,
   }, value);
+};
+
+const parseIdentifier = (str = '', source = null, isRelation = true, normalizeSourceCode = (sc) => sc) => {
+  str = (str || '').trim();
+  let res = null;
+  if (!str) {
+    return res;
+  }
+
+  // Test for Marc
+  const resParts = str.match(MARC21_RELATION_RE);
+  if (resParts) {
+    if ((source || '').trim()) {
+      res = [source, resParts ? resParts[2] : str];
+    } else if (resParts) {
+      res = resParts.slice(1, 3).map(
+        (v) => v.replace(new RegExp(MARC_BLANK_CHAR, 'ug'), ' ').trim(),
+      );
+    }
+    // Clean out data source excessive definitions
+    if (res && res[1].match(MARC21_RELATION_RE)) {
+      res[1] = res[1].replace(/^(\([^)]*\)[\p{Z}]+)+/igu, '').trim();
+    }
+    if (compact(forceArray(res)).length < 2) {
+      return res;
+    }
+    return res ? {
+      [isRelation ? 'key_to' : 'key']: res[1],
+      [isRelation ? 'source_to' : 'source']: normalizeSourceCode(res[0]),
+    } : {
+      [isRelation ? 'source_to' : 'source']: normalizeSourceCode(str),
+    };
+  }
+  // Test on URI-like
+  const entChunks = str.replace(/^[a-z0-9_-]*:\/\//ui, '').split('/').filter(
+    (x) => !!x,
+  );
+  if (entChunks.filter((v) => !!v).length > 1) {
+    return {
+      [isRelation ? 'source_to' : 'source']: entChunks[0],
+      [isRelation ? 'key_to' : 'key']: entChunks.slice(1).join('/'),
+    };
+  }
+  return res;
 };
 
 module.exports = {

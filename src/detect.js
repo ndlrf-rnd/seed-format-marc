@@ -79,7 +79,7 @@ const getMarcSource = (pub, defaultSourceCode) => {
   return '';
 };
 
-const getMarcKey = (rec) => `${rec['001'] || ''}`;
+const getControlNumber = (rec) => `${rec['001'] || ''}`;
 
 /**
  * Get electronic locations
@@ -174,9 +174,11 @@ const isMarc21 = (marcObj) => ([
   ...['007', '008'].filter(
     (o) => (typeof marcObj[o] === 'string') && (marcObj[o].length > 0),
   ),
-  ...['040', '852', '856'].filter(
+  // 008 field might happen to be missing
+  // supposing that host entry record defined in 773 has one defined
+  ...['040', '852', '856', '773'].filter(
     (a, o) => forceArray(marcObj[o]).filter(
-      (f) => (forceArray(f.a).length > 0),
+      (f) => Object.keys(f).length > 0,
     ).length > 0,
   ),
 ].length > 0);
@@ -196,6 +198,33 @@ const isAlef = (marcObj) => intersection(...[
 const isUnimarc = (marcObj) => !(
   isRusmarc(marcObj) || isMarc21(marcObj) || isAlef(marcObj)
 );
+
+/*
+Source XSD: http://www.w3.org/1999/XSL/Transform
+
+<xsl:variable name="type" select="dc:type"/>
+<xsl:variable name="leader06">
+  <xsl:choose>
+    <xsl:when test="$type='collection'">p</xsl:when>
+    <xsl:when test="$type='dataset'">m</xsl:when>
+    <xsl:when test="$type='event'">r</xsl:when>
+    <xsl:when test="$type='image'">k</xsl:when>
+    <xsl:when test="$type='interactive resource'">m</xsl:when>
+    <xsl:when test="$type='service'">m</xsl:when>
+    <xsl:when test="$type='software'">m</xsl:when>
+    <xsl:when test="$type='sound'">i</xsl:when>
+    <xsl:when test="$type='text'">a</xsl:when>
+    <xsl:otherwise>a</xsl:otherwise>
+  </xsl:choose>
+</xsl:variable>
+<xsl:variable name="leader07">
+  <xsl:choose>
+    <xsl:when test="$type='collection'">c</xsl:when>
+    <xsl:otherwise>m</xsl:otherwise>
+  </xsl:choose>
+</xsl:variable>
+<xsl:value-of select="concat('      ',$leader06,$leader07,'         3u     ')"/>
+*/
 
 /**
  * Detect MARC record type
@@ -287,7 +316,7 @@ module.exports = {
   getRecordStatus,
   isSingleRecord,
   isMultiRecord,
-  getMarcKey,
+  getControlNumber,
   getMarcSource,
   getKind,
   getRecordLevel,

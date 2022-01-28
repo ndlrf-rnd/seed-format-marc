@@ -78,21 +78,6 @@ const MARC_FORMATS = {
   },
 };
 
-// noinspection NonAsciiCharacters
-const INVALID_SOURCE_CODES_MAPPING = {
-  'dlib.rsl.ru': 'RuMoRGB',
-  elar: 'RuMoRGB',
-  rumoelar: 'RuMoRGB',
-  rumorgb: 'RuMoRGB',
-
-  '07nlr': 'RuSpRNB',
-  ргб: 'RuSpRNB',
-  рнб: 'RuSpRNB',
-  nlr: 'RuSpRNB',
-
-  ркп: 'RuMoRKP',
-};
-
 const MARC_FTC_CHAR = '\x1E';
 const MARC_SD_CHAR = '\x1F';
 const MARC_RECORD_SEPARATION_CHAR = '\x1D';
@@ -217,7 +202,6 @@ module.exports = {
   RUSMARC_TO_JSONLD_BF2_JSONATA,
   RECORD_LEVELS,
   FIELD_RELATION_TYPES,
-  INVALID_SOURCE_CODES_MAPPING,
   MARC_TEST_RE,
   MARC_ENCODING,
   MARC_CONTROL_FIELD_TAGS,

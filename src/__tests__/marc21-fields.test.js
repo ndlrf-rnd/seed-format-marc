@@ -1,8 +1,7 @@
 // noinspection HttpUrlsUsage
 
 const { parseFieldRelationSeq } = require('../relations');
-const { parseIdentifier } = require('../indentifiers');
-const { parseFieldStr } = require('../fields');
+const { parseIdentifier, parseFieldStr } = require('../fields');
 
 test('field string parsing', () => {
   expect(parseFieldStr('013#3$a'))
