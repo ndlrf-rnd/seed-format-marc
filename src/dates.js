@@ -10,7 +10,6 @@ const {
   isNaN,
 } = require('./utils/types');
 const {
-  getKind,
   getRecordStatus,
   isMarc21,
   getMarcRecordFormat,
@@ -18,7 +17,7 @@ const {
 
 const { MARC21_F008_TYPE_OF_RANGE_OFFSET } = require('./dialects/marc21/constants-marc21');
 const { RUSMARC_F100A_TYPE_OF_RANGE_OFFSET } = require('./dialects/unimarc/constants-unimarc');
-const MARC21_RECORD_STATUS = require('./constants-record-status');
+const MARC_RECORD_STATUS = require('./constants-record-status');
 const { MARC_RECORD_FORMATS } = require('./constants');
 
 const MARC_DATE_TIME_RE = /^([0-9]{4})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})(\.[0-9]+)?$/u;
@@ -391,7 +390,7 @@ const getMarcRecordDates = (rec) => {
   // Fixme: add RusMarc tech field parsing
   let extendedDate = {};
   const f005 = rec['005'];
-  const recordDateEnd = (getRecordStatus(rec) === MARC21_RECORD_STATUS.DELETED) && f005
+  const recordDateEnd = (getRecordStatus(rec) === MARC_RECORD_STATUS.DELETED) && f005
     ? parseDateStr(f005)
     : null;
   const recordDateUpdated = f005 ? parseDateStr(f005) : null;
@@ -415,7 +414,7 @@ const getMarcRecordDates = (rec) => {
   const f801c = forceArray(rec['801']).map((f) => f.c).filter((f) => !!f)[0];
 
   const getFallbackFn = (typeOfRange) => (dateStr) => {
-    debug(`WARNING: No valid date found:005: ${f005} 008: ${f008} 100a: ${f100a} 801c: ${f801c} type: ${getKind(rec)}, Invalid type of range: "${typeOfRange}" with date string: "${dateStr}", record dates parsing was applied partially.\n${JSON.stringify(rec)}.\n`);
+    debug(`WARNING: No valid date found:005: ${f005} 008: ${f008} 100a: ${f100a} 801c: ${f801c} type: ${getMarcRecordFormat(rec)}, Invalid type of range: "${typeOfRange}" with date string: "${dateStr}", record dates parsing was applied partially.\n${JSON.stringify(rec)}.\n`);
     return {};
   };
   let recordDateStart;

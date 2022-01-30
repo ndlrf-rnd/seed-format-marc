@@ -7,16 +7,24 @@ const {
   isRusmarc,
   isUnimarc,
   isAlef,
+  getMarcRecordFormat,
+  getBibliographicLevel,
+  getEncodingLevel,
+  getRecordStatus,
 } = require('../detect');
 const {
   MARC_MEDIA_TYPE,
   OPDS2_MEDIA_TYPE,
   MARC_DIALECT_RUSMARC,
   MARC_DIALECT_MARC21,
+  MARC_RECORD_FORMATS,
+  RECORD_LEVELS,
+  MARC_ENCODING_LEVEL_FULL,
 } = require('../constants');
 const { JSONLD_MEDIA_TYPE } = require('../constants');
 const { splitRecords } = require('../serial/iso2709');
 const MarcIf = require('../index');
+const { MARC_RECORD_STATUS_NEW } = require('../constants-record-status');
 
 test('MARC21 with CP1251 -> split', async () => {
   const input = fs.readFileSync(path.join(__dirname, 'data/1251.mrc'), 'ascii');
@@ -110,6 +118,44 @@ test('detect', () => {
       [true, false, false, false],
       [false, true, false, false],
       [true, false, false, false],
+    ],
+  );
+});
+
+test('detect multipart', async () => {
+  expect.assertions(1);
+  const jsonEntities = (await MarcIf.serial[MARC_MEDIA_TYPE].from(fs.readFileSync(
+    path.join(__dirname, 'data/multipart/merged.mrc'),
+    'utf-8',
+  )));
+  expect(
+    jsonEntities.map(
+      (rec) => ([
+        rec['001'],
+        ...[
+          isMarc21,
+          isRusmarc,
+          isUnimarc,
+          isAlef,
+          getRecordStatus,
+          getMarcRecordFormat,
+          getBibliographicLevel,
+          getEncodingLevel,
+          // getMarcSource,
+        ].map(
+          (fn) => fn(rec),
+        ),
+      ]),
+    ),
+  ).toEqual(
+    [
+      ['006727590', true, false, false, false, MARC_RECORD_STATUS_NEW, MARC_RECORD_FORMATS.BIBLIOGRAPHIC, RECORD_LEVELS.m, MARC_ENCODING_LEVEL_FULL],
+      ['006727594', true, false, false, false, MARC_RECORD_STATUS_NEW, MARC_RECORD_FORMATS.BIBLIOGRAPHIC, RECORD_LEVELS.m, MARC_ENCODING_LEVEL_FULL],
+      ['006776069', true, false, false, false, MARC_RECORD_STATUS_NEW, MARC_RECORD_FORMATS.BIBLIOGRAPHIC, RECORD_LEVELS.m, MARC_ENCODING_LEVEL_FULL],
+      ['006776116', true, false, false, false, MARC_RECORD_STATUS_NEW, MARC_RECORD_FORMATS.BIBLIOGRAPHIC, RECORD_LEVELS.m, MARC_ENCODING_LEVEL_FULL],
+      ['006776143', true, false, false, false, MARC_RECORD_STATUS_NEW, MARC_RECORD_FORMATS.BIBLIOGRAPHIC, RECORD_LEVELS.m, MARC_ENCODING_LEVEL_FULL],
+      ['006776219', true, false, false, false, MARC_RECORD_STATUS_NEW, MARC_RECORD_FORMATS.BIBLIOGRAPHIC, RECORD_LEVELS.m, MARC_ENCODING_LEVEL_FULL],
+      ['007496813', true, false, false, false, MARC_RECORD_STATUS_NEW, MARC_RECORD_FORMATS.BIBLIOGRAPHIC, RECORD_LEVELS.m, MARC_ENCODING_LEVEL_FULL],
     ],
   );
 });

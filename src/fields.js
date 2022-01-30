@@ -192,6 +192,7 @@ const parseIdentifier = (str = '', source = null, isRelation = true, normalizeSo
 };
 
 module.exports = {
+  parseIdentifier,
   describeField,
   parseFieldStr,
   isDataFieldTag,

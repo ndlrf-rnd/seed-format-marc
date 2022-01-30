@@ -264,7 +264,10 @@ const splitRecords = async (input, separator = MARC_RECORD_SEPARATION_CHAR) => {
     }
   }
   if (offset < recordBuffer.byteLength) {
-    result.push(recordBuffer.slice(offset));
+    const newRecord = recordBuffer.slice(offset);
+    if (newRecord.length > 1) {
+      result.push(newRecord);
+    }
   }
   return result;
 };
@@ -374,7 +377,10 @@ const convertRecordToISO2709 = (recordObj) => {
 const fromISO2709 = async (record_data /* config */) => (await splitRecords(record_data)).map(
   (rec) => convertRecordFromISO2709(rec),
 ).reduce(
-  (product, item) => (Array.isArray(product) ? product.concat(item) : [product, item]),
+  // eslint-disable-next-line no-nested-ternary
+  (product, item) => (item
+    ? (Array.isArray(product) ? product.concat(item) : [product, item])
+    : product),
   [],
 );
 

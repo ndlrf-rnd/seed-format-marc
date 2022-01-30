@@ -11,25 +11,28 @@ const { isEmpty } = require('./utils/types');
 const { toISO2709 } = require('./serial/iso2709');
 const {
   MARC_MEDIA_TYPE,
-  MARC_LEADER_BIBLIOGRAPHIC_LEVEL_OFFSET,
   MARC_TEST_RE,
-  MARC_LEADER_DESCRIPTION_LEVEL_OFFSET,
   RECORD_LEVELS,
   MARC_LEADER_MARC_RECORD_STATUS_OFFSET,
   MARC_LEADER_TYPE_OFFSET,
+  MARC_LEADER_BIBLIOGRAPHIC_LEVEL_OFFSET,
+  MARC_LEADER_ENCODING_LEVEL_OFFSET,
+  MARC_ENCODING_LEVEL,
+  MARC_BLANK_CHAR,
 } = require('./constants');
 
 const { MARC_RECORD_FORMATS } = require('./constants-record-formats');
 const { UNIMARC_RECORD_TYPE_GROUP_CODES } = require('./dialects/unimarc/constants-unimarc');
-const {
-  MARC21_BIBLIOGRAPHIC_LEVEL,
-  MARC21_RECORD_TYPE_GROUP_CODES,
-} = require('./dialects/marc21/constants-marc21');
-const MARC_RECORD_STATUS = require('./constants-record-status');
+const { MARC21_RECORD_TYPE_GROUP_CODES } = require('./dialects/marc21/constants-marc21');
+const { MARC_RECORD_STATUS } = require('./constants-record-status');
 
-const getRecordStatus = (rec) => (
-  rec.leader ? rec.leader[MARC_LEADER_MARC_RECORD_STATUS_OFFSET] : MARC_RECORD_STATUS.UNKNOWN
-).toLowerCase();
+const getRecordStatus = (rec) => {
+  if (!rec.leader) {
+    return MARC_RECORD_STATUS.UNKNOWN;
+  }
+  const statusCode = rec.leader[MARC_LEADER_MARC_RECORD_STATUS_OFFSET];
+  return MARC_RECORD_STATUS[statusCode];
+};
 
 const getMarcSource = (pub, defaultSourceCode) => {
   if (isEmpty(pub)) {
@@ -246,29 +249,33 @@ const getMarcRecordFormat = (rec) => {
   )[0] || MARC_RECORD_FORMATS.UNKNOWN;
 };
 
-const getBibliographicLevel = (rec) => (rec.leader ? (
-  MARC21_BIBLIOGRAPHIC_LEVEL[(rec.leader[MARC_LEADER_BIBLIOGRAPHIC_LEVEL_OFFSET] || '').toLowerCase()] || { type: null }
-).type : null);
-
-/**
- * Detect MARC record type
- * @param rec {*}
- * @returns {string}
- */
-const getKind = (rec) => {
-  const marcRecordType = getMarcRecordFormat(rec);
-  if (marcRecordType === MARC_RECORD_FORMATS.BIBLIOGRAPHIC) {
-    return `${getBibliographicLevel(rec) || ''}`;
+const getEncodingLevel = (rec) => {
+  if (!rec.leader) {
+    return null;
   }
-  return `${marcRecordType || ''}`;
+  const elCode = rec.leader[MARC_LEADER_ENCODING_LEVEL_OFFSET] || MARC_BLANK_CHAR;
+  return MARC_ENCODING_LEVEL[elCode];
 };
+//
+// /**
+//  * Detect MARC record type
+//  * @param rec {*}
+//  * @returns {string}
+//  */
+// const getKind = (rec) => {
+//   const marcRecordType = getMarcRecordFormat(rec);
+//   if (marcRecordType === MARC_RECORD_FORMATS.BIBLIOGRAPHIC) {
+//     return `${getBibliographicLevel(rec) || ''}`;
+//   }
+//   return `${marcRecordType || ''}`;
+// };
 
 /**
  * Detection
  * @returns {null|string|*}
  * @param rec
  */
-const getRecordLevel = (rec) => {
+const getBibliographicLevel = (rec) => {
   if (rec.leader) {
     /*
     WorkMusic
@@ -298,31 +305,27 @@ const getRecordLevel = (rec) => {
      or substring(../marc:leader,8,1) = 'd'
       or substring(../marc:leader,8,1) = 'm')
      */
-    return RECORD_LEVELS[rec.leader[MARC_LEADER_DESCRIPTION_LEVEL_OFFSET]] || RECORD_LEVELS.u;
+    const rlCode = rec.leader[MARC_LEADER_BIBLIOGRAPHIC_LEVEL_OFFSET];
+    return RECORD_LEVELS[rlCode] || RECORD_LEVELS.u;
   }
   if (typeof rec === 'string') {
-    return RECORD_LEVELS[rec[MARC_LEADER_DESCRIPTION_LEVEL_OFFSET]] || RECORD_LEVELS.u;
+    const rlCode = rec[MARC_LEADER_BIBLIOGRAPHIC_LEVEL_OFFSET];
+    return RECORD_LEVELS[rlCode] || RECORD_LEVELS.u;
   }
   return null;
 };
-
-const isSingleRecord = (rec) => (['b', 'd', 'a', 'm'].indexOf(getRecordLevel(rec)) !== -1);
-
-const isMultiRecord = (rec) => (['s', 'i', 'c'].indexOf(getRecordLevel(rec)) !== -1);
 
 module.exports = {
   getMarcRecordFormat,
   isMarc,
   getRecordStatus,
-  isSingleRecord,
-  isMultiRecord,
   getControlNumber,
   getMarcSource,
-  getKind,
-  getRecordLevel,
+  // getKind,
+  getBibliographicLevel,
+  getEncodingLevel,
   getUrlRecords,
   getPhysicalLocationRecord,
-  getBibliographicLevel,
   isRusmarc,
   isMarc21,
   isAlef,

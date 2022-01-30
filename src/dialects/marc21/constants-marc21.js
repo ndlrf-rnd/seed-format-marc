@@ -1,12 +1,4 @@
 const path = require('path');
-const {
-  ENCODING_LEVEL_INCREASE_FROM_PREPUBLISH,
-  NEW,
-  UNKNOWN,
-  DELETED,
-  CORRECTED,
-  ENCODING_LEVEL_INCREASE,
-} = require('../../constants-record-status');
 const { MARC_RECORD_FORMATS } = require('../../constants-record-formats');
 
 const MARC_DIALECT_MARC21 = 'MARC21';
@@ -149,20 +141,6 @@ const MARC21_RECORD_TYPE_NAMES = {
     p - Increase in encoding level from prepublication
 */
 
-const MARC21_RECORD_STATUS = {
-  [ENCODING_LEVEL_INCREASE]: ENCODING_LEVEL_INCREASE,
-  [CORRECTED]: CORRECTED,
-  [DELETED]: DELETED,
-  [UNKNOWN]: UNKNOWN,
-  ' ': UNKNOWN,
-  '|': UNKNOWN,
-  '#': UNKNOWN,
-  $: UNKNOWN,
-  0: UNKNOWN,
-  [NEW]: NEW,
-  [ENCODING_LEVEL_INCREASE_FROM_PREPUBLISH]: ENCODING_LEVEL_INCREASE_FROM_PREPUBLISH,
-};
-
 const MARC21_BIBLIOGRAPHIC_LEVEL = {
   a: {
     name: 'Monographic component part',
@@ -212,7 +190,6 @@ module.exports = {
   MARC21_SCHEMA_GEOAREAS,
   MARC21_SCHEMA_ORGANIZATIONS,
   MARC21_SCHEMA_RELATORS,
-  MARC21_RECORD_STATUS,
   MARC21_F008_TYPE_OF_RANGE_OFFSET,
   MARC21_FIELD_STR_RE,
   MARC21_JSON_SCHEMA_PATH,

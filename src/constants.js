@@ -111,6 +111,7 @@ const RECORD_TYPE_GROUP_MANUAL_RELATIONS = {
 const MARC_LEADER_MARC_RECORD_STATUS_OFFSET = 5;
 const MARC_LEADER_TYPE_OFFSET = 6;
 const MARC_LEADER_BIBLIOGRAPHIC_LEVEL_OFFSET = 7;
+const MARC_LEADER_ENCODING_LEVEL_OFFSET = 17;
 const MARC_DEL_CHARACTER = '$';
 const MARC_MEDIA_TYPE = 'application/marc';
 const MARC_ENCODING = 'utf-8';
@@ -196,7 +197,24 @@ const BF2_LC_XSLT_PATH = path.join(__dirname, '../thirdparty/marc2bibframe2/xsl/
 const MARC_FIELD_LENGTH_START = 3;
 const MARC_DIRECTORY_INDEX_START = 7;
 
+const MARC_ENCODING_LEVEL_FULL = 'Full level';
+const MARC_ENCODING_LEVEL = {
+  1: 'Full level, material not examined',
+  2: 'Less-than-full level, material not examined',
+  3: 'Abbreviated level',
+  4: 'Core level',
+  5: 'Partial (preliminary) level',
+  7: 'Minimal level',
+  8: 'Prepublication level',
+  u: 'Unknown',
+  z: 'Not applicable',
+  [MARC_BLANK_CHAR]: MARC_ENCODING_LEVEL_FULL,
+  '|': MARC_ENCODING_LEVEL_FULL,
+  ' ': MARC_ENCODING_LEVEL_FULL,
+};
 module.exports = {
+  MARC_ENCODING_LEVEL,
+  MARC_ENCODING_LEVEL_FULL,
   BF2_LC_XSLT_PATH,
   RUSMARC_TO_MARC21_JSONATA,
   RUSMARC_TO_JSONLD_BF2_JSONATA,
@@ -234,4 +252,5 @@ module.exports = {
   JSONLD_MEDIA_TYPE,
   MARC_FIELD_LENGTH_START,
   MARC_DIRECTORY_INDEX_START,
+  MARC_LEADER_ENCODING_LEVEL_OFFSET,
 };
