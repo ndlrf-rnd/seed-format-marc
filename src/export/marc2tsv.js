@@ -49,8 +49,8 @@ const TSV_HEADER = [
   'value', 'record',
 ];
 
-const DEFAULT_CONFIG = {
-  header: true,
+const MARC2TSV_DEFAULT_CONFIG = {
+  header: false,
   cellSeparator: TSV_CELL_SEPARATOR,
   rowSeparator: TSV_LINE_SEPARATOR,
 };
@@ -63,7 +63,7 @@ const marcRec2tsv = (
     header,
     cellSeparator,
     rowSeparator,
-  } = defaults(config, DEFAULT_CONFIG);
+  } = defaults(config, MARC2TSV_DEFAULT_CONFIG);
   const rows = [];
   if (rec) {
     const dialect = detectDialect(rec);
@@ -97,11 +97,16 @@ const marcRec2tsv = (
 const marc2tsv = async (recs, config) => forceArray(recs).map(
   (obj, idx) => marcRec2tsv(
     obj,
-    defaults({ header: idx === 0 }, config, DEFAULT_CONFIG),
+    defaults(
+      { header: config.header ? idx === 0 : false },
+      config,
+      MARC2TSV_DEFAULT_CONFIG,
+    ),
   ),
 ).join('');
 
 module.exports = {
+  MARC2TSV_DEFAULT_CONFIG,
   expandMarcObj,
   marcRec2tsv,
   marc2tsv,

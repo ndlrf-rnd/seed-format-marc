@@ -242,6 +242,17 @@ test('009913303 to TSV', async () => {
   );
 }, 60 * 1000);
 
+test('009913303 to headless TSV', async () => {
+  expect.assertions(1);
+  const data = fs.readFileSync(path.join(__dirname, 'data', 'multipart', 'merged.mrc'));
+  const rObjs = await MarcIf.serial[MARC_MEDIA_TYPE].from(data);
+  expect(
+    await MarcIf.export[TSV_MEDIA_TYPE](rObjs, { header: false }),
+  ).toEqual(
+    fs.readFileSync(path.join(__dirname, 'data', 'multipart', 'merged.tsv'), 'utf-8').split('\n').slice(1).join('\n'),
+  );
+}, 60 * 1000);
+
 test('rusmarc detection OPDS2', async () => {
   expect.assertions(1);
   const data = fs.readFileSync(path.join(__dirname, 'data/rusmarc2marc-rusmarc.mrc'));
