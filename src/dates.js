@@ -11,11 +11,13 @@ const {
 } = require('./utils/types');
 const {
   getRecordStatus,
-  isMarc21,
   getMarcRecordFormat,
 } = require('./detect');
+const { dialects } = require('./dialects');
 
-const { MARC21_F008_TYPE_OF_RANGE_OFFSET } = require('./dialects/marc21/constants-marc21');
+const { MARC21_F008_TYPE_OF_RANGE_OFFSET,
+  MARC_DIALECT_MARC21,
+} = require('./dialects/marc21/constants-marc21');
 const { RUSMARC_F100A_TYPE_OF_RANGE_OFFSET } = require('./dialects/unimarc/constants-unimarc');
 const MARC_RECORD_STATUS = require('./constants-record-status');
 const { MARC_RECORD_FORMATS } = require('./constants');
@@ -420,7 +422,7 @@ const getMarcRecordDates = (rec) => {
   let recordDateStart;
   let typeOfRange;
   try {
-    if (f008 && isMarc21(rec)) {
+    if (f008 && dialects[MARC_DIALECT_MARC21].is(rec)) {
       recordDateStart = parseDateStr(f008.substr(0, 6)); // 0 - 5
       if (getMarcRecordFormat(rec) === MARC_RECORD_FORMATS.BIBLIOGRAPHIC) {
         typeOfRange = (f008[MARC21_F008_TYPE_OF_RANGE_OFFSET] || 'n').toLowerCase(); // 6

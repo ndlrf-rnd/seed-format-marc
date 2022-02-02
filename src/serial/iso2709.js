@@ -374,7 +374,9 @@ const convertRecordToISO2709 = (recordObj) => {
 
 // The last element will always be empty because records end in char 1D
 // eslint-disable-next-line no-control-regex
-const fromISO2709 = async (record_data /* config */) => (await splitRecords(record_data)).map(
+const fromISO2709 = async (record_data /* config */) => (
+  await splitRecords(record_data)
+).map(
   (rec) => convertRecordFromISO2709(rec),
 ).reduce(
   // eslint-disable-next-line no-nested-ternary

@@ -1,21 +1,11 @@
-const {
-  forceArray,
-} = require('./utils/arrays');
-const {
-  isAlef,
-  isMarc21,
-  isUnimarc,
-  isRusmarc,
-} = require('./detect');
+const { marc2tsv } = require('./export/marc2tsv');
+const { dialects } = require('./dialects');
 
 const {
   MARC_EXTENSION,
-  RUSMARC_TO_MARC21_JSONATA,
   JSON_MEDIA_TYPE,
-  MARC_DIALECT_RUSMARC,
-  MARC_DIALECT_UNIMARC,
-  MARC_DIALECT_MARC21,
-  MARC_DIALECT_ALEF,
+  TSV_MEDIA_TYPE,
+  RDF_MEDIA_TYPE,
 } = require('./constants');
 const {
   toISO2709,
@@ -38,6 +28,7 @@ const {
   fromSlimXml,
 } = require('./serial/marcxml');
 const { marcToOpds } = require('./export/opds2');
+const { mrc2bf2rdf } = require('./export/bf2-rdf');
 
 // const marcToOpds = (input) => {
 //   if ((typeof input === 'string') || (Buffer.isBuffer(input))) {
@@ -54,7 +45,6 @@ const { marcToOpds } = require('./export/opds2');
 // };
 
 module.exports = {
-  // is: isMarc,
   serial: {
     [MARC_MEDIA_TYPE]: {
       endMarker: MARC_RECORD_SEPARATION_CHAR,
@@ -74,32 +64,10 @@ module.exports = {
       endMarker: MARCXML_END_MARKER,
     },
   },
-  defaultDialect: MARC_DIALECT_MARC21,
-  dialects: {
-    [MARC_DIALECT_MARC21]: {
-      is: isMarc21,
-    },
-    [MARC_DIALECT_UNIMARC]: {
-      is: isUnimarc,
-      to: {
-        [MARC_DIALECT_MARC21]: (recs) => RUSMARC_TO_MARC21_JSONATA(forceArray(recs)),
-        [MARC_DIALECT_RUSMARC]: (recs) => recs,
-      },
-    },
-    [MARC_DIALECT_RUSMARC]: {
-      is: isRusmarc,
-      to: {
-        [MARC_DIALECT_MARC21]: (recs) => forceArray(recs).map(
-          (rec) => RUSMARC_TO_MARC21_JSONATA(rec),
-        ),
-        [MARC_DIALECT_UNIMARC]: (recs) => recs,
-      },
-    },
-    [MARC_DIALECT_ALEF]: {
-      is: isAlef,
-    },
-  },
+  dialects,
   export: {
+    [TSV_MEDIA_TYPE]: marc2tsv,
+    [RDF_MEDIA_TYPE]: mrc2bf2rdf,
     [OPDS2_MEDIA_TYPE]: marcToOpds,
     [JSONLD_MEDIA_TYPE]: marcToOpds,
     [JSON_MEDIA_TYPE]: (input) => fromISO2709(input),

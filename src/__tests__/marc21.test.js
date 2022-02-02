@@ -3,15 +3,12 @@ const fs = require('fs');
 const { parseFieldRelationSeq } = require('../relations');
 const { omit } = require('../utils/objects');
 const {
-  isMarc21,
-  isRusmarc,
-  isUnimarc,
-  isAlef,
   getMarcRecordFormat,
   getBibliographicLevel,
   getEncodingLevel,
   getRecordStatus,
 } = require('../detect');
+const { dialects } = require('../dialects');
 const {
   MARC_MEDIA_TYPE,
   OPDS2_MEDIA_TYPE,
@@ -20,11 +17,14 @@ const {
   MARC_RECORD_FORMATS,
   RECORD_LEVELS,
   MARC_ENCODING_LEVEL_FULL,
+  TSV_MEDIA_TYPE,
+  MARC_DIALECT_ALEF,
 } = require('../constants');
 const { JSONLD_MEDIA_TYPE } = require('../constants');
 const { splitRecords } = require('../serial/iso2709');
 const MarcIf = require('../index');
 const { MARC_RECORD_STATUS_NEW } = require('../constants-record-status');
+const { MARC_DIALECT_UNIMARC } = require('../dialects/unimarc/constants-unimarc');
 
 test('MARC21 with CP1251 -> split', async () => {
   const input = fs.readFileSync(path.join(__dirname, 'data/1251.mrc'), 'ascii');
@@ -105,13 +105,12 @@ test('detect', () => {
 
   expect(
     jsonEntities.map(
-      (rec) => ([
-        isMarc21,
-        isRusmarc,
-        isUnimarc,
-        isAlef,
-      ].map((fn) => fn(rec))
-      ),
+      (rec) => [
+        dialects[MARC_DIALECT_MARC21].is,
+        dialects[MARC_DIALECT_RUSMARC].is,
+        dialects[MARC_DIALECT_UNIMARC].is,
+        dialects[MARC_DIALECT_ALEF].is,
+      ].map((fn) => fn(rec)),
     ),
   ).toEqual(
     [
@@ -133,10 +132,10 @@ test('detect multipart', async () => {
       (rec) => ([
         rec['001'],
         ...[
-          isMarc21,
-          isRusmarc,
-          isUnimarc,
-          isAlef,
+          dialects[MARC_DIALECT_MARC21].is,
+          dialects[MARC_DIALECT_RUSMARC].is,
+          dialects[MARC_DIALECT_UNIMARC].is,
+          dialects[MARC_DIALECT_ALEF].is,
           getRecordStatus,
           getMarcRecordFormat,
           getBibliographicLevel,
@@ -164,10 +163,16 @@ describe('rusmarc -> marc 21', () => {
   test('MARC21 -> OPDS vs same RUSMARC -> OPDS rsl01002988236', async () => {
     expect.assertions(1);
     const marc21Json = (await MarcIf.export[JSONLD_MEDIA_TYPE](
-      fs.readFileSync(path.join(__dirname, 'data', 'history_xvii', 'RuMoRGB', '01002988236_marc21.mrc'), 'utf-8'),
+      fs.readFileSync(
+        path.join(__dirname, 'data', 'history_xvii', 'RuMoRGB', '01002988236_marc21.mrc'),
+        'utf-8',
+      ),
     ));
     const rusmarcMappedJson = await MarcIf.export[JSONLD_MEDIA_TYPE](
-      fs.readFileSync(path.join(__dirname, 'data', 'history_xvii', 'RuMoRGB', '01002988236_rusmarc.iso'), 'utf-8'),
+      fs.readFileSync(
+        path.join(__dirname, 'data', 'history_xvii', 'RuMoRGB', '01002988236_rusmarc.iso'),
+        'utf-8',
+      ),
     );
     expect(
       rusmarcMappedJson,
@@ -181,9 +186,12 @@ describe('rusmarc -> marc 21', () => {
     const marc21Json = (await MarcIf.serial[MARC_MEDIA_TYPE].from(
       fs.readFileSync(path.join(__dirname, 'data', 'ISBN-978-5-901202-50-0', '01003120729.mrc'), 'utf-8'),
     ));
-    const rusmarcMappedJson = (await MarcIf.dialects[MARC_DIALECT_RUSMARC].to[MARC_DIALECT_MARC21](
+    const rusmarcMappedJson = (await dialects[MARC_DIALECT_RUSMARC].to[MARC_DIALECT_MARC21](
       await MarcIf.serial[MARC_MEDIA_TYPE].from(
-        fs.readFileSync(path.join(__dirname, 'data/ISBN-978-5-901202-50-0', '01003120729.iso'), 'utf-8'),
+        fs.readFileSync(
+          path.join(__dirname, 'data/ISBN-978-5-901202-50-0', '01003120729.iso'),
+          'utf-8',
+        ),
       ),
     ));
     expect(
@@ -215,14 +223,22 @@ describe('rusmarc -> marc 21', () => {
 test('009913303 to OPDS', async () => {
   expect.assertions(1);
   const data = fs.readFileSync(path.join(__dirname, 'data/009913303_marc21.mrc'));
-  // expect(MarcIf.dialects[MARC_DIALECT_RUSMARC].is(UB)).toBeTruthy();
   const rObjs = await MarcIf.serial[MARC_MEDIA_TYPE].from(data);
-  // expect(rObjs).toEqual([]);
-  // expect(rObjs).toEqual([]);
   expect(
     await MarcIf.export[OPDS2_MEDIA_TYPE](rObjs),
   ).toEqual(
     JSON.parse(fs.readFileSync(path.join(__dirname, 'data/009913303_opds.json'), 'utf-8')),
+  );
+}, 60 * 1000);
+
+test('009913303 to TSV', async () => {
+  expect.assertions(1);
+  const data = fs.readFileSync(path.join(__dirname, 'data', 'multipart', 'merged.mrc'));
+  const rObjs = await MarcIf.serial[MARC_MEDIA_TYPE].from(data);
+  expect(
+    await MarcIf.export[TSV_MEDIA_TYPE](rObjs, { header: true }),
+  ).toEqual(
+    fs.readFileSync(path.join(__dirname, 'data', 'multipart', 'merged.tsv'), 'utf-8'),
   );
 }, 60 * 1000);
 
