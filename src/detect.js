@@ -1,17 +1,15 @@
 const {
   flattenDeep,
-  intersection,
   flatten,
   forceArray,
   compact,
   zip,
 } = require('./utils/arrays');
+const { dialects } = require('./dialects');
 const { isEmpty } = require('./utils/types');
-
 const { toISO2709 } = require('./serial/iso2709');
 const {
   MARC_MEDIA_TYPE,
-  MARC_TEST_RE,
   RECORD_LEVELS,
   MARC_LEADER_MARC_RECORD_STATUS_OFFSET,
   MARC_LEADER_TYPE_OFFSET,
@@ -19,6 +17,7 @@ const {
   MARC_LEADER_ENCODING_LEVEL_OFFSET,
   MARC_ENCODING_LEVEL,
   MARC_BLANK_CHAR,
+  MARC_DIALECT_MARC21,
 } = require('./constants');
 
 const { MARC_RECORD_FORMATS } = require('./constants-record-formats');
@@ -155,53 +154,6 @@ const getPhysicalLocationRecord = (rec) => flattenDeep(['852', '853'].map(
   ),
 )).filter((v) => !!v);
 
-/**
- * Detectors
- */
-
-/**
- * TODO: RUSMARC is UNIMARC compliant so it would be better to have of multi-level classification
- *       at the other hand [IFLA see](https://www.ifla.org/publications/unimarc-formats-and-related-documentation)
- *       them as the same level branches.
- * TODO: Differentiate other forms of UNIMARC from RUSMARC
- */
-
-const isMarc = async (input) => (typeof input === 'string') && (!!input.trim().match(MARC_TEST_RE));
-
-const isRusmarc = (marcObj) => {
-  const field100a = forceArray(marcObj['100']).map((f) => f.a).join('');
-  return !!(field100a && field100a.match(/^[0-9]{8}[a-z].{25,27}$/ui));
-};
-
-const isMarc21 = (marcObj) => ([
-  ...['007', '008'].filter(
-    (o) => (typeof marcObj[o] === 'string') && (marcObj[o].length > 0),
-  ),
-  // 008 field might happen to be missing
-  // supposing that host entry record defined in 773 has one defined
-  ...['040', '852', '856', '773'].filter(
-    (a, o) => forceArray(marcObj[o]).filter(
-      (f) => Object.keys(f).length > 0,
-    ).length > 0,
-  ),
-].length > 0);
-const isAlef = (marcObj) => intersection(...[
-  [
-    'OWN',
-    'GLOBAL',
-    'LKR',
-    'ITM',
-    'UP',
-    'DN',
-    'PAR',
-  ],
-  Object.keys(marcObj),
-].map((k) => k.toLocaleString()).sort()).length > 0;
-
-const isUnimarc = (marcObj) => !(
-  isRusmarc(marcObj) || isMarc21(marcObj) || isAlef(marcObj)
-);
-
 /*
 Source XSD: http://www.w3.org/1999/XSL/Transform
 
@@ -237,7 +189,9 @@ Source XSD: http://www.w3.org/1999/XSL/Transform
 const getMarcRecordFormat = (rec) => {
   // TODO: Here RUSMARC and UNIMARC are about pretty the same,
   //       but i'm not confident about all RUSMARC authority and holdings files
-  const codeMap = isMarc21(rec) ? MARC21_RECORD_TYPE_GROUP_CODES : UNIMARC_RECORD_TYPE_GROUP_CODES;
+  const codeMap = dialects[MARC_DIALECT_MARC21].is(rec)
+    ? MARC21_RECORD_TYPE_GROUP_CODES
+    : UNIMARC_RECORD_TYPE_GROUP_CODES;
   const leader = rec.leader;
 
   const leaderCode = ((
@@ -317,17 +271,11 @@ const getBibliographicLevel = (rec) => {
 
 module.exports = {
   getMarcRecordFormat,
-  isMarc,
   getRecordStatus,
   getControlNumber,
   getMarcSource,
-  // getKind,
   getBibliographicLevel,
   getEncodingLevel,
   getUrlRecords,
   getPhysicalLocationRecord,
-  isRusmarc,
-  isMarc21,
-  isAlef,
-  isUnimarc,
 };

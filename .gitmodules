@@ -1,3 +1,3 @@
-[submodule "thirdparty/marc2bibframe2"]
-	path = thirdparty/marc2bibframe2
+[submodule "contrib/marc2bibframe2"]
+	path = contrib/marc2bibframe2
 	url = https://github.com/lcnetdev/marc2bibframe2.git

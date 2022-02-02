@@ -33,6 +33,13 @@ const JSON_MEDIA_TYPE = 'application/json';
 const OPDS2_MEDIA_TYPE = 'application/opds+json';
 const JSONLD_MEDIA_TYPE = 'application/ld+json';
 
+const TSV_MEDIA_TYPE = 'text/tab-separated-values';
+const TSV_ENCODING = 'utf-8';
+const TSV_LINE_SEPARATOR = '\n';
+const TSV_CELL_SEPARATOR = '\t';
+const TSV_EXTENSION = 'tsv';
+const TSV_SCHEMA_DOC = 'https://digital-preservation.github.io/csv-schema/csv-schema-1.2.html';
+
 const JSON_SCHEMA_EXTENSION = '.schema.json';
 const COLUMNS = [
   'record_type',
@@ -212,7 +219,28 @@ const MARC_ENCODING_LEVEL = {
   '|': MARC_ENCODING_LEVEL_FULL,
   ' ': MARC_ENCODING_LEVEL_FULL,
 };
+
+const MARC21_TO_BF2_XSLT_PATH = path.join(__dirname, 'export', 'marc2bibframe2.merged.xsl');
+const BF2_VANILLA_XSLT_NAME = path.join(__dirname, '..', 'contrib', 'marc2bibframe2', 'xsl', 'marc2bibframe2.xsl');
+
+/* RDF */
+const RDF_MEDIA_TYPE = 'application/rdf+xml';
+const RDF_ENCODING = 'utf-8';
+const RDF_EXTENSION = 'rdf';
+const RDF_FORMAT = 'application/n-quads';
+const RDF_NS = { xmlns: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#' };
+const RDF_ALGORITHM = 'URDNA2015';
+const RDF_NORMALIZATION_OPTIONS = { algorithm: RDF_ALGORITHM };
+
 module.exports = {
+  MARC21_TO_BF2_XSLT_PATH,
+  BF2_VANILLA_XSLT_NAME,
+  RDF_MEDIA_TYPE,
+  RDF_ENCODING,
+  RDF_FORMAT,
+  RDF_EXTENSION,
+  RDF_NS,
+  RDF_NORMALIZATION_OPTIONS,
   MARC_ENCODING_LEVEL,
   MARC_ENCODING_LEVEL_FULL,
   BF2_LC_XSLT_PATH,
@@ -253,4 +281,10 @@ module.exports = {
   MARC_FIELD_LENGTH_START,
   MARC_DIRECTORY_INDEX_START,
   MARC_LEADER_ENCODING_LEVEL_OFFSET,
+  TSV_MEDIA_TYPE,
+  TSV_EXTENSION,
+  TSV_SCHEMA_DOC,
+  TSV_CELL_SEPARATOR,
+  TSV_LINE_SEPARATOR,
+  TSV_ENCODING,
 };

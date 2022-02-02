@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const jsonata = require('jsonata');
 const jsyaml = require('js-yaml');
+
 const { x2j } = require('../../utils/x2j');
-// const { mkdirpSync } = require('../../utils/fs');
 
 const CONVERTOR_VERSION = '0.1.0';
 
@@ -28,20 +28,22 @@ const JSON_RAW_PATH = path.join(__dirname, '..', 'rsl-rusmarc-bibliographic', CO
 
 const resultingSchema = jsonata(fs.readFileSync(PATH_JSONATA, 'utf-8')).evaluate(inputJson);
 
+/* JSON export */
 process.stderr.write(`${SCHEMA_PATH}  ->  ${JSON_PATH}\n`);
 const jsonSchema = JSON.stringify(resultingSchema, null, 2);
 fs.mkdirSync(path.dirname(JSON_PATH), { recursive: true });
 fs.writeFileSync(JSON_PATH, jsonSchema, 'utf8');
 
-process.stderr.write(`${SCHEMA_PATH}  ->  ${YAML_PATH}\n`);
-const yamlSchema = jsyaml.dump(JSON.parse(jsonSchema), { sortKeys: true });
-fs.mkdirSync(path.dirname(YAML_PATH), { recursive: true });
-fs.writeFileSync(YAML_PATH, yamlSchema, 'utf8');
-
 process.stderr.write(`${SCHEMA_PATH}  ->  ${JSON_RAW_PATH}\n`);
 const jsonRawSchema = JSON.stringify(inputJson, null, 2);
 fs.mkdirSync(path.dirname(JSON_RAW_PATH), { recursive: true });
 fs.writeFileSync(JSON_RAW_PATH, jsonRawSchema, 'utf8');
+
+/* YAML export */
+process.stderr.write(`${SCHEMA_PATH}  ->  ${YAML_PATH}\n`);
+const yamlSchema = jsyaml.dump(JSON.parse(jsonSchema), { sortKeys: true });
+fs.mkdirSync(path.dirname(YAML_PATH), { recursive: true });
+fs.writeFileSync(YAML_PATH, yamlSchema, 'utf8');
 
 process.stderr.write(`${SCHEMA_PATH}  ->  ${YAML_RAW_PATH}\n`);
 const yamlRawSchema = jsyaml.dump(JSON.parse(jsonRawSchema), { sortKeys: true });
