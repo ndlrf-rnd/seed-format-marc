@@ -2,6 +2,7 @@ const { getMarcRecordFormat } = require('../detect');
 const { detectDialect } = require('../dialects/index');
 const { forceArray } = require('../utils/arrays');
 const {
+  TSV_HEADER,
   TSV_CELL_SEPARATOR,
   TSV_LINE_SEPARATOR,
 } = require('../constants');
@@ -41,13 +42,6 @@ const expandMarcObj = (rec) => {
   });
   return kvObj;
 };
-
-const TSV_HEADER = [
-  'dialect', 'format',
-  'code', 'subfield',
-  'ind1', 'ind2',
-  'value', 'record',
-];
 
 const MARC2TSV_DEFAULT_CONFIG = {
   header: false,

@@ -205,9 +205,10 @@ const MARC_FIELD_LENGTH_START = 3;
 const MARC_DIRECTORY_INDEX_START = 7;
 
 const MARC_ENCODING_LEVEL_FULL = 'Full level';
+const MARC_ENCODING_LEVEL_LESS_THAN_FULL = 'Less-than-full level, material not examined';
 const MARC_ENCODING_LEVEL = {
   1: 'Full level, material not examined',
-  2: 'Less-than-full level, material not examined',
+  2: MARC_ENCODING_LEVEL_LESS_THAN_FULL,
   3: 'Abbreviated level',
   4: 'Core level',
   5: 'Partial (preliminary) level',
@@ -232,7 +233,15 @@ const RDF_NS = { xmlns: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#' };
 const RDF_ALGORITHM = 'URDNA2015';
 const RDF_NORMALIZATION_OPTIONS = { algorithm: RDF_ALGORITHM };
 
+const TSV_HEADER = [
+  'dialect', 'format',
+  'code', 'subfield',
+  'ind1', 'ind2',
+  'value', 'record',
+];
+
 module.exports = {
+  TSV_HEADER,
   MARC21_TO_BF2_XSLT_PATH,
   BF2_VANILLA_XSLT_NAME,
   RDF_MEDIA_TYPE,
@@ -249,6 +258,7 @@ module.exports = {
   RECORD_LEVELS,
   FIELD_RELATION_TYPES,
   MARC_TEST_RE,
+  MARC_ENCODING_LEVEL_LESS_THAN_FULL,
   MARC_ENCODING,
   MARC_CONTROL_FIELD_TAGS,
   MARC_DEL_CHARACTER,

@@ -9,6 +9,7 @@ const {
 const {
   forceArray,
   intersection,
+  flatten,
 } = require('../utils/arrays');
 
 /**
@@ -33,19 +34,23 @@ const isMarc = (input) => (
 );
 
 const isRusmarc = (marcObj) => {
-  const field100a = forceArray(marcObj['100']).map((f) => f.a).join('');
+  const field100a = flatten(
+    forceArray(marcObj['100']).map(
+      (f) => ((f.ind1 === '#') && (f.ind2 === '#') ? f.a : ''),
+    ),
+  ).join('');
   return !!(field100a && field100a.match(/^[0-9]{8}[a-z].{25,27}$/ui));
 };
 
 const isMarc21 = (marcObj) => ([
-  ...['007', '008'].filter(
-    (o) => (typeof marcObj[o] === 'string') && (marcObj[o].length > 0),
+  ...['007', '008', '035', '040'].filter(
+    (o) => (typeof marcObj[o] !== 'undefined'),
   ),
   // 008 field might happen to be missing
   // supposing that host entry record defined in 773 has one defined
   ...['040', '852', '856', '773'].filter(
     (a, o) => forceArray(marcObj[o]).filter(
-      (f) => Object.keys(f).length > 0,
+      (f) => Object.keys(f).length === 1,
     ).length > 0,
   ),
 ].length > 0);
@@ -107,4 +112,7 @@ const detectDialect = (rec) => {
   return null;
 };
 
-module.exports = { dialects, detectDialect };
+module.exports = {
+  dialects,
+  detectDialect,
+};

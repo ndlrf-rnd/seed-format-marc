@@ -19,12 +19,14 @@ const {
   MARC_ENCODING_LEVEL_FULL,
   TSV_MEDIA_TYPE,
   MARC_DIALECT_ALEF,
+  MARC_ENCODING_LEVEL_LESS_THAN_FULL,
 } = require('../constants');
 const { JSONLD_MEDIA_TYPE } = require('../constants');
 const { splitRecords } = require('../serial/iso2709');
 const MarcIf = require('../index');
 const { MARC_RECORD_STATUS_NEW } = require('../constants-record-status');
 const { MARC_DIALECT_UNIMARC } = require('../dialects/unimarc/constants-unimarc');
+const { flatten } = require('../utils/arrays');
 
 test('MARC21 with CP1251 -> split', async () => {
   const input = fs.readFileSync(path.join(__dirname, 'data/1251.mrc'), 'ascii');
@@ -123,10 +125,19 @@ test('detect', () => {
 
 test('detect multipart', async () => {
   expect.assertions(1);
-  const jsonEntities = (await MarcIf.serial[MARC_MEDIA_TYPE].from(fs.readFileSync(
-    path.join(__dirname, 'data/multipart/merged.mrc'),
-    'utf-8',
-  )));
+  const jsonEntities = flatten(
+    await Promise.all(
+      [
+        path.join(__dirname, 'data', '01005301426.mrc'),
+        path.join(__dirname, 'data', '01000980102.mrc'),
+        path.join(__dirname, 'data', 'multipart', 'merged.mrc'),
+      ].map(
+        (p) => MarcIf.serial[MARC_MEDIA_TYPE].from(
+          fs.readFileSync(p, 'utf-8'),
+        ),
+      ),
+    ),
+  );
   expect(
     jsonEntities.map(
       (rec) => ([
@@ -148,6 +159,9 @@ test('detect multipart', async () => {
     ),
   ).toEqual(
     [
+      ['005301426', true, false, false, false, MARC_RECORD_STATUS_NEW, MARC_RECORD_FORMATS.BIBLIOGRAPHIC, RECORD_LEVELS.m, MARC_ENCODING_LEVEL_LESS_THAN_FULL],
+      ['000980102', true, false, false, false, MARC_RECORD_STATUS_NEW, MARC_RECORD_FORMATS.BIBLIOGRAPHIC, RECORD_LEVELS.m, MARC_ENCODING_LEVEL_FULL],
+
       ['006727590', true, false, false, false, MARC_RECORD_STATUS_NEW, MARC_RECORD_FORMATS.BIBLIOGRAPHIC, RECORD_LEVELS.m, MARC_ENCODING_LEVEL_FULL],
       ['006727594', true, false, false, false, MARC_RECORD_STATUS_NEW, MARC_RECORD_FORMATS.BIBLIOGRAPHIC, RECORD_LEVELS.m, MARC_ENCODING_LEVEL_FULL],
       ['006776069', true, false, false, false, MARC_RECORD_STATUS_NEW, MARC_RECORD_FORMATS.BIBLIOGRAPHIC, RECORD_LEVELS.m, MARC_ENCODING_LEVEL_FULL],
