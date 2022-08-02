@@ -6,6 +6,7 @@ const {
 const { isControlFieldTag } = require('../fields');
 const { Iso2709 } = require('../serial/iso2709');
 
+const TEXT_MEDIA_TYPE = 'text/plain';
 /**
  * Converts field object to string representation.
  *
@@ -46,15 +47,17 @@ const makeFieldStr = (tag, fieldObj) => {
 /**
  * Pretty-Print fields objects list representation
  * @param input
- * @param fieldSep - fields separator
- * @param lineSep - lines separator
+ * @param ctx - context Object
+ * @param ctx.fieldSep - fields separator
+ * @param ctx.lineSep - lines separator
  * @returns {*}
  */
-const text = (
+const marc2text = async (
   input,
-  fieldSep = DEFAULT_TEXT_FIELD_SEPARATOR,
-  lineSep = DEFAULT_TEXT_LINE_SEPARATOR,
+  ctx,
 ) => {
+  const fieldSep = (ctx || {}).fieldSep || DEFAULT_TEXT_FIELD_SEPARATOR;
+  const lineSep = (ctx || {}).lineSep || DEFAULT_TEXT_LINE_SEPARATOR;
   const inputObj = (typeof input === 'string') ? Iso2709.from(input) : input;
   return [
     Object.keys(inputObj).sort().map(
@@ -68,5 +71,6 @@ const text = (
 };
 
 module.exports = {
-  marcToText: text,
+  TEXT_MEDIA_TYPE,
+  marc2text,
 };

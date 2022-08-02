@@ -1,4 +1,5 @@
 const { marc2tsv } = require('./export/marc2tsv');
+const { marc2text, TEXT_MEDIA_TYPE } = require('./export/text');
 const { dialects } = require('./dialects');
 
 const {
@@ -70,6 +71,7 @@ module.exports = {
     [RDF_MEDIA_TYPE]: mrc2bf2rdf,
     [OPDS2_MEDIA_TYPE]: marcToOpds,
     [JSONLD_MEDIA_TYPE]: marcToOpds,
-    [JSON_MEDIA_TYPE]: (input) => fromISO2709(input),
+    [JSON_MEDIA_TYPE]: async (input) => fromISO2709(input),
+    [TEXT_MEDIA_TYPE]: marc2text,
   },
 };
